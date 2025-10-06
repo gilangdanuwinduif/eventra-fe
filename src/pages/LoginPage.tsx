@@ -13,17 +13,18 @@ const LoginPage: React.FC = () => {
 		e.preventDefault()
 		try {
 			const loginResponse = await axios.post('/auth/login', { email, password })
-			const { data: token } = loginResponse.data
-
+			const token = loginResponse.data.data.token
 			localStorage.setItem('authToken', token)
 
 			const decodedToken: { sub: string; iat: number; exp: number } = jwtDecode(token)
 			const userId = decodedToken.sub // Assuming 'sub' contains the user ID or email
 
-			const userResponse = await axios.get(`/users/${userId}`)
-			const userRole = userResponse.data.data.role // Assuming the user role is in response.data.data.role
+			const userResponse = await axios.get(`/users/${userId}`, {
+				headers: { Authorization: `Bearer ${token}` }
+			})
 
-			if (userRole === 'admin') {
+			const userRole = userResponse.data.data.role // Assuming the user role is in response.data.data.role
+			if (userRole === 'ADMIN') {
 				navigate('/dashboard/admin')
 			} else {
 				navigate('/') // Redirect to a default page for non-admin users

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { CiMenuFries } from 'react-icons/ci'
+import useAuthStore from '../../store/authStore'
 import { Button } from '../ui/button'
 import Text from '../custom-ui/text'
 import SideNav from './side-nav'
@@ -10,9 +11,16 @@ import { motion } from 'framer-motion'
 export default function Navbar() {
 	const [scrollY, setScrollY] = useState(0)
 	const [isOpen, setIsOpen] = useState(false)
+	const { token, logout } = useAuthStore()
+	const navigate = useNavigate()
 
 	const toggleOpen = () => {
 		setIsOpen(!isOpen)
+	}
+
+	const handleLogout = () => {
+		logout()
+		navigate('/login') // Redirect to login page after logout
 	}
 
 	useEffect(() => {
@@ -79,30 +87,35 @@ export default function Navbar() {
 				{/* Auth Buttons */}
 				<div className="flex items-center gap-4">
 					<div className="hidden md:flex items-center gap-4">
-						<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-							<Link
-								to="/login"
-								className="text-sm font-medium text-white hover:text-even-tect-purple dark:text-white dark:hover:text-even-tect-purple transition-colors"
-							>
-								Login
-							</Link>
-						</motion.div>
-						<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-							<Link to="/register">
-								<Button className="bg-even-tect-purple hover:bg-even-tect-purple/90 text-white shadow-lg hover:shadow-xl transition-all duration-300">
-									Sign Up
+						{token ? (
+							<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+								<Button
+									onClick={handleLogout}
+									className="bg-red-500 hover:bg-red-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+								>
+									Logout
 								</Button>
-							</Link>
-						</motion.div>
+							</motion.div>
+						) : (
+							<>
+								<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+									<Link
+										to="/login"
+										className="text-sm font-medium text-white hover:text-even-tect-purple dark:text-white dark:hover:text-even-tect-purple transition-colors"
+									>
+										Login
+									</Link>
+								</motion.div>
+								<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+									<Link to="/register">
+										<Button className="bg-even-tect-purple hover:bg-even-tect-purple/90 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+											Sign Up
+										</Button>
+									</Link>
+								</motion.div>
+							</>
+						)}
 					</div>
-
-					{/* <ModeToggle />
-          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-            <CiMenuFries
-              onClick={toggleOpen}
-              className="h-6 w-6 md:hidden text-gray-600 dark:text-gray-400 cursor-pointer hover:text-even-tect-purple dark:hover:text-even-tect-purple transition-colors"
-            />
-          </motion.div> */}
 				</div>
 			</motion.nav>
 		</>
