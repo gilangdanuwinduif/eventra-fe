@@ -6,32 +6,30 @@ const LoginPage = React.lazy(() => import('../pages/LoginPage'))
 const RegisterPage = React.lazy(() => import('../pages/RegisterPage'))
 
 // Admin Pages
-const DashboardAdminPage = React.lazy(
-  () => import('../pages/DashboardAdminPage')
-)
+const DashboardAdminPage = React.lazy(() => import('../pages/DashboardAdminPage'))
 
 export const publicRoutes = [
-  {
-    path: '/',
-    element: LandingPage,
-    exact: true
-  },
-  {
-    path: '/login',
-    element: LoginPage,
-    exact: true
-  },
-  {
-    path: '/register',
-    element: RegisterPage,
-    exact: true
-  }
+	{
+		path: '/',
+		element: LandingPage,
+		exact: true
+	},
+	{
+		path: '/login',
+		element: LoginPage,
+		exact: true
+	},
+	{
+		path: '/register',
+		element: RegisterPage,
+		exact: true
+	}
 ]
 
 export const privateRoutes = [
-  {
-    path: '/dashboard-admin',
-    element: DashboardAdminPage,
-    exact: true
-  }
+	{
+		path: '/dashboard-admin',
+		element: DashboardAdminPage,
+		exact: true
+	}
 ]

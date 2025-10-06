@@ -1,12 +1,13 @@
 module.exports = {
-  printWidth: 80,
-  tabWidth: 2,
-  singleQuote: true,
-  quoteProps: 'as-needed',
-  trailingComma: 'none',
-  bracketSpacing: true,
-  semi: false,
-  useTabs: false,
-  bracketSameLine: false,
-  proseWrap: 'never'
+	printWidth: 120,
+	tabWidth: 4,
+	singleQuote: true,
+	quoteProps: 'as-needed',
+	trailingComma: 'none',
+	bracketSpacing: true,
+	semi: false,
+	useTabs: true,
+	bracketSameLine: false,
+	proseWrap: 'never',
+	endOfLine: 'lf'
 }
