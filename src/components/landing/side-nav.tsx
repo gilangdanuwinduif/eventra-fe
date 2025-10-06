@@ -1,8 +1,9 @@
-import React from 'react';
+import React from 'react'
+import { Button } from '../ui/button'
 
 interface SideNavProps {
-  isOpen: boolean;
-  handleClose: () => void;
+  isOpen: boolean
+  handleClose: () => void
 }
 
 const SideNav: React.FC<SideNavProps> = ({ isOpen, handleClose }) => {
@@ -18,19 +19,57 @@ const SideNav: React.FC<SideNavProps> = ({ isOpen, handleClose }) => {
         onClick={(e) => e.stopPropagation()}
       >
         {/* SideNav content goes here */}
-        <button onClick={handleClose} className="text-gray-600 dark:text-gray-400">
+        <Button
+          onClick={handleClose}
+          className="text-gray-600 dark:text-gray-400"
+        >
           Close
-        </button>
+        </Button>
         <ul className="mt-4 space-y-2">
-          <li><a href="/" className="block text-gray-800 dark:text-gray-200 hover:text-indigo-600">Home</a></li>
-          <li><a href="/events" className="block text-gray-800 dark:text-gray-200 hover:text-indigo-600">Events</a></li>
-          <li><a href="/about" className="block text-gray-800 dark:text-gray-200 hover:text-indigo-600">About Us</a></li>
-          <li><a href="/contact" className="block text-gray-800 dark:text-gray-200 hover:text-indigo-600">Contact</a></li>
-          <li><a href="/login" className="block text-indigo-600 hover:text-indigo-700">Login</a></li>
+          <li>
+            <a
+              href="/"
+              className="block text-gray-800 dark:text-gray-200 hover:text-indigo-600"
+            >
+              Home
+            </a>
+          </li>
+          <li>
+            <a
+              href="/events"
+              className="block text-gray-800 dark:text-gray-200 hover:text-indigo-600"
+            >
+              Events
+            </a>
+          </li>
+          <li>
+            <a
+              href="/about"
+              className="block text-gray-800 dark:text-gray-200 hover:text-indigo-600"
+            >
+              About Us
+            </a>
+          </li>
+          <li>
+            <a
+              href="/contact"
+              className="block text-gray-800 dark:text-gray-200 hover:text-indigo-600"
+            >
+              Contact
+            </a>
+          </li>
+          <li>
+            <a
+              href="/login"
+              className="block text-indigo-600 hover:text-indigo-700"
+            >
+              Login
+            </a>
+          </li>
         </ul>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SideNav;
+export default SideNav

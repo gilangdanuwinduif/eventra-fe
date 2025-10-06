@@ -1,44 +1,44 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { CiMenuFries } from "react-icons/ci";
-import { Button } from "../ui/button";
-import Text from "../custom-ui/text";
-import SideNav from "./side-nav";
-import { ModeToggle } from "../mode-toggle";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { CiMenuFries } from 'react-icons/ci'
+import { Button } from '../ui/button'
+import Text from '../custom-ui/text'
+import SideNav from './side-nav'
+import { ModeToggle } from '../mode-toggle'
+import { motion } from 'framer-motion'
 
 export default function Navbar() {
-  const [scrollY, setScrollY] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0)
+  const [isOpen, setIsOpen] = useState(false)
 
   const toggleOpen = () => {
-    setIsOpen(!isOpen);
-  };
+    setIsOpen(!isOpen)
+  }
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
+      setScrollY(window.scrollY)
+    }
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll)
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   const handleNavClick = () => {
     if (isOpen) {
-      setIsOpen(false);
+      setIsOpen(false)
     }
-  };
+  }
 
   const navLinks = [
-    { to: "/", label: "Home" }, // Changed from /features to /
-    { to: "/events", label: "Events" }, // Added Events
-    { to: "/about", label: "About Us" }, // Added About Us
-    { to: "/contact", label: "Contact" }, // Added Contact
-  ];
+    { to: '/', label: 'Home' }, // Changed from /features to /
+    { to: '/events', label: 'Events' }, // Added Events
+    { to: '/about', label: 'About Us' }, // Added About Us
+    { to: '/contact', label: 'Contact' } // Added Contact
+  ]
 
   return (
     <>
@@ -46,9 +46,9 @@ export default function Navbar() {
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-className={`flex items-center justify-between px-4 md:px-8 w-full h-[80px] top-0 bg-blue-500/80 md:dark:border-none border-b dark:bg-blue-900/80 dark:border-b-gray-800 z-20 fixed backdrop-blur-md ${
-          scrollY > 150 ? "shadow-sm" : ""
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        className={`flex items-center justify-between px-4 md:px-8 w-full h-[80px] top-0 bg-blue-500/80 md:dark:border-none border-b dark:bg-blue-900/80 dark:border-b-gray-800 z-20 fixed backdrop-blur-md ${
+          scrollY > 150 ? 'shadow-sm' : ''
         }`}
         onClick={handleNavClick}
       >
@@ -113,5 +113,5 @@ className={`flex items-center justify-between px-4 md:px-8 w-full h-[80px] top-0
         </div>
       </motion.nav>
     </>
-  );
+  )
 }
