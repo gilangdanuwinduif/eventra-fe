@@ -28,7 +28,7 @@ export const publicRoutes = [
 
 export const privateRoutes = [
 	{
-		path: '/dashboard-admin',
+		path: '/dashboard/admin',
 		element: DashboardAdminPage,
 		exact: true
 	}

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '../components/ui/button'
 import axios from '../lib/axios'
 import { jwtDecode } from 'jwt-decode'
+import useAuthStore, { DecodedToken, User } from '../store/authStore'
 
 const LoginPage: React.FC = () => {
 	const [email, setEmail] = useState<string>('')
@@ -14,7 +15,7 @@ const LoginPage: React.FC = () => {
 		try {
 			const loginResponse = await axios.post('/auth/login', { email, password })
 			const token = loginResponse.data.data.token
-			localStorage.setItem('authToken', token)
+			useAuthStore.getState().setToken(token) // Use the store's setToken function
 
 			const decodedToken: { sub: string; iat: number; exp: number } = jwtDecode(token)
 			const userId = decodedToken.sub // Assuming 'sub' contains the user ID or email
@@ -24,9 +25,21 @@ const LoginPage: React.FC = () => {
 			})
 
 			const userRole = userResponse.data.data.role // Assuming the user role is in response.data.data.role
-			if (userRole === 'ADMIN') {
+			const currentUser = useAuthStore.getState().user as DecodedToken // Cast to DecodedToken
+			const fullUser: User = {
+				sub: currentUser.sub,
+				iat: currentUser.iat,
+				exp: currentUser.exp,
+				role: userRole
+			}
+			useAuthStore.getState().setUser(fullUser) // Update user role in store
+			console.log(userRole, '<==== ini userRole')
+			if (userRole == 'ADMIN') {
+				console.log('masuk sini')
 				navigate('/dashboard/admin')
 			} else {
+				console.log('masuk sini2')
+
 				navigate('/') // Redirect to a default page for non-admin users
 			}
 		} catch (error) {

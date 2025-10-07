@@ -1,7 +1,59 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from '../components/ui/button'
+import api from '../lib/axios' // Import the configured axios instance
+
+interface Event {
+	id: string
+	title: string
+	description: string
+	location: string
+	startDate: string
+	endDate: string
+	createdAt: string
+	createdBy: string
+	updatedAt: string
+	updatedBy: string
+	imageUrl: string
+}
+
+interface ApiResponse {
+	success: boolean
+	message: string
+	data: {
+		content: Event[]
+		page: number
+		limit: number
+		totalElements: number
+		totalPages: number
+		last: boolean
+	}
+}
 
 const DashboardAdminPage: React.FC = () => {
+	const [events, setEvents] = useState<Event[]>([])
+	const [currentPage, setCurrentPage] = useState<number>(1)
+	const [totalPages, setTotalPages] = useState<number>(1)
+	const [loading, setLoading] = useState<boolean>(true)
+	const [error, setError] = useState<string | null>(null)
+
+	useEffect(() => {
+		const fetchEvents = async () => {
+			setLoading(true)
+			setError(null)
+			try {
+				const response = await api.get<ApiResponse>(`/events?page=${currentPage}&limit=10`)
+				setEvents(response.data.data.content)
+				setTotalPages(response.data.data.totalPages)
+			} catch (err) {
+				setError('Failed to fetch events.')
+				console.error(err)
+			} finally {
+				setLoading(false)
+			}
+		}
+
+		fetchEvents()
+	}, [currentPage])
 	return (
 		<div className="min-h-screen bg-gray-100">
 			{/* Header */}
@@ -133,57 +185,83 @@ const DashboardAdminPage: React.FC = () => {
 							</tr>
 						</thead>
 						<tbody className="bg-white divide-y divide-gray-200">
-							<tr>
-								<td className="px-6 py-4 whitespace-nowrap">
-									<img
-										src="https://via.placeholder.com/40"
-										alt="Event Thumbnail"
-										className="h-10 w-10"
-									/>
-								</td>
-								<td className="px-6 py-4 whitespace-nowrap">Event 001</td>
-								<td className="px-6 py-4 whitespace-nowrap">1 Oktober 2025</td>
-								<td className="px-6 py-4 whitespace-nowrap">200</td>
-								<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-									<button className="bg-purple-600 text-white px-4 py-2 rounded-md">Detail</button>
-								</td>
-							</tr>
-							<tr>
-								<td className="px-6 py-4 whitespace-nowrap">
-									<img
-										src="https://via.placeholder.com/40"
-										alt="Event Thumbnail"
-										className="h-10 w-10"
-									/>
-								</td>
-								<td className="px-6 py-4 whitespace-nowrap">Event 002</td>
-								<td className="px-6 py-4 whitespace-nowrap">5 Oktober 2025</td>
-								<td className="px-6 py-4 whitespace-nowrap">HABIS!</td>
-								<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-									<button className="bg-purple-600 text-white px-4 py-2 rounded-md">Detail</button>
-								</td>
-							</tr>
+							{loading ? (
+								<tr>
+									<td colSpan={5} className="px-6 py-4 text-center text-gray-500">
+										Loading events...
+									</td>
+								</tr>
+							) : error ? (
+								<tr>
+									<td colSpan={5} className="px-6 py-4 text-center text-red-500">
+										{error}
+									</td>
+								</tr>
+							) : events.length === 0 ? (
+								<tr>
+									<td colSpan={5} className="px-6 py-4 text-center text-gray-500">
+										No events found.
+									</td>
+								</tr>
+							) : (
+								events.map((event) => (
+									<tr key={event.id}>
+										<td className="px-6 py-4 whitespace-nowrap">
+											<img
+												src={event.imageUrl || 'https://via.placeholder.com/40'}
+												alt="Event Thumbnail"
+												className="h-10 w-10 object-cover rounded"
+											/>
+										</td>
+										<td className="px-6 py-4 whitespace-nowrap">{event.title}</td>
+										<td className="px-6 py-4 whitespace-nowrap">
+											{new Date(event.startDate).toLocaleDateString('id-ID', {
+												year: 'numeric',
+												month: 'long',
+												day: 'numeric'
+											})}
+										</td>
+										<td className="px-6 py-4 whitespace-nowrap">N/A</td>{' '}
+										{/* Sisa Tiket - Not available in API */}
+										<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+											<Button className="bg-purple-600 text-white px-4 py-2 rounded-md">
+												Detail
+											</Button>
+										</td>
+									</tr>
+								))
+							)}
 						</tbody>
 					</table>
 
 					{/* Pagination */}
 					<div className="mt-4 flex justify-center">
-						<span className="px-2 py-1">Page</span>
-						<a href="#" className="px-2 py-1 font-bold text-purple-700">
-							1
-						</a>
-						<a href="#" className="px-2 py-1 text-gray-600">
-							2
-						</a>
-						<a href="#" className="px-2 py-1 text-gray-600">
-							3
-						</a>
-						<a href="#" className="px-2 py-1 text-gray-600">
-							4
-						</a>
-						<a href="#" className="px-2 py-1 text-gray-600">
-							5
-						</a>
+						<Button
+							onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+							disabled={currentPage === 1 || loading}
+							className="px-3 py-1 mx-1 border rounded-md"
+						>
+							Previous
+						</Button>
+						{Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+							<Button
+								key={page}
+								onClick={() => setCurrentPage(page)}
+								className={`px-3 py-1 mx-1 border rounded-md ${
+									currentPage === page ? 'bg-purple-700 text-white' : 'bg-gray-200'
+								}`}
+								disabled={loading}
+							>
+								{page}
+							</Button>
+						))}
+						<Button
+							onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+							disabled={currentPage === totalPages || loading}
+							className="px-3 py-1 mx-1 border rounded-md"
+						>
+							Next
+						</Button>
 					</div>
 				</div>
 			</main>

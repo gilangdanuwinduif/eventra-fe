@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom' // Import useLocation
 import useAuthStore from '../store/authStore'
 
 interface ProtectedRouteProps {
@@ -9,6 +9,7 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 	const { token, user, userRole, logout } = useAuthStore()
 	const navigate = useNavigate()
+	const location = useLocation() // Get current location
 
 	useEffect(() => {
 		if (!token) {
@@ -18,11 +19,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 			if (user && user.exp * 1000 < Date.now()) {
 				logout()
 				navigate('/login')
-			} else if (userRole === 'ADMIN' && window.location.pathname !== '/dashboard/admin') {
-				navigate('/dashboard/admin')
+			} else if (location.pathname.startsWith('/dashboard/admin') && userRole !== 'ADMIN') {
+				// If trying to access admin dashboard and not an admin, redirect to home
+				navigate('/')
 			}
 		}
-	}, [token, user, userRole, navigate, logout])
+	}, [token, user, userRole, navigate, logout, location.pathname])
 
 	if (token && user && user.exp * 1000 >= Date.now()) {
 		return <>{children}</>
