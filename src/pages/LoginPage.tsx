@@ -30,7 +30,9 @@ const LoginPage: React.FC = () => {
 				sub: currentUser.sub,
 				iat: currentUser.iat,
 				exp: currentUser.exp,
-				role: userRole
+				role: userRole,
+				name: currentUser.name, // edit : by Gilang Diisi dari API
+    			profilePicture: currentUser.profilePicture // edit : by Gilang Diisi dari API
 			}
 			useAuthStore.getState().setUser(fullUser) // Update user role in store
 			console.log(userRole, '<==== ini userRole')

@@ -5,7 +5,9 @@ export interface DecodedToken {
 	sub: string
 	iat: number
 	exp: number
-	role?: string | null // Role might be in the token, can be string or null
+	role?: string | null // Role might be in the token, can be string or null property JWT
+	name: string // <-- TAMBAHKAN INI : by Gilang
+	profilePicture?: string | null // <-- TAMBAHKAN INI (opsional) : by Gilang
 }
 
 export interface User {
@@ -13,6 +15,8 @@ export interface User {
 	iat: number
 	exp: number
 	role: string | null // User object will definitely have a role after fetching
+	name: string // <-- TAMBAHKAN INI : by Gilang
+    profilePicture?: string | null // <-- TAMBAHKAN INI (opsional) : by Gilang
 }
 
 export interface AuthState {
