@@ -7,11 +7,12 @@ import Text from '../custom-ui/text'
 import SideNav from './side-nav'
 import { ModeToggle } from '../mode-toggle'
 import { motion } from 'framer-motion'
+import UserProfileDropdown from '../custom-ui/UserProfileDropdown'
 
 export default function Navbar() {
 	const [scrollY, setScrollY] = useState(0)
 	const [isOpen, setIsOpen] = useState(false)
-	const { token, logout } = useAuthStore()
+	const { token, user, userRole, logout } = useAuthStore() //edit : by Gilang ambil data token dan logout dari authStore
 	const navigate = useNavigate()
 
 	const toggleOpen = () => {
@@ -41,12 +42,27 @@ export default function Navbar() {
 		}
 	}
 
-	const navLinks = [
-		{ to: '/', label: 'Home' }, // Changed from /features to /
-		{ to: '/events', label: 'Events' }, // Added Events
-		{ to: '/about', label: 'About Us' }, // Added About Us
-		{ to: '/contact', label: 'Contact' } // Added Contact
+	// Edit : By Gilang sampe 
+	// Definisi Navigasi Berdasarkan Role
+    // Navigasi yang tampil di tengah Navbar
+	const commonNavLinks = [
+		{ to: '/', label: 'Home' }, 
+		{ to: '/events', label: 'Events' }, 
+		{ to: '/about', label: 'About Us' },
+		{ to: '/contact', label: 'Contact' }
 	]
+    
+    // Navigasi khusus
+    const roleNavLinks = []
+    
+    if (userRole === 'ADMIN') {
+        roleNavLinks.push({ to: '/dashboard/admin', label: 'Dashboard Admin' })
+    }
+    // else if (userRole === 'USER') {
+    //     roleNavLinks.push({ to: '/my-tickets', label: 'Tiket Saya' })
+    // }
+
+    const finalNavLinks = [...roleNavLinks, ...commonNavLinks]
 
 	return (
 		<>
@@ -71,7 +87,8 @@ export default function Navbar() {
 
 				{/* Desktop Navigation - Centered */}
 				<div className="hidden md:flex items-center gap-6 mx-auto">
-					{navLinks.map((link) => (
+                    {/* Tampilkan link yang sudah digabungkan dan difilter role */}
+					{finalNavLinks.map((link) => (
 						<motion.div key={link.to} whileHover={{ y: -2 }} whileTap={{ y: 0 }}>
 							<Link
 								to={link.to}
@@ -84,19 +101,15 @@ export default function Navbar() {
 					))}
 				</div>
 
-				{/* Auth Buttons */}
+				{/* Auth/Profile & Mode Toggle */}
 				<div className="flex items-center gap-4">
 					<div className="hidden md:flex items-center gap-4">
-						{token ? (
-							<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-								<Button
-									onClick={handleLogout}
-									className="bg-red-500 hover:bg-red-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
-								>
-									Logout
-								</Button>
-							</motion.div>
+						{/* 👇 Pengkondisian untuk Profil/Auth */}
+						{token && user ? (
+                            // Tampilkan komponen dropdown profil jika sudah login
+							<UserProfileDropdown />
 						) : (
+                            // Tampilkan tombol Login/Signup jika belum login
 							<>
 								<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
 									<Link
@@ -115,7 +128,15 @@ export default function Navbar() {
 								</motion.div>
 							</>
 						)}
+                        
 					</div>
+					{/* Tombol Menu untuk Mobile */}
+					<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+						<CiMenuFries
+							className="text-white text-2xl cursor-pointer md:hidden"
+							onClick={toggleOpen}
+						/>
+					</motion.div>
 				</div>
 			</motion.nav>
 		</>

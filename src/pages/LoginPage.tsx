@@ -31,7 +31,7 @@ const LoginPage: React.FC = () => {
 				iat: currentUser.iat,
 				exp: currentUser.exp,
 				role: userRole,
-				name: currentUser.name, // edit : by Gilang Diisi dari API
+				fullName: currentUser.fullName, // edit : by Gilang Diisi dari API
     			profilePicture: currentUser.profilePicture // edit : by Gilang Diisi dari API
 			}
 			useAuthStore.getState().setUser(fullUser) // Update user role in store
