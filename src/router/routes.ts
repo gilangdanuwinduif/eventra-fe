@@ -1,5 +1,4 @@
 import React from 'react'
-import CreateEventPage from '../pages/CreateEventPage'
 
 // Public Pages
 const LandingPage = React.lazy(() => import('../pages/LandingPage'))
@@ -8,6 +7,8 @@ const RegisterPage = React.lazy(() => import('../pages/RegisterPage'))
 
 // Admin Pages
 const DashboardAdminPage = React.lazy(() => import('../pages/DashboardAdminPage'))
+const CreateEventPage = React.lazy(() => import('../pages/CreateEventPage'))
+const UpdateEventPage = React.lazy(() => import('../pages/UpdateEventPage'))
 
 export const publicRoutes = [
 	{
@@ -36,6 +37,11 @@ export const privateRoutes = [
 	{
 		path: '/create/event',
 		element: CreateEventPage,
+		exact: true
+	},
+	{
+		path: '/update/event/:id',
+		element: UpdateEventPage,
 		exact: true
 	}
 ]

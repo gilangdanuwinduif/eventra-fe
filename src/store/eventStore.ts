@@ -35,6 +35,8 @@ interface EventState {
 	success: boolean
 	message: string | null
 	createEvent: (eventData: CreateEventPayload) => Promise<void>
+	fetchEventById: (id: string) => Promise<Event | null>
+	updateEvent: (id: string, eventData: CreateEventPayload) => Promise<void>
 	resetState: () => void
 }
 
@@ -53,10 +55,47 @@ export const useEventStore = create<EventState>((set) => ({
 			} else {
 				set({ error: response.data.message || 'Failed to create event', loading: false })
 			}
-		} catch (err: any) {
-			set({ error: err.response?.data?.message || err.message || 'An unexpected error occurred', loading: false })
+		} catch (err: unknown) {
+			const message =
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				(err as any).response?.data?.message || (err as Error).message || 'An unexpected error occurred'
+			set({ error: message, loading: false })
 		}
 	},
+
+	fetchEventById: async (id: string): Promise<Event | null> => {
+		set({ loading: true, error: null, success: false, message: null }) // Reset success/message for fetch
+		try {
+			const response = await axios.get<Event>(`http://localhost:8080/api/events/${id}`)
+			console.log(response, '<=== ini apa?')
+			set({ loading: false }) // Only set loading to false, do not set success/message
+			return response.data
+		} catch (err: unknown) {
+			const message =
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				(err as any).response?.data?.message || (err as Error).message || 'Failed to fetch event'
+			set({ error: message, loading: false })
+			return null
+		}
+	},
+
+	updateEvent: async (id: string, eventData: CreateEventPayload) => {
+		set({ loading: true, error: null, success: false, message: null })
+		try {
+			const response = await axios.put(`http://localhost:8080/api/events/${id}`, eventData)
+			if (response.data.success) {
+				set({ success: true, message: response.data.message, loading: false })
+			} else {
+				set({ error: response.data.message || 'Failed to update event', loading: false })
+			}
+		} catch (err: unknown) {
+			const message =
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				(err as any).response?.data?.message || (err as Error).message || 'An unexpected error occurred'
+			set({ error: message, loading: false })
+		}
+	},
+
 	resetState: () => {
 		set({ loading: false, error: null, success: false, message: null })
 	}
