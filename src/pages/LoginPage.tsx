@@ -35,13 +35,9 @@ const LoginPage: React.FC = () => {
 				profilePicture: currentUser.profilePicture // edit : by Gilang Diisi dari API
 			}
 			useAuthStore.getState().setUser(fullUser) // Update user role in store
-			console.log(userRole, '<==== ini userRole')
 			if (userRole == 'ADMIN') {
-				console.log('masuk sini')
 				navigate('/dashboard/admin')
 			} else {
-				console.log('masuk sini2')
-
 				navigate('/') // Redirect to a default page for non-admin users
 			}
 		} catch (error) {

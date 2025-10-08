@@ -14,29 +14,29 @@ const SideNav: React.FC<SideNavProps> = ({ isOpen, handleClose }) => {
 			} transition-transform duration-300 ease-in-out`}
 			onClick={handleClose}
 		>
-			<div className="w-64 bg-white dark:bg-black h-full shadow-lg p-4" onClick={(e) => e.stopPropagation()}>
+			<div className="w-64 bg-white h-full shadow-lg p-4" onClick={(e) => e.stopPropagation()}>
 				{/* SideNav content goes here */}
-				<Button onClick={handleClose} className="text-gray-600 dark:text-gray-400">
+				<Button onClick={handleClose} className="text-gray-600">
 					Close
 				</Button>
 				<ul className="mt-4 space-y-2">
 					<li>
-						<a href="/" className="block text-gray-800 dark:text-gray-200 hover:text-indigo-600">
+						<a href="/" className="block text-gray-800 hover:text-indigo-600">
 							Home
 						</a>
 					</li>
 					<li>
-						<a href="/events" className="block text-gray-800 dark:text-gray-200 hover:text-indigo-600">
+						<a href="/events" className="block text-gray-800 hover:text-indigo-600">
 							Events
 						</a>
 					</li>
 					<li>
-						<a href="/about" className="block text-gray-800 dark:text-gray-200 hover:text-indigo-600">
+						<a href="/about" className="block text-gray-800 hover:text-indigo-600">
 							About Us
 						</a>
 					</li>
 					<li>
-						<a href="/contact" className="block text-gray-800 dark:text-gray-200 hover:text-indigo-600">
+						<a href="/contact" className="block text-gray-800 hover:text-indigo-600">
 							Contact
 						</a>
 					</li>

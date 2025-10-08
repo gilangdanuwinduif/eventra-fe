@@ -9,7 +9,6 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 	const { token, user, userRole, logout } = useAuthStore()
-	console.log(useAuthStore.getState().userRole, '<==== ini userRole dari protected route')
 	const navigate = useNavigate()
 	const location = useLocation() // Get current location
 
@@ -22,9 +21,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 				logout()
 				navigate('/login')
 			} else if (location.pathname.startsWith('/dashboard/admin') && userRole !== 'ADMIN') {
-				console.log(userRole, '<==== ini userRole')
 				// If trying to access admin dashboard and not an admin, redirect to home
-				console.log('Access denied. Redirecting to home.')
 				navigate('/')
 			}
 		}

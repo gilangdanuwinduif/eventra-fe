@@ -1,27 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { CiMenuFries } from 'react-icons/ci'
 import useAuthStore from '../../store/authStore'
 import { Button } from '../ui/button'
 import Text from '../custom-ui/text'
 import SideNav from './side-nav'
-import { ModeToggle } from '../mode-toggle'
 import { motion } from 'framer-motion'
 import UserProfileDropdown from '../custom-ui/UserProfileDropdown'
 
 export default function Navbar() {
 	const [scrollY, setScrollY] = useState(0)
 	const [isOpen, setIsOpen] = useState(false)
-	const { token, user, userRole, logout } = useAuthStore() //edit : by Gilang ambil data token dan logout dari authStore
-	const navigate = useNavigate()
+	const { token, user, userRole } = useAuthStore() //edit : by Gilang ambil data token dan logout dari authStore
 
 	const toggleOpen = () => {
 		setIsOpen(!isOpen)
-	}
-
-	const handleLogout = () => {
-		logout()
-		navigate('/') // Redirect to login page after logout
 	}
 
 	useEffect(() => {
@@ -54,7 +47,6 @@ export default function Navbar() {
 
 	// Navigasi khusus
 	const roleNavLinks = []
-	console.log('UserRole:', userRole)
 	if (userRole === 'ADMIN') {
 		roleNavLinks.push(
 			{ to: '/dashboard/admin', label: 'Dashboard' },
@@ -83,7 +75,7 @@ export default function Navbar() {
 				initial={{ y: -100 }}
 				animate={{ y: 0 }}
 				transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-				className={`flex items-center justify-between px-4 md:px-8 w-full h-[80px] top-0 bg-blue-500/80 md:dark:border-none border-b dark:bg-blue-900/80 dark:border-b-gray-800 z-20 fixed backdrop-blur-md ${
+				className={`flex items-center justify-between px-4 md:px-8 w-full h-[80px] top-0 bg-blue-500/80 md:border-none border-b z-20 fixed backdrop-blur-md ${
 					scrollY > 150 ? 'shadow-sm' : ''
 				}`}
 				onClick={handleNavClick}
@@ -92,7 +84,7 @@ export default function Navbar() {
 				<div className="flex items-center gap-8">
 					<Link to="/">
 						<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-							<Text label="EventTech" className="text-xl font-bold text-white dark:text-white" />
+							<Text label="EventTech" className="text-xl font-bold text-white" />
 						</motion.div>
 					</Link>
 				</div>
@@ -104,7 +96,7 @@ export default function Navbar() {
 						<motion.div key={link.to} whileHover={{ y: -2 }} whileTap={{ y: 0 }}>
 							<Link
 								to={link.to}
-								className="text-sm font-medium text-white hover:text-even-tect-purple dark:text-white dark:hover:text-even-tect-purple transition-colors relative group"
+								className="text-sm font-medium text-white hover:text-even-tect-purple transition-colors relative group"
 							>
 								{link.label}
 								<span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-even-tect-purple group-hover:w-full transition-all duration-300" />
@@ -126,7 +118,7 @@ export default function Navbar() {
 								<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
 									<Link
 										to="/login"
-										className="text-sm font-medium text-white hover:text-even-tect-purple dark:text-white dark:hover:text-even-tect-purple transition-colors"
+										className="text-sm font-medium text-white hover:text-even-tect-purple transition-colors"
 									>
 										Login
 									</Link>

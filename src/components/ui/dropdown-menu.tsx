@@ -54,7 +54,7 @@ export default function UserProfileDropdown() {
                TRIGGER: Bagian yang Terlihat di Navbar
                ======================================= */}
 			<div
-				className="flex items-center gap-2 cursor-pointer p-2 rounded-full transition-colors hover:bg-blue-600/50 dark:hover:bg-blue-800/50"
+				className="flex items-center gap-2 cursor-pointer p-2 rounded-full transition-colors hover:bg-blue-600/50"
 				onClick={() => setIsOpen(!isOpen)} // Toggle Dropdown
 			>
 				{/* Avatar/Foto Kustom (Tailwind Murni) */}
@@ -69,7 +69,7 @@ export default function UserProfileDropdown() {
 				{/* Nama dan Status */}
 				<div className="flex flex-col items-start hidden sm:flex">
 					<span className="text-sm font-semibold text-white truncate max-w-[120px]">{user.fullName}</span>
-					<span className="text-xs text-blue-200 dark:text-blue-300">{displayRole}</span>
+					<span className="text-xs text-blue-200">{displayRole}</span>
 				</div>
 
 				{/* Dropdown Icon */}
@@ -88,11 +88,11 @@ export default function UserProfileDropdown() {
                CONTENT: Isi Dropdown Menu
                ======================================= */}
 			{isOpen && (
-				<div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-md shadow-xl border border-gray-200 dark:border-gray-700 z-30 transform origin-top-right animate-fade-in">
+				<div className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-xl border border-gray-200 z-30 transform origin-top-right animate-fade-in">
 					{/* Label Header */}
-					<div className="px-4 py-3 border-b dark:border-gray-700">
-						<p className="font-bold text-gray-900 dark:text-white">{user.fullName}</p>
-						<p className="text-xs font-normal text-gray-500 dark:text-gray-400">{displayRole}</p>
+					<div className="px-4 py-3 border-b">
+						<p className="font-bold text-gray-900">{user.fullName}</p>
+						<p className="text-xs font-normal text-gray-500">{displayRole}</p>
 					</div>
 
 					{/* Menu Items */}
@@ -101,7 +101,7 @@ export default function UserProfileDropdown() {
 						{userRole === 'ADMIN' && (
 							<Link
 								to="/dashboard/admin"
-								className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+								className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
 								onClick={() => setIsOpen(false)}
 							>
 								Dashboard Admin
@@ -110,7 +110,7 @@ export default function UserProfileDropdown() {
 
 						<Link
 							to="/profile"
-							className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+							className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
 							onClick={() => setIsOpen(false)}
 						>
 							Profil Saya
@@ -118,19 +118,19 @@ export default function UserProfileDropdown() {
 
 						<Link
 							to="/settings"
-							className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+							className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
 							onClick={() => setIsOpen(false)}
 						>
 							Pengaturan
 						</Link>
 
 						{/* Separator */}
-						<div className="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+						<div className="border-t border-gray-200 my-1"></div>
 
 						{/* Logout */}
 						<button
 							onClick={handleLogout}
-							className="w-full text-left block px-4 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-gray-700 dark:focus:bg-gray-700"
+							className="w-full text-left block px-4 py-2 text-sm text-red-500 hover:bg-red-50"
 						>
 							Logout
 						</button>

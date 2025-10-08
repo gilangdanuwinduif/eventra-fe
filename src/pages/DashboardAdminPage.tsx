@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '../components/ui/button'
 import api from '../lib/axios' // Import the configured axios instance
+import { useNavigate } from 'react-router-dom'
 
 interface Event {
 	id: string
@@ -30,6 +31,7 @@ interface ApiResponse {
 }
 
 const DashboardAdminPage: React.FC = () => {
+	const navigate = useNavigate()
 	const [events, setEvents] = useState<Event[]>([])
 	const [currentPage, setCurrentPage] = useState<number>(1)
 	const [totalPages, setTotalPages] = useState<number>(1)
