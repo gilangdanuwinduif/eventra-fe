@@ -49,8 +49,8 @@ const LoginPage: React.FC = () => {
 	}
 
 	return (
-		<>
-			<div className="bg-[#d1c4e9] min-h-screen flex items-center justify-center px-[20px]">
+		<div>
+			<section className="bg-[#d1c4e9] py-[100px] px-[50px] text-center text-[#4a148c] min-h-[500px] flex flex-col justify-center items-center">
 				<div className="flex max-w-screen-md bg-white rounded-[10px] shadow-[0_10px_30px_rgba(0,0,0,0.1)] overflow-hidden mx-auto">
 					<div className="flex flex-col md:flex-row p-[50px] gap-[30px]">
 						{/* Left Column - Welcome & Features */}
@@ -149,8 +149,8 @@ const LoginPage: React.FC = () => {
 						</div>
 					</div>
 				</div>
-			</div>
-		</>
+			</section>
+		</div>
 	)
 }
 

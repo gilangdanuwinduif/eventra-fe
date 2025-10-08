@@ -68,8 +68,8 @@ const RegisterPage: React.FC = () => {
 	}
 
 	return (
-		<>
-			<div className="min-h-screen flex items-center justify-center bg-[#d1c4e9] h-screen py-[40px] px-[20px] pt-[90px]">
+		<div>
+			<section className="bg-[#d1c4e9] py-[100px] px-[50px] text-center text-[#4a148c] min-h-[500px] flex flex-col justify-center items-center">
 				<div className="w-[90%] max-w-[900px] bg-white rounded-[10px] shadow-[0_10px_30px_rgba(0,0,0,0.1)] overflow-hidden mx-auto">
 					<div className="p-[40px]">
 						<h2 className="text-[28px] font-bold text-[#4a148c] mb-[5px] text-center">Buat Akun Baru</h2>
@@ -272,8 +272,8 @@ const RegisterPage: React.FC = () => {
 						</div>
 					</div>
 				</div>
-			</div>
-		</>
+			</section>
+		</div>
 	)
 }
 
