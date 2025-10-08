@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom' // Import useLocation
 import useAuthStore from '../store/authStore'
-import MainHeader from '../components/layout/MainHeader'
+import Navbar from '../components/landing/Navbar'
 
 interface ProtectedRouteProps {
 	children: React.ReactNode
@@ -33,7 +33,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 	if (token && user && user.exp * 1000 >= Date.now()) {
 		return (
 			<>
-				<MainHeader role={userRole as 'ADMIN' | 'USER'} />
+				<Navbar />
 				{children}
 			</>
 		)

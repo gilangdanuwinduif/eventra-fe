@@ -1,4 +1,5 @@
 import React from 'react'
+import CreateEventPage from '../pages/CreateEventPage'
 
 // Public Pages
 const LandingPage = React.lazy(() => import('../pages/LandingPage'))
@@ -30,6 +31,11 @@ export const privateRoutes = [
 	{
 		path: '/dashboard/admin',
 		element: DashboardAdminPage,
+		exact: true
+	},
+	{
+		path: '/create/event',
+		element: CreateEventPage,
 		exact: true
 	}
 ]

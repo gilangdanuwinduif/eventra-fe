@@ -117,9 +117,12 @@ const DashboardAdminPage: React.FC = () => {
 				{/* Event List */}
 				<div className="bg-white rounded-lg shadow-md p-6">
 					<div className="flex justify-end mb-4">
-						<button className="bg-green-500 text-white px-4 py-2 rounded-md flex items-center">
+						<Button
+							onClick={() => navigate('/create/event')}
+							className="bg-green-500 text-white px-4 py-2 rounded-md flex items-center"
+						>
 							<span className="mr-2">+</span> Event
-						</button>
+						</Button>
 					</div>
 
 					<table className="min-w-full divide-y divide-gray-200">
