@@ -1,378 +1,394 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EventTech Eventra - Temukan Event Terbaik</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        /* CSS RESET */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>EventTech Eventra - Temukan Event Terbaik</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+		<style>
+			/* CSS RESET */
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            color: #333;
-            background-color: #f7f7f7; /* Latar belakang abu-abu muda */
-        }
+			body {
+				font-family: 'Poppins', sans-serif;
+				color: #333;
+				background-color: #f7f7f7; /* Latar belakang abu-abu muda */
+			}
 
-        /* --- NAVIGATION BAR (HEADER) - DARI MOCKUP SEBELUMNYA --- */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 80px;
-            background-color: white;
-            box-shadow: 0 1px 10px rgba(0, 0, 0, 0.05);
-        }
+			/* --- NAVIGATION BAR (HEADER) - DARI MOCKUP SEBELUMNYA --- */
+			.header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 15px 80px;
+				background-color: white;
+				box-shadow: 0 1px 10px rgba(0, 0, 0, 0.05);
+			}
 
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 24px;
-            font-weight: 700;
-            color: #4a148c;
-        }
+			.logo {
+				display: flex;
+				align-items: center;
+				font-size: 24px;
+				font-weight: 700;
+				color: #4a148c;
+			}
 
-        .nav-links {
-            display: flex;
-            align-items: center;
-        }
+			.nav-links {
+				display: flex;
+				align-items: center;
+			}
 
-        .menu a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            margin: 0 20px;
-            font-size: 16px;
-            transition: color 0.3s;
-        }
+			.menu a {
+				text-decoration: none;
+				color: #333;
+				font-weight: 500;
+				margin: 0 20px;
+				font-size: 16px;
+				transition: color 0.3s;
+			}
 
-        .auth-buttons a {
-            text-decoration: none;
-            padding: 8px 20px;
-            border-radius: 6px;
-            margin-left: 10px;
-            font-weight: 600;
-            transition: background-color 0.3s;
-        }
+			.auth-buttons a {
+				text-decoration: none;
+				padding: 8px 20px;
+				border-radius: 6px;
+				margin-left: 10px;
+				font-weight: 600;
+				transition: background-color 0.3s;
+			}
 
-        .auth-buttons .masuk {
-            color: #4a148c;
-            border: none;
-        }
+			.auth-buttons .masuk {
+				color: #4a148c;
+				border: none;
+			}
 
-        .auth-buttons .daftar {
-            background-color: #8c5dff;
-            color: white;
-            border: 1px solid #8c5dff;
-        }
+			.auth-buttons .daftar {
+				background-color: #8c5dff;
+				color: white;
+				border: 1px solid #8c5dff;
+			}
 
-        /* --- HERO SECTION - DARI MOCKUP SEBELUMNYA --- */
-        .hero-section {
-            background-color: #d1c4e9;
-            padding: 100px 50px;
-            text-align: center;
-            color: #4a148c;
-            min-height: 450px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
+			/* --- HERO SECTION - DARI MOCKUP SEBELUMNYA --- */
+			.hero-section {
+				background-color: #d1c4e9;
+				padding: 100px 50px;
+				text-align: center;
+				color: #4a148c;
+				min-height: 450px;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+			}
 
-        .hero-title {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            max-width: 800px;
-            line-height: 1.2;
-        }
+			.hero-title {
+				font-size: 48px;
+				font-weight: 700;
+				margin-bottom: 20px;
+				max-width: 800px;
+				line-height: 1.2;
+			}
 
-        .hero-subtitle {
-            font-size: 18px;
-            font-weight: 400;
-            margin-bottom: 40px;
-            max-width: 600px;
-            color: #6a1b9a;
-        }
+			.hero-subtitle {
+				font-size: 18px;
+				font-weight: 400;
+				margin-bottom: 40px;
+				max-width: 600px;
+				color: #6a1b9a;
+			}
 
-        .search-container {
-            width: 100%;
-            max-width: 600px;
-            position: relative;
-        }
+			.search-container {
+				width: 100%;
+				max-width: 600px;
+				position: relative;
+			}
 
-        .search-input {
-            width: 100%;
-            padding: 15px 25px 15px 50px;
-            border: none;
-            border-radius: 30px;
-            font-size: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            outline: none;
-        }
+			.search-input {
+				width: 100%;
+				padding: 15px 25px 15px 50px;
+				border: none;
+				border-radius: 30px;
+				font-size: 16px;
+				box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+				outline: none;
+			}
 
-        .search-container i {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #999;
-            font-size: 18px;
-        }
-        
-        /* --- EVENT CARD SECTION (BARU) --- */
-        .event-section {
-            padding: 60px 80px;
-            text-align: center;
-        }
+			.search-container i {
+				position: absolute;
+				left: 20px;
+				top: 50%;
+				transform: translateY(-50%);
+				color: #999;
+				font-size: 18px;
+			}
 
-        .event-section h2 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 50px;
-            color: #4a148c;
-        }
+			/* --- EVENT CARD SECTION (BARU) --- */
+			.event-section {
+				padding: 60px 80px;
+				text-align: center;
+			}
 
-        .card-container {
-            display: flex;
-            justify-content: center;
-            gap: 30px; /* Jarak antar kartu */
-            flex-wrap: wrap; /* Agar responsif jika layar kecil */
-        }
+			.event-section h2 {
+				font-size: 32px;
+				font-weight: 700;
+				margin-bottom: 50px;
+				color: #4a148c;
+			}
 
-        .event-card {
-            width: 280px;
-            background-color: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            text-align: left;
-            transition: transform 0.3s;
-        }
-        
-        .event-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
+			.card-container {
+				display: flex;
+				justify-content: center;
+				gap: 30px; /* Jarak antar kartu */
+				flex-wrap: wrap; /* Agar responsif jika layar kecil */
+			}
 
-        .card-image-wrapper {
-            position: relative;
-        }
+			.event-card {
+				width: 280px;
+				background-color: white;
+				border-radius: 10px;
+				overflow: hidden;
+				box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+				text-align: left;
+				transition: transform 0.3s;
+			}
 
-        .card-image {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            display: block;
-        }
-        
-        .category-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background-color: #8c5dff;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
-        }
+			.event-card:hover {
+				transform: translateY(-5px);
+				box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+			}
 
-        .card-content {
-            padding: 15px;
-        }
+			.card-image-wrapper {
+				position: relative;
+			}
 
-        .event-type {
-            font-size: 14px;
-            color: #8c5dff;
-            font-weight: 500;
-            margin-bottom: 5px;
-        }
-        
-        .event-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            line-height: 1.4;
-            color: #333;
-        }
+			.card-image {
+				width: 100%;
+				height: 180px;
+				object-fit: cover;
+				display: block;
+			}
 
-        .event-detail {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-            font-size: 14px;
-            color: #666;
-        }
+			.category-badge {
+				position: absolute;
+				top: 15px;
+				right: 15px;
+				background-color: #8c5dff;
+				color: white;
+				padding: 4px 10px;
+				border-radius: 4px;
+				font-size: 12px;
+				font-weight: 600;
+			}
 
-        .event-detail i {
-            margin-right: 8px;
-            color: #8c5dff;
-        }
+			.card-content {
+				padding: 15px;
+			}
 
-        .event-price {
-            font-size: 16px;
-            font-weight: 700;
-            color: #4CAF50; /* Warna hijau untuk harga */
-            margin-top: 15px;
-        }
+			.event-type {
+				font-size: 14px;
+				color: #8c5dff;
+				font-weight: 500;
+				margin-bottom: 5px;
+			}
 
-        /* --- FOOTER (BARU) --- */
-        .footer {
-            background-color: #444; /* Warna abu-abu gelap untuk Footer */
-            color: white;
-            padding: 50px 80px;
-            text-align: center;
-        }
+			.event-title {
+				font-size: 18px;
+				font-weight: 600;
+				margin-bottom: 10px;
+				line-height: 1.4;
+				color: #333;
+			}
 
-        .footer p {
-            font-size: 24px;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
+			.event-detail {
+				display: flex;
+				align-items: center;
+				margin-bottom: 5px;
+				font-size: 14px;
+				color: #666;
+			}
 
-    </style>
-</head>
-<body>
+			.event-detail i {
+				margin-right: 8px;
+				color: #8c5dff;
+			}
 
-    <header class="header">
-        <div class="logo">
-            <i class="fas fa-calendar-alt"></i>
-            EventTech Eventra
-        </div>
-        <div class="nav-links">
-            <div class="menu">
-                <a href="#">Event</a>
-                <a href="#">Kategori</a>
-                <a href="#">Tentang Kami</a>
-            </div>
-            <div class="auth-buttons">
-                <a href="#" class="masuk">Masuk</a>
-                <a href="#" class="daftar">Daftar</a>
-            </div>
-        </div>
-    </header>
+			.event-price {
+				font-size: 16px;
+				font-weight: 700;
+				color: #4caf50; /* Warna hijau untuk harga */
+				margin-top: 15px;
+			}
 
-    <section class="hero-section">
-        <h1 class="hero-title">Temukan Event Terbaik di EventTeh Eventra</h1>
-        <p class="hero-subtitle">
-            Jelajahi berbagai event musik, olahraga, seni, dan banyak lagi.
-            Dapat pengalaman tak terlupakan bersama kami.
-        </p>
-        <div class="search-container">
-            <i class="fas fa-search"></i>
-            <input type="text" class="search-input" placeholder="Search">
-        </div>
-    </section>
-    
-    <main class="event-section">
-        <h2>Event Terbaru dan Terpopuler</h2>
-        
-        <div class="card-container">
-            <div class="event-card">
-                <div class="card-image-wrapper">
-                    <img src="https://via.placeholder.com/280x180/7e57c2/ffffff?text=EVENT+DRIVE+IN" alt="Event Drive In Senja" class="card-image">
-                    <span class="category-badge">Kategori</span>
-                </div>
-                <div class="card-content">
-                    <p class="event-type">Movies | Drive-In</p>
-                    <h3 class="event-title">Drive In Senja Back to the...</h3>
-                    <div class="event-detail">
-                        <i class="far fa-calendar-alt"></i> 
-                        <span class="date">22 SEP</span>
-                    </div>
-                    <div class="event-detail">
-                        <i class="fas fa-money-bill-wave"></i> 
-                        <span class="price-range">Rp 200.000 - 550.000</span>
-                    </div>
-                    <div class="event-detail">
-                        <i class="fas fa-map-marker-alt"></i> 
-                        <span class="location">Parkiran Utama Mall @ Alam...</span>
-                    </div>
-                </div>
-            </div>
+			/* --- FOOTER (BARU) --- */
+			.footer {
+				background-color: #444; /* Warna abu-abu gelap untuk Footer */
+				color: white;
+				padding: 50px 80px;
+				text-align: center;
+			}
 
-            <div class="event-card">
-                <div class="card-image-wrapper">
-                    <img src="https://via.placeholder.com/280x180/7e57c2/ffffff?text=EVENT+DRIVE+IN" alt="Event Drive In Senja" class="card-image">
-                    <span class="category-badge">Kategori</span>
-                </div>
-                <div class="card-content">
-                    <p class="event-type">Movies | Drive-In</p>
-                    <h3 class="event-title">Drive In Senja Back to the...</h3>
-                    <div class="event-detail">
-                        <i class="far fa-calendar-alt"></i> 
-                        <span class="date">22 SEP</span>
-                    </div>
-                    <div class="event-detail">
-                        <i class="fas fa-money-bill-wave"></i> 
-                        <span class="price-range">Rp 200.000 - 550.000</span>
-                    </div>
-                    <div class="event-detail">
-                        <i class="fas fa-map-marker-alt"></i> 
-                        <span class="location">Parkiran Utama Mall @ Alam...</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="event-card">
-                <div class="card-image-wrapper">
-                    <img src="https://via.placeholder.com/280x180/7e57c2/ffffff?text=EVENT+DRIVE+IN" alt="Event Drive In Senja" class="card-image">
-                    <span class="category-badge">Kategori</span>
-                </div>
-                <div class="card-content">
-                    <p class="event-type">Movies | Drive-In</p>
-                    <h3 class="event-title">Drive In Senja Back to the...</h3>
-                    <div class="event-detail">
-                        <i class="far fa-calendar-alt"></i> 
-                        <span class="date">22 SEP</span>
-                    </div>
-                    <div class="event-detail">
-                        <i class="fas fa-money-bill-wave"></i> 
-                        <span class="price-range">Rp 200.000 - 550.000</span>
-                    </div>
-                    <div class="event-detail">
-                        <i class="fas fa-map-marker-alt"></i> 
-                        <span class="location">Parkiran Utama Mall @ Alam...</span>
-                    </div>
-                </div>
-            </div>
-            
-             <div class="event-card">
-                <div class="card-image-wrapper">
-                    <img src="https://via.placeholder.com/280x180/7e57c2/ffffff?text=EVENT+DRIVE+IN" alt="Event Drive In Senja" class="card-image">
-                    <span class="category-badge">Kategori</span>
-                </div>
-                <div class="card-content">
-                    <p class="event-type">Movies | Drive-In</p>
-                    <h3 class="event-title">Drive In Senja Back to the...</h3>
-                    <div class="event-detail">
-                        <i class="far fa-calendar-alt"></i> 
-                        <span class="date">22 SEP</span>
-                    </div>
-                    <div class="event-detail">
-                        <i class="fas fa-money-bill-wave"></i> 
-                        <span class="price-range">Rp 200.000 - 550.000</span>
-                    </div>
-                    <div class="event-detail">
-                        <i class="fas fa-map-marker-alt"></i> 
-                        <span class="location">Parkiran Utama Mall @ Alam...</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+			.footer p {
+				font-size: 24px;
+				font-weight: 600;
+				letter-spacing: 2px;
+				text-transform: uppercase;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="header">
+			<div class="logo">
+				<i class="fas fa-calendar-alt"></i>
+				EventTech Eventra
+			</div>
+			<div class="nav-links">
+				<div class="menu">
+					<a href="#">Event</a>
+					<a href="#">Kategori</a>
+					<a href="#">Tentang Kami</a>
+				</div>
+				<div class="auth-buttons">
+					<a href="#" class="masuk">Masuk</a>
+					<a href="#" class="daftar">Daftar</a>
+				</div>
+			</div>
+		</header>
 
-    <footer class="footer">
-        <p>FOOTER</p>
-    </footer>
+		<section class="hero-section">
+			<h1 class="hero-title">Temukan Event Terbaik di EventTeh Eventra</h1>
+			<p class="hero-subtitle">
+				Jelajahi berbagai event musik, olahraga, seni, dan banyak lagi. Dapat pengalaman tak terlupakan bersama
+				kami.
+			</p>
+			<div class="search-container">
+				<i class="fas fa-search"></i>
+				<input type="text" class="search-input" placeholder="Search" />
+			</div>
+		</section>
 
-</body>
+		<main class="event-section">
+			<h2>Event Terbaru dan Terpopuler</h2>
+
+			<div class="card-container">
+				<div class="event-card">
+					<div class="card-image-wrapper">
+						<img
+							src="https://via.placeholder.com/280x180/7e57c2/ffffff?text=EVENT+DRIVE+IN"
+							alt="Event Drive In Senja"
+							class="card-image"
+						/>
+						<span class="category-badge">Kategori</span>
+					</div>
+					<div class="card-content">
+						<p class="event-type">Movies | Drive-In</p>
+						<h3 class="event-title">Drive In Senja Back to the...</h3>
+						<div class="event-detail">
+							<i class="far fa-calendar-alt"></i>
+							<span class="date">22 SEP</span>
+						</div>
+						<div class="event-detail">
+							<i class="fas fa-money-bill-wave"></i>
+							<span class="price-range">Rp 200.000 - 550.000</span>
+						</div>
+						<div class="event-detail">
+							<i class="fas fa-map-marker-alt"></i>
+							<span class="location">Parkiran Utama Mall @ Alam...</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="event-card">
+					<div class="card-image-wrapper">
+						<img
+							src="https://via.placeholder.com/280x180/7e57c2/ffffff?text=EVENT+DRIVE+IN"
+							alt="Event Drive In Senja"
+							class="card-image"
+						/>
+						<span class="category-badge">Kategori</span>
+					</div>
+					<div class="card-content">
+						<p class="event-type">Movies | Drive-In</p>
+						<h3 class="event-title">Drive In Senja Back to the...</h3>
+						<div class="event-detail">
+							<i class="far fa-calendar-alt"></i>
+							<span class="date">22 SEP</span>
+						</div>
+						<div class="event-detail">
+							<i class="fas fa-money-bill-wave"></i>
+							<span class="price-range">Rp 200.000 - 550.000</span>
+						</div>
+						<div class="event-detail">
+							<i class="fas fa-map-marker-alt"></i>
+							<span class="location">Parkiran Utama Mall @ Alam...</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="event-card">
+					<div class="card-image-wrapper">
+						<img
+							src="https://via.placeholder.com/280x180/7e57c2/ffffff?text=EVENT+DRIVE+IN"
+							alt="Event Drive In Senja"
+							class="card-image"
+						/>
+						<span class="category-badge">Kategori</span>
+					</div>
+					<div class="card-content">
+						<p class="event-type">Movies | Drive-In</p>
+						<h3 class="event-title">Drive In Senja Back to the...</h3>
+						<div class="event-detail">
+							<i class="far fa-calendar-alt"></i>
+							<span class="date">22 SEP</span>
+						</div>
+						<div class="event-detail">
+							<i class="fas fa-money-bill-wave"></i>
+							<span class="price-range">Rp 200.000 - 550.000</span>
+						</div>
+						<div class="event-detail">
+							<i class="fas fa-map-marker-alt"></i>
+							<span class="location">Parkiran Utama Mall @ Alam...</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="event-card">
+					<div class="card-image-wrapper">
+						<img
+							src="https://via.placeholder.com/280x180/7e57c2/ffffff?text=EVENT+DRIVE+IN"
+							alt="Event Drive In Senja"
+							class="card-image"
+						/>
+						<span class="category-badge">Kategori</span>
+					</div>
+					<div class="card-content">
+						<p class="event-type">Movies | Drive-In</p>
+						<h3 class="event-title">Drive In Senja Back to the...</h3>
+						<div class="event-detail">
+							<i class="far fa-calendar-alt"></i>
+							<span class="date">22 SEP</span>
+						</div>
+						<div class="event-detail">
+							<i class="fas fa-money-bill-wave"></i>
+							<span class="price-range">Rp 200.000 - 550.000</span>
+						</div>
+						<div class="event-detail">
+							<i class="fas fa-map-marker-alt"></i>
+							<span class="location">Parkiran Utama Mall @ Alam...</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<footer class="footer">
+			<p>FOOTER</p>
+		</footer>
+	</body>
 </html>

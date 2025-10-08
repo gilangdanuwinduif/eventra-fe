@@ -56,52 +56,6 @@ const DashboardAdminPage: React.FC = () => {
 	}, [currentPage])
 	return (
 		<div className="min-h-screen bg-gray-100">
-			{/* Header */}
-			<header className="bg-purple-700 text-white p-4 flex justify-between items-center">
-				<div className="flex items-center">
-					<img src="/src/logo.svg" alt="EventTech Eventra Logo" className="h-8 mr-2" />
-					<span className="text-xl font-bold">EventTech Eventra</span>
-				</div>
-				<nav>
-					<ul className="flex space-x-4">
-						<li>
-							<a href="#" className="hover:underline">
-								Dashboard
-							</a>
-						</li>
-						<li>
-							<a href="#" className="hover:underline">
-								Event
-							</a>
-						</li>
-						<li>
-							<a href="#" className="hover:underline">
-								Tiket
-							</a>
-						</li>
-						<li>
-							<a href="#" className="hover:underline">
-								Pengguna
-							</a>
-						</li>
-						<li>
-							<a href="#" className="hover:underline">
-								Laporan
-							</a>
-						</li>
-						<li>
-							<a href="#" className="hover:underline">
-								Order
-							</a>
-						</li>
-					</ul>
-				</nav>
-				<div className="text-right">
-					<p className="font-semibold">Name</p>
-					<p className="text-sm">Status User</p>
-				</div>
-			</header>
-
 			{/* Main Content */}
 			<main className="p-8">
 				<div className="flex justify-between items-center mb-6">

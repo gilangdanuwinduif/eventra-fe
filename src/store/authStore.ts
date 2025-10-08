@@ -16,7 +16,7 @@ export interface User {
 	exp: number
 	role: string | null // User object will definitely have a role after fetching
 	fullName: string // <-- TAMBAHKAN INI : by Gilang
-    profilePicture?: string | null // <-- TAMBAHKAN INI (opsional) : by Gilang
+	profilePicture?: string | null // <-- TAMBAHKAN INI (opsional) : by Gilang
 }
 
 export interface AuthState {

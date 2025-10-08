@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom' // Import useLocation
 import useAuthStore from '../store/authStore'
+import MainHeader from '../components/layout/MainHeader'
 
 interface ProtectedRouteProps {
 	children: React.ReactNode
@@ -8,6 +9,7 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 	const { token, user, userRole, logout } = useAuthStore()
+	console.log(useAuthStore.getState().userRole, '<==== ini userRole dari protected route')
 	const navigate = useNavigate()
 	const location = useLocation() // Get current location
 
@@ -20,14 +22,21 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 				logout()
 				navigate('/login')
 			} else if (location.pathname.startsWith('/dashboard/admin') && userRole !== 'ADMIN') {
+				console.log(userRole, '<==== ini userRole')
 				// If trying to access admin dashboard and not an admin, redirect to home
+				console.log('Access denied. Redirecting to home.')
 				navigate('/')
 			}
 		}
 	}, [token, user, userRole, navigate, logout, location.pathname])
 
 	if (token && user && user.exp * 1000 >= Date.now()) {
-		return <>{children}</>
+		return (
+			<>
+				<MainHeader role={userRole as 'ADMIN' | 'USER'} />
+				{children}
+			</>
+		)
 	}
 
 	return null // Or a loading spinner, while redirection happens

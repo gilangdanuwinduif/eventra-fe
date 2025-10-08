@@ -8,5 +8,14 @@ module.exports = {
 	plugins: ['@typescript-eslint', 'prettier'],
 	parserOptions: {
 		parser: '@typescript-eslint/parser'
+	},
+	rules: {
+		'prettier/prettier': [
+			'error',
+			{
+				endOfLine: 'lf'
+			}
+		],
+		'linebreak-style': ['error', 'unix']
 	}
 }

@@ -1,291 +1,297 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masuk - EventTech Eventra</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    <style>
-        /* CSS GLOBAL & RESET */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Masuk - EventTech Eventra</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #d1c4e9;
-            min-height: 100vh; 
-            padding: 40px 20px; /* Padding untuk jarak tepi */
-        }
+		<style>
+			/* CSS GLOBAL & RESET */
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
 
-        /* --- CONTAINER UTAMA LOGIN --- */
-        .login-page-container {
-            width: 90%;
-            max-width: 1100px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            margin: 0 auto; /* Tengah secara horizontal */
-        }
-        
-        /* --- HEADER NAVIGATION BAR --- */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 40px; 
-            background-color: #8c5dff;
-            color: white;
-            font-weight: 600;
-        }
+			body {
+				font-family: 'Poppins', sans-serif;
+				background-color: #d1c4e9;
+				min-height: 100vh;
+				padding: 40px 20px; /* Padding untuk jarak tepi */
+			}
 
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 20px;
-        }
+			/* --- CONTAINER UTAMA LOGIN --- */
+			.login-page-container {
+				width: 90%;
+				max-width: 1100px;
+				background-color: white;
+				border-radius: 10px;
+				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+				overflow: hidden;
+				margin: 0 auto; /* Tengah secara horizontal */
+			}
 
-        .nav-menu a {
-            color: white;
-            text-decoration: none;
-            margin-left: 30px;
-        }
+			/* --- HEADER NAVIGATION BAR --- */
+			.header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 15px 40px;
+				background-color: #8c5dff;
+				color: white;
+				font-weight: 600;
+			}
 
-        /* --- MAIN CONTENT (DUAL COLUMN LAYOUT) --- */
-        .login-content {
-            display: flex;
-            padding: 50px;
-            gap: 30px;
-        }
+			.logo {
+				display: flex;
+				align-items: center;
+				font-size: 20px;
+			}
 
-        /* Kolom Kiri - Selamat Datang & Fitur */
-        .welcome-section {
-            flex: 1;
-            padding-right: 40px;
-            border-right: 1px solid #eee;
-        }
+			.nav-menu a {
+				color: white;
+				text-decoration: none;
+				margin-left: 30px;
+			}
 
-        .welcome-section h2 {
-            font-size: 28px;
-            font-weight: 700;
-            color: #4a148c;
-            margin-bottom: 20px;
-        }
+			/* --- MAIN CONTENT (DUAL COLUMN LAYOUT) --- */
+			.login-content {
+				display: flex;
+				padding: 50px;
+				gap: 30px;
+			}
 
-        .feature-list {
-            list-style: none;
-            padding: 0;
-            margin-top: 30px;
-        }
+			/* Kolom Kiri - Selamat Datang & Fitur */
+			.welcome-section {
+				flex: 1;
+				padding-right: 40px;
+				border-right: 1px solid #eee;
+			}
 
-        .feature-list li {
-            font-size: 16px;
-            margin-bottom: 15px;
-            color: #555;
-            display: flex;
-            align-items: flex-start;
-        }
+			.welcome-section h2 {
+				font-size: 28px;
+				font-weight: 700;
+				color: #4a148c;
+				margin-bottom: 20px;
+			}
 
-        .feature-list li::before {
-            content: "\f058"; /* Check-circle icon */
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            color: #4CAF50;
-            margin-right: 15px;
-            font-size: 18px;
-            line-height: 1.5;
-        }
+			.feature-list {
+				list-style: none;
+				padding: 0;
+				margin-top: 30px;
+			}
 
-        /* Kolom Kanan - Formulir Login */
-        .login-form-section {
-            flex: 1;
-            padding-left: 40px;
-        }
+			.feature-list li {
+				font-size: 16px;
+				margin-bottom: 15px;
+				color: #555;
+				display: flex;
+				align-items: flex-start;
+			}
 
-        .login-form-section h3 {
-            font-size: 24px;
-            font-weight: 600;
-            color: #4a148c;
-            margin-bottom: 5px;
-        }
+			.feature-list li::before {
+				content: '\f058'; /* Check-circle icon */
+				font-family: 'Font Awesome 6 Free';
+				font-weight: 900;
+				color: #4caf50;
+				margin-right: 15px;
+				font-size: 18px;
+				line-height: 1.5;
+			}
 
-        .input-group {
-            margin-bottom: 20px;
-        }
-        
-        .input-group label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 8px;
-            color: #333;
-        }
+			/* Kolom Kanan - Formulir Login */
+			.login-form-section {
+				flex: 1;
+				padding-left: 40px;
+			}
 
-        .input-field {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 16px;
-        }
+			.login-form-section h3 {
+				font-size: 24px;
+				font-weight: 600;
+				color: #4a148c;
+				margin-bottom: 5px;
+			}
 
-        .password-container {
-            position: relative;
-        }
-        
-        .password-container i {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #999;
-            cursor: pointer;
-        }
+			.input-group {
+				margin-bottom: 20px;
+			}
 
-        .options-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
+			.input-group label {
+				display: block;
+				font-weight: 500;
+				margin-bottom: 8px;
+				color: #333;
+			}
 
-        .forgot-password {
-            color: #8c5dff;
-            text-decoration: none;
-            font-weight: 500;
-        }
+			.input-field {
+				width: 100%;
+				padding: 12px;
+				border: 1px solid #ccc;
+				border-radius: 6px;
+				font-size: 16px;
+			}
 
-        /* BUTTONS */
-        .btn-primary {
-            width: 100%;
-            padding: 12px;
-            background-color: #8c5dff;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-        }
+			.password-container {
+				position: relative;
+			}
 
-        .no-account-text {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 14px;
-            color: #555;
-        }
+			.password-container i {
+				position: absolute;
+				right: 15px;
+				top: 50%;
+				transform: translateY(-50%);
+				color: #999;
+				cursor: pointer;
+			}
 
-        .btn-secondary {
-            width: 100%;
-            padding: 12px;
-            background-color: transparent;
-            color: #8c5dff;
-            border: 1px solid #8c5dff;
-            border-radius: 6px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+			.options-row {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 30px;
+				font-size: 14px;
+			}
 
-        /* Media Query Sederhana untuk Responsif */
-        @media (max-width: 900px) {
-            .login-content {
-                flex-direction: column;
-                padding: 30px;
-            }
-            .welcome-section {
-                padding-right: 0;
-                border-right: none;
-                border-bottom: 1px solid #eee;
-                padding-bottom: 30px;
-                margin-bottom: 30px;
-            }
-            .login-form-section {
-                padding-left: 0;
-            }
-        }
-        
-    </style>
-</head>
-<body>
+			.forgot-password {
+				color: #8c5dff;
+				text-decoration: none;
+				font-weight: 500;
+			}
 
-    <div class="login-page-container">
-        
-        <header class="header">
-            <div class="logo">
-                <i class="fas fa-calendar-alt"></i>
-                EventTech Eventra
-            </div>
-            <nav class="nav-menu">
-                <a href="index.html">Event</a>
-                <a href="index.html">Kategori</a>
-                <a href="index.html">Tentang Kami</a>
-            </nav>
-        </header>
+			/* BUTTONS */
+			.btn-primary {
+				width: 100%;
+				padding: 12px;
+				background-color: #8c5dff;
+				color: white;
+				border: none;
+				border-radius: 6px;
+				font-size: 18px;
+				font-weight: 600;
+				cursor: pointer;
+			}
 
-        <div class="login-content">
-            
-            <div class="welcome-section">
-                <h2>
-                    Selamat Datang <br> 
-                    Kembali di EventraTech Eventra
-                </h2>
-                <p>
-                    Masuk ke akun Anda untuk mengelola event, pembelian 
-                    tiket, dan pengaturan personal lainnya.
-                </p>
+			.no-account-text {
+				text-align: center;
+				margin-top: 30px;
+				font-size: 14px;
+				color: #555;
+			}
 
-                <ul class="feature-list">
-                    <li>Akses ke semua event eksklusif</li>
-                    <li>Kelola tiket dan pembelian Anda</li>
-                    <li>Notifikasi untuk event favorit</li>
-                    <li>Pembayaran yang aman dan cepat</li>
-                </ul>
-            </div>
+			.btn-secondary {
+				width: 100%;
+				padding: 12px;
+				background-color: transparent;
+				color: #8c5dff;
+				border: 1px solid #8c5dff;
+				border-radius: 6px;
+				font-size: 18px;
+				font-weight: 600;
+				cursor: pointer;
+				margin-top: 10px;
+			}
 
-            <div class="login-form-section">
-                <h3>Masuk ke Akun</h3>
-                <p>Isi detail login Anda untuk mengelola akun EventTech Eventra</p>
-                
-                <form action="#" method="POST">
-                    
-                    <div class="input-group">
-                        <label for="email">Email atau Username</label>
-                        <input type="text" id="email" name="email" class="input-field" placeholder="Masukkan email atau username" required>
-                    </div>
+			/* Media Query Sederhana untuk Responsif */
+			@media (max-width: 900px) {
+				.login-content {
+					flex-direction: column;
+					padding: 30px;
+				}
+				.welcome-section {
+					padding-right: 0;
+					border-right: none;
+					border-bottom: 1px solid #eee;
+					padding-bottom: 30px;
+					margin-bottom: 30px;
+				}
+				.login-form-section {
+					padding-left: 0;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="login-page-container">
+			<header class="header">
+				<div class="logo">
+					<i class="fas fa-calendar-alt"></i>
+					EventTech Eventra
+				</div>
+				<nav class="nav-menu">
+					<a href="index.html">Event</a>
+					<a href="index.html">Kategori</a>
+					<a href="index.html">Tentang Kami</a>
+				</nav>
+			</header>
 
-                    <div class="input-group">
-                        <label for="password">Password</label>
-                        <div class="password-container">
-                            <input type="password" id="password" name="password" class="input-field" placeholder="Masukkan password" required>
-                            <i class="far fa-eye-slash"></i> 
-                        </div>
-                    </div>
-                    
-                    <div class="options-row">
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="remember" style="margin-right: 5px;">
-                            Ingat saya
-                        </label>
-                        <a href="#" class="forgot-password">Lupa Password?</a>
-                    </div>
+			<div class="login-content">
+				<div class="welcome-section">
+					<h2>
+						Selamat Datang <br />
+						Kembali di EventraTech Eventra
+					</h2>
+					<p>Masuk ke akun Anda untuk mengelola event, pembelian tiket, dan pengaturan personal lainnya.</p>
 
-                    <button type="submit" class="btn-primary">Masuk</button>
-                    
-                    <p class="no-account-text">Belum punya akun?</p>
-                    <button type="button" class="btn-secondary">Daftar Sekarang</button>
+					<ul class="feature-list">
+						<li>Akses ke semua event eksklusif</li>
+						<li>Kelola tiket dan pembelian Anda</li>
+						<li>Notifikasi untuk event favorit</li>
+						<li>Pembayaran yang aman dan cepat</li>
+					</ul>
+				</div>
 
-                </form>
-            </div>
+				<div class="login-form-section">
+					<h3>Masuk ke Akun</h3>
+					<p>Isi detail login Anda untuk mengelola akun EventTech Eventra</p>
 
-        </div>
-    </div>
+					<form action="#" method="POST">
+						<div class="input-group">
+							<label for="email">Email atau Username</label>
+							<input
+								type="text"
+								id="email"
+								name="email"
+								class="input-field"
+								placeholder="Masukkan email atau username"
+								required
+							/>
+						</div>
 
-</body>
+						<div class="input-group">
+							<label for="password">Password</label>
+							<div class="password-container">
+								<input
+									type="password"
+									id="password"
+									name="password"
+									class="input-field"
+									placeholder="Masukkan password"
+									required
+								/>
+								<i class="far fa-eye-slash"></i>
+							</div>
+						</div>
+
+						<div class="options-row">
+							<label class="checkbox-label">
+								<input type="checkbox" name="remember" style="margin-right: 5px" />
+								Ingat saya
+							</label>
+							<a href="#" class="forgot-password">Lupa Password?</a>
+						</div>
+
+						<button type="submit" class="btn-primary">Masuk</button>
+
+						<p class="no-account-text">Belum punya akun?</p>
+						<button type="button" class="btn-secondary">Daftar Sekarang</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>

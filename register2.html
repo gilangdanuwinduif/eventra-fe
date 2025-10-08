@@ -1,339 +1,380 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Akun Baru - EventTech Eventra</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    <style>
-        /* CSS GLOBAL & RESET (dipertahankan dari login.html) */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Daftar Akun Baru - EventTech Eventra</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #d1c4e9; /* Latar belakang ungu muda */
-            min-height: 100vh; 
-            padding: 40px 20px;
-        }
+		<style>
+			/* CSS GLOBAL & RESET (dipertahankan dari login.html) */
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
 
-        /* --- CONTAINER UTAMA --- */
-        .register-page-container {
-            width: 90%;
-            max-width: 900px; /* Lebih lebar dari login karena formulir lebih panjang */
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            margin: 0 auto;
-        }
-        
-        /* --- HEADER NAVIGATION BAR (Sama dengan Login/Index) --- */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 40px; 
-            background-color: #8c5dff;
-            color: white;
-            font-weight: 600;
-        }
+			body {
+				font-family: 'Poppins', sans-serif;
+				background-color: #d1c4e9; /* Latar belakang ungu muda */
+				min-height: 100vh;
+				padding: 40px 20px;
+			}
 
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 20px;
-        }
+			/* --- CONTAINER UTAMA --- */
+			.register-page-container {
+				width: 90%;
+				max-width: 900px; /* Lebih lebar dari login karena formulir lebih panjang */
+				background-color: white;
+				border-radius: 10px;
+				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+				overflow: hidden;
+				margin: 0 auto;
+			}
 
-        .nav-menu a {
-            color: white;
-            text-decoration: none;
-            margin-left: 30px;
-        }
+			/* --- HEADER NAVIGATION BAR (Sama dengan Login/Index) --- */
+			.header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 15px 40px;
+				background-color: #8c5dff;
+				color: white;
+				font-weight: 600;
+			}
 
-        /* --- MAIN REGISTRATION FORM --- */
-        .register-content {
-            padding: 40px;
-        }
-        
-        .register-content h2 {
-            font-size: 28px;
-            font-weight: 700;
-            color: #4a148c;
-            margin-bottom: 5px;
-            text-align: center;
-        }
-        
-        .register-content p.subtitle {
-            font-size: 14px;
-            color: #777;
-            margin-bottom: 40px;
-            text-align: center;
-        }
+			.logo {
+				display: flex;
+				align-items: center;
+				font-size: 20px;
+			}
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* Dua kolom utama */
-            gap: 20px 40px;
-        }
-        
-        .input-group {
-            margin-bottom: 10px;
-        }
+			.nav-menu a {
+				color: white;
+				text-decoration: none;
+				margin-left: 30px;
+			}
 
-        .input-group.full-width {
-            grid-column: 1 / -1; /* Mengambil lebar penuh (untuk tombol) */
-        }
-        
-        .input-group label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 5px;
-            color: #333;
-        }
+			/* --- MAIN REGISTRATION FORM --- */
+			.register-content {
+				padding: 40px;
+			}
 
-        .input-field {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 16px;
-        }
-        
-        .input-field::placeholder {
-            color: #bbb;
-        }
+			.register-content h2 {
+				font-size: 28px;
+				font-weight: 700;
+				color: #4a148c;
+				margin-bottom: 5px;
+				text-align: center;
+			}
 
-        /* Styling untuk Input Password dan Konfirmasi Password */
-        .password-group {
-            position: relative;
-        }
+			.register-content p.subtitle {
+				font-size: 14px;
+				color: #777;
+				margin-bottom: 40px;
+				text-align: center;
+			}
 
-        /* --- JENIS KELAMIN RADIO BUTTONS --- */
-        .gender-options {
-            display: flex;
-            align-items: center;
-            height: 100%; /* Agar radio buttons sejajar dengan input lain */
-            padding-top: 10px;
-            gap: 25px;
-        }
+			.form-grid {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr); /* Dua kolom utama */
+				gap: 20px 40px;
+			}
 
-        .gender-options label {
-            display: inline-flex;
-            align-items: center;
-            font-weight: 400;
-            cursor: pointer;
-        }
+			.input-group {
+				margin-bottom: 10px;
+			}
 
-        .gender-options input[type="radio"] {
-            margin-right: 8px;
-            width: 16px;
-            height: 16px;
-        }
+			.input-group.full-width {
+				grid-column: 1 / -1; /* Mengambil lebar penuh (untuk tombol) */
+			}
 
-        /* --- KRITERIA PASSWORD --- */
-        .password-rules {
-            grid-row: 4 / 6; /* Mencakup dua baris */
-            grid-column: 2 / 3;
-            padding: 10px 0 0 20px;
-        }
-        
-        .password-rules h4 {
-            color: red;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
+			.input-group label {
+				display: block;
+				font-weight: 500;
+				margin-bottom: 5px;
+				color: #333;
+			}
 
-        .password-rules ul {
-            list-style: none;
-            font-size: 13px;
-            color: #555;
-        }
+			.input-field {
+				width: 100%;
+				padding: 12px;
+				border: 1px solid #ccc;
+				border-radius: 6px;
+				font-size: 16px;
+			}
 
-        .password-rules ul li {
-            margin-bottom: 4px;
-            padding-left: 15px;
-            position: relative;
-        }
+			.input-field::placeholder {
+				color: #bbb;
+			}
 
-        .password-rules ul li::before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: red;
-        }
+			/* Styling untuk Input Password dan Konfirmasi Password */
+			.password-group {
+				position: relative;
+			}
 
-        /* --- CHECKBOX SYARAT & KETENTUAN --- */
-        .terms-checkbox {
-            grid-column: 1 / -1;
-            margin-top: 20px;
-            margin-bottom: 30px;
-            font-size: 14px;
-            color: #555;
-            display: flex;
-            align-items: center;
-        }
+			/* --- JENIS KELAMIN RADIO BUTTONS --- */
+			.gender-options {
+				display: flex;
+				align-items: center;
+				height: 100%; /* Agar radio buttons sejajar dengan input lain */
+				padding-top: 10px;
+				gap: 25px;
+			}
 
-        .terms-checkbox a {
-            color: #8c5dff;
-            text-decoration: none;
-            font-weight: 500;
-        }
+			.gender-options label {
+				display: inline-flex;
+				align-items: center;
+				font-weight: 400;
+				cursor: pointer;
+			}
 
-        .terms-checkbox input[type="checkbox"] {
-            margin-right: 10px;
-        }
+			.gender-options input[type='radio'] {
+				margin-right: 8px;
+				width: 16px;
+				height: 16px;
+			}
 
-        /* --- BUTTONS --- */
-        .btn-register {
-            width: 100%;
-            padding: 12px;
-            background-color: #8c5dff;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        
-        .login-link-group {
-            text-align: center;
-            margin-top: 30px;
-        }
+			/* --- KRITERIA PASSWORD --- */
+			.password-rules {
+				grid-row: 4 / 6; /* Mencakup dua baris */
+				grid-column: 2 / 3;
+				padding: 10px 0 0 20px;
+			}
 
-        .login-link-group p {
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 10px;
-        }
+			.password-rules h4 {
+				color: red;
+				font-size: 14px;
+				font-weight: 600;
+				margin-bottom: 8px;
+			}
 
-        .btn-login-secondary {
-            width: 100%;
-            padding: 12px;
-            background-color: transparent;
-            color: #8c5dff;
-            border: 1px solid #8c5dff;
-            border-radius: 6px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-        }
+			.password-rules ul {
+				list-style: none;
+				font-size: 13px;
+				color: #555;
+			}
 
-        /* Media Query Sederhana */
-        @media (max-width: 800px) {
-            .form-grid {
-                grid-template-columns: 1fr; /* Satu kolom di mobile */
-            }
-            .password-rules {
-                grid-column: 1 / -1; /* Pindah ke bawah */
-                grid-row: auto;
-                padding: 10px 0;
-            }
-        }
-        
-    </style>
-</head>
-<body>
+			.password-rules ul li {
+				margin-bottom: 4px;
+				padding-left: 15px;
+				position: relative;
+			}
 
-    <div class="register-page-container">
-        
-        <header class="header">
-            <div class="logo">
-                <i class="fas fa-calendar-alt"></i>
-                EventTech Eventra
-            </div>
-            <nav class="nav-menu">
-                <a href="index.html">Event</a>
-                <a href="index.html">Kategori</a>
-                <a href="index.html">Tentang Kami</a>
-            </nav>
-        </header>
+			.password-rules ul li::before {
+				content: '•';
+				position: absolute;
+				left: 0;
+				color: red;
+			}
 
-        <div class="register-content">
-            <h2>Buat Akun Baru</h2>
-            <p class="subtitle">Daftar sekarang untuk mengakses semua fitur EventTech Eventra</p>
-            
-            <form action="#" method="POST" class="form-grid">
-                
-                <div class="input-group">
-                    <label for="nik">NIK</label>
-                    <input type="text" id="nik" name="nik" class="input-field" placeholder="Masukkan NIK" required>
-                </div>
-                
-                <div class="input-group">
-                    <label for="nama">Nama Sesuai NIK</label>
-                    <input type="text" id="nama" name="nama" class="input-field" placeholder="Masukkan nama sesuai NIK" required>
-                </div>
-                
-                <div class="input-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" class="input-field" placeholder="Masukkan alamat email" required>
-                </div>
+			/* --- CHECKBOX SYARAT & KETENTUAN --- */
+			.terms-checkbox {
+				grid-column: 1 / -1;
+				margin-top: 20px;
+				margin-bottom: 30px;
+				font-size: 14px;
+				color: #555;
+				display: flex;
+				align-items: center;
+			}
 
-                <div class="input-group">
-                    <label for="telepon">Nomor Telepon</label>
-                    <input type="tel" id="telepon" name="telepon" class="input-field" placeholder="Contoh: 08123781263" required>
-                </div>
-                
-                <div class="input-group password-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" class="input-field" placeholder="Masukkan password" required>
-                </div>
-                
-                <div class="input-group password-group">
-                    <label for="konfirmasi_password">Konfirmasi Password</label>
-                    <input type="password" id="konfirmasi_password" name="konfirmasi_password" class="input-field" placeholder="Contoh: 08123781263" required>
-                </div>
-                
-                <div class="input-group">
-                    <label>Jenis Kelamin</label>
-                    <div class="gender-options">
-                        <label>
-                            <input type="radio" name="jenis_kelamin" value="Laki-Laki" required>
-                            Laki-Laki
-                        </label>
-                        <label>
-                            <input type="radio" name="jenis_kelamin" value="Perempuan">
-                            Perempuan
-                        </label>
-                    </div>
-                </div>
+			.terms-checkbox a {
+				color: #8c5dff;
+				text-decoration: none;
+				font-weight: 500;
+			}
 
-                <div class="password-rules">
-                    <h4>Password harus memenuhi:</h4>
-                    <ul>
-                        <li>Minimal 8 karakter</li>
-                        <li>Mengandung huruf besar</li>
-                        <li>Mengandung angka</li>
-                        <li>Mengandung karakter khusus</li>
-                    </ul>
-                </div>
-                
-                <div class="terms-checkbox">
-                    <input type="checkbox" id="terms" name="terms" required>
-                    <label for="terms">Saya menyetujui <a href="#">Syarat & Ketentuan</a> dan <a href="#">Kebijakan Privasi</a> EventTech Eventra</label>
-                </div>
+			.terms-checkbox input[type='checkbox'] {
+				margin-right: 10px;
+			}
 
-                <div class="input-group full-width">
-                    <button type="submit" class="btn-register">Daftar Sekarang</button>
-                </div>
+			/* --- BUTTONS --- */
+			.btn-register {
+				width: 100%;
+				padding: 12px;
+				background-color: #8c5dff;
+				color: white;
+				border: none;
+				border-radius: 6px;
+				font-size: 18px;
+				font-weight: 600;
+				cursor: pointer;
+			}
 
-            </form>
+			.login-link-group {
+				text-align: center;
+				margin-top: 30px;
+			}
 
-            <div class="login-link-group">
-                <p>Sudah punya akun?</p>
-                <a href="login.html" class="btn-secondary btn-login-secondary">Masuk ke Akun</a>
-            </div>
+			.login-link-group p {
+				font-size: 14px;
+				color: #555;
+				margin-bottom: 10px;
+			}
 
-        </div>
-    </div>
+			.btn-login-secondary {
+				width: 100%;
+				padding: 12px;
+				background-color: transparent;
+				color: #8c5dff;
+				border: 1px solid #8c5dff;
+				border-radius: 6px;
+				font-size: 18px;
+				font-weight: 600;
+				cursor: pointer;
+			}
 
-</body>
+			/* Media Query Sederhana */
+			@media (max-width: 800px) {
+				.form-grid {
+					grid-template-columns: 1fr; /* Satu kolom di mobile */
+				}
+				.password-rules {
+					grid-column: 1 / -1; /* Pindah ke bawah */
+					grid-row: auto;
+					padding: 10px 0;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="register-page-container">
+			<header class="header">
+				<div class="logo">
+					<i class="fas fa-calendar-alt"></i>
+					EventTech Eventra
+				</div>
+				<nav class="nav-menu">
+					<a href="index.html">Event</a>
+					<a href="index.html">Kategori</a>
+					<a href="index.html">Tentang Kami</a>
+				</nav>
+			</header>
+
+			<div class="register-content">
+				<h2>Buat Akun Baru</h2>
+				<p class="subtitle">Daftar sekarang untuk mengakses semua fitur EventTech Eventra</p>
+
+				<form action="#" method="POST" class="form-grid">
+					<div class="input-group">
+						<label for="nik">NIK</label>
+						<input
+							type="text"
+							id="nik"
+							name="nik"
+							class="input-field"
+							placeholder="Masukkan NIK"
+							required
+						/>
+					</div>
+
+					<div class="input-group">
+						<label for="nama">Nama Sesuai NIK</label>
+						<input
+							type="text"
+							id="nama"
+							name="nama"
+							class="input-field"
+							placeholder="Masukkan nama sesuai NIK"
+							required
+						/>
+					</div>
+
+					<div class="input-group">
+						<label for="email">Email</label>
+						<input
+							type="email"
+							id="email"
+							name="email"
+							class="input-field"
+							placeholder="Masukkan alamat email"
+							required
+						/>
+					</div>
+
+					<div class="input-group">
+						<label for="telepon">Nomor Telepon</label>
+						<input
+							type="tel"
+							id="telepon"
+							name="telepon"
+							class="input-field"
+							placeholder="Contoh: 08123781263"
+							required
+						/>
+					</div>
+
+					<div class="input-group password-group">
+						<label for="password">Password</label>
+						<input
+							type="password"
+							id="password"
+							name="password"
+							class="input-field"
+							placeholder="Masukkan password"
+							required
+						/>
+					</div>
+
+					<div class="input-group password-group">
+						<label for="konfirmasi_password">Konfirmasi Password</label>
+						<input
+							type="password"
+							id="konfirmasi_password"
+							name="konfirmasi_password"
+							class="input-field"
+							placeholder="Contoh: 08123781263"
+							required
+						/>
+					</div>
+
+					<div class="input-group">
+						<label>Jenis Kelamin</label>
+						<div class="gender-options">
+							<label>
+								<input type="radio" name="jenis_kelamin" value="Laki-Laki" required />
+								Laki-Laki
+							</label>
+							<label>
+								<input type="radio" name="jenis_kelamin" value="Perempuan" />
+								Perempuan
+							</label>
+						</div>
+					</div>
+
+					<div class="password-rules">
+						<h4>Password harus memenuhi:</h4>
+						<ul>
+							<li>Minimal 8 karakter</li>
+							<li>Mengandung huruf besar</li>
+							<li>Mengandung angka</li>
+							<li>Mengandung karakter khusus</li>
+						</ul>
+					</div>
+
+					<div class="terms-checkbox">
+						<input type="checkbox" id="terms" name="terms" required />
+						<label for="terms"
+							>Saya menyetujui <a href="#">Syarat & Ketentuan</a> dan
+							<a href="#">Kebijakan Privasi</a> EventTech Eventra</label
+						>
+					</div>
+
+					<div class="input-group full-width">
+						<button type="submit" class="btn-register">Daftar Sekarang</button>
+					</div>
+				</form>
+
+				<div class="login-link-group">
+					<p>Sudah punya akun?</p>
+					<a href="login.html" class="btn-secondary btn-login-secondary">Masuk ke Akun</a>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>
