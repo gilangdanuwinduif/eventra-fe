@@ -9,12 +9,12 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { DateInputWithIcon } from '../components/form-elements/DateInputWithIcon'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '../hooks/useToast'
 
 export default function CreateEventPage() {
 	const navigate = useNavigate()
 	const [eventName, setEventName] = useState('')
 	const [category, setCategory] = useState('')
-	const [capacity, setCapacity] = useState('')
 	const [startDate, setStartDate] = useState<Date | null>(null)
 	const [endDate, setEndDate] = useState<Date | null>(null)
 	// startTime and endTime will be handled by DatePicker directly within startDate/endDate
@@ -23,26 +23,38 @@ export default function CreateEventPage() {
 	const [city, setCity] = useState('')
 	const [province, setProvince] = useState('')
 	const [description, setDescription] = useState('')
-	const [ticketTypes, setTicketTypes] = useState([
-		{ name: '', price: 0, quantity: 0, purchaseLimit: 0, importantInfo: '' }
-	]) // State for ticket types
+	const [tickets, setTickets] = useState([{ ticketCategory: '', price: 0, quota: 0 }]) // State for ticket types
+	const { showToast } = useToast()
 
-	const { loading, error, success, message, createEvent, resetState } = useEventStore()
+	const { loading, error, createEvent, resetState } = useEventStore((state) => ({
+		loading: state.loading,
+		error: state.error,
+		createEvent: state.createEvent,
+		resetState: state.resetState
+	}))
 
 	useEffect(() => {
-		if (success) {
-			const timer = setTimeout(() => {
-				resetState()
-				navigate('/dashboard/admin') // Redirect on success
-			}, 3000) // Reset after 3 seconds and redirect
-			return () => clearTimeout(timer)
-		} else if (error) {
-			const timer = setTimeout(() => {
-				resetState()
-			}, 5000) // Reset after 5 seconds
-			return () => clearTimeout(timer)
+		// Reset error state when component mounts or navigate away
+		return () => {
+			resetState()
 		}
-	}, [success, error, resetState, navigate])
+	}, [resetState])
+
+	// No longer need local useEffect for success/error, as toast handles it globally
+	// useEffect(() => {
+	// 	if (success) {
+	// 		const timer = setTimeout(() => {
+	// 			resetState()
+	// 			navigate('/dashboard/admin') // Redirect on success
+	// 		}, 3000) // Reset after 3 seconds and redirect
+	// 		return () => clearTimeout(timer)
+	// 	} else if (error) {
+	// 		const timer = setTimeout(() => {
+	// 			resetState()
+	// 		}, 5000) // Reset after 5 seconds
+	// 		return () => clearTimeout(timer)
+	// 	}
+	// }, [success, error, resetState, navigate])
 
 	const handlePublishEvent = async () => {
 		const formattedStartDate = startDate ? startDate.toISOString() : ''
@@ -50,38 +62,37 @@ export default function CreateEventPage() {
 
 		const eventPayload = {
 			title: eventName,
-			description: description || null,
+			description: description,
 			location: `${venueName}, ${address}, ${city}, ${province}`,
 			startDate: formattedStartDate,
 			endDate: formattedEndDate,
 			imageUrl: 'https://picsum.photos/seed/event1/800/600', // Placeholder
-			capacity: parseInt(capacity),
 			category: category,
 			status: 'PLANNED',
-			importantInfo: null, // Add importantInfo as null or a default value if needed
-			ticketTypes: ticketTypes.map((ticket) => ({
-				name: ticket.name,
+			tickets: tickets.map((ticket) => ({
+				ticketCategory: ticket.ticketCategory,
 				price: ticket.price,
-				quantity: ticket.quantity,
-				purchaseLimit: ticket.purchaseLimit,
-				importantInfo: ticket.importantInfo || null
+				quota: ticket.quota
 			}))
 		}
-		await createEvent(eventPayload)
+		await createEvent(eventPayload, showToast)
+		if (!loading && !error) {
+			navigate('/dashboard/admin')
+		}
 	}
 
 	const handleTicketTypeChange = (index: number, field: string, value: string | number) => {
-		const updatedTicketTypes = [...ticketTypes]
-		updatedTicketTypes[index] = { ...updatedTicketTypes[index], [field]: value }
-		setTicketTypes(updatedTicketTypes)
+		const updatedTickets = [...tickets]
+		updatedTickets[index] = { ...updatedTickets[index], [field]: value }
+		setTickets(updatedTickets)
 	}
 
 	const addTicketType = () => {
-		setTicketTypes([...ticketTypes, { name: '', price: 0, quantity: 0, purchaseLimit: 0, importantInfo: '' }])
+		setTickets([...tickets, { ticketCategory: '', price: 0, quota: 0 }])
 	}
 
 	const removeTicketType = (indexToRemove: number) => {
-		setTicketTypes(ticketTypes.filter((_, index) => index !== indexToRemove))
+		setTickets(tickets.filter((_, index) => index !== indexToRemove))
 	}
 
 	return (
@@ -92,9 +103,7 @@ export default function CreateEventPage() {
 
 					{loading && <div className="mb-4 p-3 bg-blue-100 text-blue-800 rounded-md">Loading...</div>}
 					{error && <div className="mb-4 p-3 bg-red-100 text-red-800 rounded-md">Error: {error}</div>}
-					{success && (
-						<div className="mb-4 p-3 bg-green-100 text-green-800 rounded-md">Success: {message}</div>
-					)}
+					{/* Success message is now handled by global toast */}
 
 					{/* Informasi Dasar */}
 					<div className="mb-8 p-6 bg-purple-50 rounded-lg shadow-md">
@@ -122,16 +131,6 @@ export default function CreateEventPage() {
 								onChange={(e) => setCategory(e.target.value)}
 								required
 								onClear={() => setCategory('')}
-							/>
-							<FormInput
-								id="capacity"
-								label="Kapasitas"
-								type="number"
-								placeholder="123"
-								value={capacity}
-								onChange={(e) => setCapacity(e.target.value)}
-								required
-								onClear={() => setCapacity('')}
 							/>
 						</div>
 						<div className="mt-6 p-4 border-2 border-dashed border-gray-300 rounded-lg text-center">
@@ -272,11 +271,11 @@ export default function CreateEventPage() {
 								</span>
 								<h2 className="text-xl font-semibold text-gray-800">Informasi Tiket</h2>
 							</div>
-							{ticketTypes.map((ticket, index) => (
+							{tickets.map((ticket, index) => (
 								<div key={index} className="mb-6 p-4 border border-gray-200 rounded-md">
 									<div className="flex justify-between items-center mb-4">
 										<h3 className="text-lg font-medium text-gray-700">Jenis Tiket #{index + 1}</h3>
-										{ticketTypes.length > 1 && (
+										{tickets.length > 1 && (
 											<Button
 												type="button"
 												variant="destructive"
@@ -289,13 +288,15 @@ export default function CreateEventPage() {
 									</div>
 									<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
 										<FormInput
-											id={`ticketName-${index}`}
-											label="Nama Tiket"
-											placeholder="Contoh : Regular Tiket"
-											value={ticket.name}
-											onChange={(e) => handleTicketTypeChange(index, 'name', e.target.value)}
+											id={`ticketCategory-${index}`}
+											label="Kategori Tiket"
+											placeholder="Contoh : Asik"
+											value={ticket.ticketCategory}
+											onChange={(e) =>
+												handleTicketTypeChange(index, 'ticketCategory', e.target.value)
+											}
 											required
-											onClear={() => handleTicketTypeChange(index, 'name', '')}
+											onClear={() => handleTicketTypeChange(index, 'ticketCategory', '')}
 										/>
 										<FormInput
 											id={`ticketPrice-${index}`}
@@ -310,27 +311,16 @@ export default function CreateEventPage() {
 											onClear={() => handleTicketTypeChange(index, 'price', 0)}
 										/>
 										<FormInput
-											id={`ticketQuantity-${index}`}
-											label="Jumlah"
+											id={`ticketQuota-${index}`}
+											label="Kuota"
 											type="number"
 											placeholder={'0'}
-											value={ticket.quantity}
+											value={ticket.quota}
 											onChange={(e) =>
-												handleTicketTypeChange(index, 'quantity', Number(e.target.value))
+												handleTicketTypeChange(index, 'quota', Number(e.target.value))
 											}
 											required
-											onClear={() => handleTicketTypeChange(index, 'quantity', 0)}
-										/>
-										<FormInput
-											id={`purchaseLimit-${index}`}
-											label="Batas Pembelian"
-											type="number"
-											placeholder="Maksimal per Orang"
-											value={ticket.purchaseLimit}
-											onChange={(e) =>
-												handleTicketTypeChange(index, 'purchaseLimit', Number(e.target.value))
-											}
-											onClear={() => handleTicketTypeChange(index, 'purchaseLimit', 0)}
+											onClear={() => handleTicketTypeChange(index, 'quota', 0)}
 										/>
 									</div>
 								</div>

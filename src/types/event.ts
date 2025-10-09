@@ -10,19 +10,21 @@ export interface Event {
 	updatedAt: string
 	updatedBy: string | null
 	imageUrl: string
-	capacity: number
 	category: string
 	status: string
-	importantInfo: string | null
-	ticketTypes: TicketType[]
+	tickets: Ticket[]
 }
 
-export interface TicketType {
-	name: string
+export interface Ticket {
+	eventId?: string // Optional, as it might be generated on the backend or not needed for creation
+	ticketCategory: string
 	price: number
-	quantity: number
-	purchaseLimit: number
-	importantInfo: string | null
+	quota: number
+	id?: string
+	createdAt?: string
+	createdBy?: string
+	updatedAt?: string
+	updatedBy?: string
 }
 
 export interface EventResponse {

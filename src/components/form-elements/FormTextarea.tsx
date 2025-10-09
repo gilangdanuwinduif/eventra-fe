@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css' // Import Quill's CSS
 import { Label } from '../ui/label'
@@ -58,6 +58,7 @@ export const FormTextarea: React.FC<FormTextareaProps> = ({
 			</Label>
 			<div className="relative">
 				<ReactQuill
+					ref={useRef(null)}
 					theme="snow"
 					value={value}
 					onChange={onChange}

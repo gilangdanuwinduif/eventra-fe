@@ -9,13 +9,13 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { DateInputWithIcon } from '../components/form-elements/DateInputWithIcon'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useToast } from '../hooks/useToast'
 
 export default function UpdateEventPage() {
 	const navigate = useNavigate()
 	const { id } = useParams<{ id: string }>()
 	const [eventName, setEventName] = useState('')
 	const [category, setCategory] = useState('')
-	const [capacity, setCapacity] = useState(0)
 	const [startDate, setStartDate] = useState<Date | null>(null)
 	const [endDate, setEndDate] = useState<Date | null>(null)
 	// startTime and endTime will be handled by DatePicker directly within startDate/endDate
@@ -24,15 +24,12 @@ export default function UpdateEventPage() {
 	const [city, setCity] = useState('')
 	const [province, setProvince] = useState('')
 	const [description, setDescription] = useState('')
-	const [ticketTypes, setTicketTypes] = useState([
-		{ name: '', price: 0, quantity: 0, purchaseLimit: 0, importantInfo: '' }
-	]) // State for ticket types
+	const [tickets, setTickets] = useState([{ ticketCategory: '', price: 0, quota: 0 }]) // State for ticket types
+	const { showToast } = useToast()
 
-	const { loading, error, success, message, updateEvent, resetState, fetchEventById } = useEventStore((state) => ({
+	const { loading, error, updateEvent, resetState, fetchEventById } = useEventStore((state) => ({
 		loading: state.loading,
 		error: state.error,
-		success: state.success,
-		message: state.message,
 		updateEvent: state.updateEvent,
 		resetState: state.resetState,
 		fetchEventById: state.fetchEventById
@@ -43,13 +40,12 @@ export default function UpdateEventPage() {
 		if (id) {
 			setIsEditMode(true)
 			const fetchEvent = async () => {
-				resetState() // Clear any previous success/error states
+				resetState() // Clear any previous error states
 				try {
-					const event = await fetchEventById(id!)
+					const event = await fetchEventById(id, showToast)
 					if (event) {
 						setEventName(event.title)
 						setCategory(event.category)
-						setCapacity(event.capacity)
 						setStartDate(new Date(event.startDate))
 						setEndDate(new Date(event.endDate))
 						const locationParts = event.location.split(', ')
@@ -58,13 +54,14 @@ export default function UpdateEventPage() {
 						setCity(locationParts[2] || '')
 						setProvince(locationParts[3] || '')
 						setDescription(event.description || '')
-						setTicketTypes(
-							event.ticketTypes && event.ticketTypes.length > 0
-								? event.ticketTypes.map((ticket) => ({
-										...ticket,
-										importantInfo: ticket.importantInfo || ''
+						setTickets(
+							event.tickets && event.tickets.length > 0
+								? event.tickets.map((ticket) => ({
+										ticketCategory: ticket.ticketCategory,
+										price: ticket.price,
+										quota: ticket.quota
 									}))
-								: [{ name: '', price: 0, quantity: 0, purchaseLimit: 0, importantInfo: '' }]
+								: [{ ticketCategory: '', price: 0, quota: 0 }]
 						)
 					} else {
 						navigate('/dashboard/admin') // Redirect if event not found or error
@@ -76,35 +73,30 @@ export default function UpdateEventPage() {
 			}
 			fetchEvent()
 		}
-	}, [id, navigate, resetState, fetchEventById]) // Add fetchEventById to dependency array
+	}, [id, navigate, resetState, fetchEventById, showToast]) // Add fetchEventById and showToast to dependency array
 
-	useEffect(() => {
-		if (success) {
-			const timer = setTimeout(() => {
-				resetState()
-				navigate('/dashboard/admin') // Redirect on success
-			}, 3000) // Reset after 3 seconds and redirect
-			return () => clearTimeout(timer)
-		} else if (error) {
-			const timer = setTimeout(() => {
-				resetState()
-			}, 5000) // Reset after 5 seconds
-			return () => clearTimeout(timer)
-		}
-	}, [success, error, resetState, navigate])
+	// No longer need a local useEffect for error, as toast handles it globally
+	// useEffect(() => {
+	// 	if (error) {
+	// 		const timer = setTimeout(() => {
+	// 			resetState()
+	// 		}, 5000) // Reset after 5 seconds
+	// 		return () => clearTimeout(timer)
+	// 	}
+	// }, [error, resetState])
 
 	const handleTicketTypeChange = (index: number, field: string, value: string | number) => {
-		const updatedTicketTypes = [...ticketTypes]
-		updatedTicketTypes[index] = { ...updatedTicketTypes[index], [field]: value }
-		setTicketTypes(updatedTicketTypes)
+		const updatedTickets = [...tickets]
+		updatedTickets[index] = { ...updatedTickets[index], [field]: value }
+		setTickets(updatedTickets)
 	}
 
 	const addTicketType = () => {
-		setTicketTypes([...ticketTypes, { name: '', price: 0, quantity: 0, purchaseLimit: 0, importantInfo: '' }])
+		setTickets([...tickets, { ticketCategory: '', price: 0, quota: 0 }])
 	}
 
 	const removeTicketType = (indexToRemove: number) => {
-		setTicketTypes(ticketTypes.filter((_, index) => index !== indexToRemove))
+		setTickets(tickets.filter((_, index) => index !== indexToRemove))
 	}
 
 	const handleSaveEvent = async () => {
@@ -113,25 +105,27 @@ export default function UpdateEventPage() {
 
 		const eventPayload = {
 			title: eventName,
-			description: description || null,
+			description: description,
 			location: `${venueName}, ${address}, ${city}, ${province}`,
 			startDate: formattedStartDate,
 			endDate: formattedEndDate,
 			imageUrl: 'https://picsum.photos/seed/event1/800/600', // Placeholder
-			capacity: capacity,
 			category: category,
 			status: 'PLANNED', // Assuming status remains PLANNED for now
-			ticketTypes: ticketTypes.map((ticket) => ({
-				name: ticket.name,
+			tickets: tickets.map((ticket) => ({
+				ticketCategory: ticket.ticketCategory,
 				price: ticket.price,
-				quantity: ticket.quantity,
-				purchaseLimit: ticket.purchaseLimit,
-				importantInfo: ticket.importantInfo || null
+				quota: ticket.quota
 			}))
 		}
 
 		if (isEditMode && id) {
-			await updateEvent(id, eventPayload)
+			await updateEvent(id, eventPayload, showToast)
+			// Manually navigate on successful update
+			if (!loading && !error) {
+				// Check if update was successful (not loading and no error)
+				navigate('/dashboard/admin')
+			}
 		}
 	}
 
@@ -144,10 +138,7 @@ export default function UpdateEventPage() {
 					</h1>
 
 					{loading && <div className="mb-4 p-3 bg-blue-100 text-blue-800 rounded-md">Loading...</div>}
-					{error && <div className="mb-4 p-3 bg-red-100 text-red-800 rounded-md">Error: {error}</div>}
-					{success && (
-						<div className="mb-4 p-3 bg-green-100 text-green-800 rounded-md">Success: {message}</div>
-					)}
+					{/* Error and Success messages are now handled by global toast */}
 
 					{/* Informasi Dasar */}
 					<div className="mb-8 p-6 bg-purple-50 rounded-lg shadow-md">
@@ -175,16 +166,6 @@ export default function UpdateEventPage() {
 								onChange={(e) => setCategory(e.target.value)}
 								required
 								onClear={() => setCategory('')}
-							/>
-							<FormInput
-								id="capacity"
-								label="Kapasitas"
-								type="number"
-								placeholder="123"
-								value={capacity}
-								onChange={(e) => setCapacity(Number(e.target.value))}
-								required
-								onClear={() => setCapacity(0)}
 							/>
 						</div>
 						<div className="mt-6 p-4 border-2 border-dashed border-gray-300 rounded-lg text-center">
@@ -325,11 +306,11 @@ export default function UpdateEventPage() {
 								</span>
 								<h2 className="text-xl font-semibold text-gray-800">Informasi Tiket</h2>
 							</div>
-							{ticketTypes.map((ticket, index) => (
+							{tickets.map((ticket, index) => (
 								<div key={index} className="mb-6 p-4 border border-gray-200 rounded-md">
 									<div className="flex justify-between items-center mb-4">
 										<h3 className="text-lg font-medium text-gray-700">Jenis Tiket #{index + 1}</h3>
-										{ticketTypes.length > 1 && (
+										{tickets.length > 1 && (
 											<Button
 												type="button"
 												variant="destructive"
@@ -342,13 +323,15 @@ export default function UpdateEventPage() {
 									</div>
 									<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
 										<FormInput
-											id={`ticketName-${index}`}
-											label="Nama Tiket"
-											placeholder="Contoh : Regular Tiket"
-											value={ticket.name}
-											onChange={(e) => handleTicketTypeChange(index, 'name', e.target.value)}
+											id={`ticketCategory-${index}`}
+											label="Kategori Tiket"
+											placeholder="Contoh : Asik"
+											value={ticket.ticketCategory}
+											onChange={(e) =>
+												handleTicketTypeChange(index, 'ticketCategory', e.target.value)
+											}
 											required
-											onClear={() => handleTicketTypeChange(index, 'name', '')}
+											onClear={() => handleTicketTypeChange(index, 'ticketCategory', '')}
 										/>
 										<FormInput
 											id={`ticketPrice-${index}`}
@@ -363,38 +346,18 @@ export default function UpdateEventPage() {
 											onClear={() => handleTicketTypeChange(index, 'price', 0)}
 										/>
 										<FormInput
-											id={`ticketQuantity-${index}`}
-											label="Jumlah"
+											id={`ticketQuota-${index}`}
+											label="Kuota"
 											type="number"
 											placeholder={'0'}
-											value={ticket.quantity}
+											value={ticket.quota}
 											onChange={(e) =>
-												handleTicketTypeChange(index, 'quantity', Number(e.target.value))
+												handleTicketTypeChange(index, 'quota', Number(e.target.value))
 											}
 											required
-											onClear={() => handleTicketTypeChange(index, 'quantity', 0)}
-										/>
-										<FormInput
-											id={`purchaseLimit-${index}`}
-											label="Batas Pembelian"
-											type="number"
-											placeholder="Maksimal per Orang"
-											value={ticket.purchaseLimit}
-											onChange={(e) =>
-												handleTicketTypeChange(index, 'purchaseLimit', Number(e.target.value))
-											}
-											onClear={() => handleTicketTypeChange(index, 'purchaseLimit', 0)}
+											onClear={() => handleTicketTypeChange(index, 'quota', 0)}
 										/>
 									</div>
-									<FormTextarea
-										id={`importantInfo-${index}`}
-										label="Informasi Penting"
-										placeholder="Yang di dapat pada tiket ini"
-										value={ticket.importantInfo}
-										onChange={(content) => handleTicketTypeChange(index, 'importantInfo', content)}
-										required
-										onClear={() => handleTicketTypeChange(index, 'importantInfo', '')}
-									/>
 								</div>
 							))}
 							<Button
