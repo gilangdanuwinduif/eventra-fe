@@ -31,7 +31,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 		return (
 			<>
 				<Navbar />
-				{children}
+				<main className="pt-[100px]"> {/* jarak aman dari navbar */}
+      {children}
+    </main>
 			</>
 		)
 	}

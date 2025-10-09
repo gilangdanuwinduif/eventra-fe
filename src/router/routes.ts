@@ -4,6 +4,7 @@ import React from 'react'
 const LandingPage = React.lazy(() => import('../pages/LandingPage'))
 const LoginPage = React.lazy(() => import('../pages/LoginPage'))
 const RegisterPage = React.lazy(() => import('../pages/RegisterPage'))
+const ProfilePage = React.lazy(() => import('../pages/ProfilePage'))
 
 // Admin Pages
 const DashboardAdminPage = React.lazy(() => import('../pages/DashboardAdminPage'))
@@ -43,5 +44,10 @@ export const privateRoutes = [
 		path: '/update/event/:id',
 		element: UpdateEventPage,
 		exact: true
-	}
+	},
+	{
+    path: '/profile', //Edit : By Gilang, route untuk profile page
+    element: ProfilePage,
+    exact: true,
+  	}
 ]

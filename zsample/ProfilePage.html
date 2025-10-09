@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profil Pengguna - EventTech Eventra</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#f3f3ff] font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-[#7b5bf3] text-white px-8 py-3 flex justify-between items-center shadow-md">
+    <div class="flex items-center gap-2">
+      <div class="bg-white/20 rounded-lg p-1">
+        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828961.png" alt="logo" class="w-6 h-6">
+      </div>
+      <h1 class="font-bold text-lg">EventTech Eventra</h1>
+    </div>
+
+    <ul class="hidden md:flex gap-6 text-sm">
+      <li><a href="#" class="hover:underline">Event</a></li>
+      <li><a href="#" class="hover:underline">Kategori</a></li>
+      <li><a href="#" class="hover:underline">Tiket Saya</a></li>
+      <li><a href="#" class="hover:underline">Tentang Kami</a></li>
+    </ul>
+
+    <div class="flex items-center gap-3">
+      <i class="fa fa-shopping-cart"></i>
+      <i class="fa fa-bell"></i>
+      <div class="flex items-center gap-2">
+        <img src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png" class="w-8 h-8 rounded-full border border-white/30" />
+        <div>
+          <p class="font-semibold leading-tight">Name</p>
+          <p class="text-sm text-gray-200 leading-tight">Status User</p>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex flex-col md:flex-row gap-8 p-8">
+
+    <!-- Sidebar -->
+    <aside class="bg-white rounded-2xl shadow-md p-6 w-full md:w-1/4">
+      <div class="flex flex-col items-center">
+        <div class="bg-[#e9e3ff] w-20 h-20 rounded-full flex items-center justify-center mb-4">
+          <img src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png" class="w-10 h-10" />
+        </div>
+        <h2 class="font-semibold text-lg">Ahma Yani</h2>
+        <p class="text-gray-500 text-sm">ahmad.yani123@gmail.com</p>
+        <p class="text-[#7b5bf3] font-semibold text-2xl mt-2">12</p>
+        <p class="text-gray-500 text-sm">Tiket</p>
+      </div>
+
+      <hr class="my-6 border-gray-200">
+
+      <nav class="space-y-4 text-sm">
+        <a href="#" class="flex items-center text-[#7b5bf3] font-semibold">
+          <i class="fa fa-user mr-2"></i> Informasi Pribadi
+        </a>
+        <a href="#" class="flex items-center text-gray-600 hover:text-[#7b5bf3]">
+          <i class="fa fa-lock mr-2"></i> Keamanan
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Profile Form -->
+    <section class="bg-white rounded-2xl shadow-md p-8 flex-1">
+      <h2 class="text-xl font-bold mb-6">Informasi Pribadi</h2>
+
+      <form class="space-y-5">
+        <div>
+          <label class="block font-medium mb-1">Nama</label>
+          <input type="text" placeholder="Nama Sesuai NIK" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#7b5bf3] focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1">NIK</label>
+          <input type="text" placeholder="Nomor Induk Kependudukan" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#7b5bf3] focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1">Email</label>
+          <input type="email" value="Alamatemail@gmail.com" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#7b5bf3] focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1">Nomor Telepon</label>
+          <input type="text" placeholder="Nomor Telepon" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#7b5bf3] focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1">Jenis Kelamin</label>
+          <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#7b5bf3] focus:outline-none">
+            <option>Laki - Laki</option>
+            <option>Perempuan</option>
+          </select>
+        </div>
+
+        <div class="pt-4">
+          <button type="submit" class="w-full bg-[#7b5bf3] hover:bg-[#6a4ae0] text-white py-2 rounded-lg font-medium">
+            Simpan Perubahan
+          </button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import useAuthStore from '../../store/authStore'
+import useAuthStore, { User, DecodedToken } from '../../store/authStore'
 
 // URL default jika pengguna belum memiliki foto profil
 const DEFAULT_PROFILE_URL = 'https://via.placeholder.com/32'
@@ -35,17 +35,23 @@ export default function UserProfileDropdown() {
 	if (!user) {
 		return null
 	}
-	const userName = user.email || 'Pengguna'
+
+	// Type guard to check if user is a full User object
+	const isFullUser = (userData: User | DecodedToken): userData is User => {
+		return (userData as User).email !== undefined
+	}
+
+	const userName = isFullUser(user) ? user.email : user.fullName || 'Pengguna'
 	const initials = userName
 		.split(' ')
-		.map((n) => n[0])
+		.map((n: string) => n[0])
 		.join('')
 		.toUpperCase()
 		.substring(0, 2)
 
 	const displayRole = user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1).toLowerCase() : 'User'
 
-	const profileImageUrl = DEFAULT_PROFILE_URL
+	const profileImageUrl = user.profilePicture || DEFAULT_PROFILE_URL
 
 	return (
 		// Gunakan ref untuk mendeteksi klik di luar
@@ -60,7 +66,7 @@ export default function UserProfileDropdown() {
 				{/* Avatar/Foto Kustom (Tailwind Murni) */}
 				<div className="h-8 w-8 rounded-full overflow-hidden bg-gray-600 flex items-center justify-center flex-shrink-0">
 					{profileImageUrl !== DEFAULT_PROFILE_URL ? (
-						<img src={profileImageUrl} alt={user.email} className="h-full w-full object-cover" />
+						<img src={profileImageUrl} alt={userName} className="h-full w-full object-cover" />
 					) : (
 						<span className="text-sm font-medium text-white">{initials}</span>
 					)}
@@ -68,7 +74,7 @@ export default function UserProfileDropdown() {
 
 				{/* Nama dan Status */}
 				<div className="flex flex-col items-start hidden sm:flex">
-					<span className="text-sm font-semibold text-white truncate max-w-[120px]">{user.email}</span>
+					<span className="text-sm font-semibold text-white truncate max-w-[120px]">{userName}</span>
 					<span className="text-xs text-blue-200">{displayRole}</span>
 				</div>
 
@@ -91,7 +97,7 @@ export default function UserProfileDropdown() {
 				<div className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-xl border border-gray-200 z-30 transform origin-top-right animate-fade-in">
 					{/* Label Header */}
 					<div className="px-4 py-3 border-b">
-						<p className="font-bold text-gray-900">{user.email}</p>
+						<p className="font-bold text-gray-900">{userName}</p>
 						<p className="text-xs font-normal text-gray-500">{displayRole}</p>
 					</div>
 
