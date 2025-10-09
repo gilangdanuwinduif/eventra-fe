@@ -75,16 +75,6 @@ export default function UpdateEventPage() {
 		}
 	}, [id, navigate, resetState, fetchEventById, showToast]) // Add fetchEventById and showToast to dependency array
 
-	// No longer need a local useEffect for error, as toast handles it globally
-	// useEffect(() => {
-	// 	if (error) {
-	// 		const timer = setTimeout(() => {
-	// 			resetState()
-	// 		}, 5000) // Reset after 5 seconds
-	// 		return () => clearTimeout(timer)
-	// 	}
-	// }, [error, resetState])
-
 	const handleTicketTypeChange = (index: number, field: string, value: string | number) => {
 		const updatedTickets = [...tickets]
 		updatedTickets[index] = { ...updatedTickets[index], [field]: value }
@@ -121,9 +111,7 @@ export default function UpdateEventPage() {
 
 		if (isEditMode && id) {
 			await updateEvent(id, eventPayload, showToast)
-			// Manually navigate on successful update
 			if (!loading && !error) {
-				// Check if update was successful (not loading and no error)
 				navigate('/dashboard/admin')
 			}
 		}
@@ -202,7 +190,6 @@ export default function UpdateEventPage() {
 										customInput={<DateInputWithIcon />}
 										className="w-full pr-10 border border-gray-300 rounded-md py-2 pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-purple-500"
 									/>
-									{/* CalendarIcon is now part of DateInputWithIcon */}
 								</div>
 							</div>
 							<div>
@@ -221,7 +208,6 @@ export default function UpdateEventPage() {
 										customInput={<DateInputWithIcon />}
 										className="w-full pr-10 border border-gray-300 rounded-md py-2 pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-purple-500"
 									/>
-									{/* CalendarIcon is now part of DateInputWithIcon */}
 								</div>
 							</div>
 						</div>
@@ -302,7 +288,6 @@ export default function UpdateEventPage() {
 							<div className="flex items-center mb-4">
 								<span className="text-purple-700 mr-2">
 									<List className="h-6 w-6" />{' '}
-									{/* Using List icon as a placeholder for ticket icon */}
 								</span>
 								<h2 className="text-xl font-semibold text-gray-800">Informasi Tiket</h2>
 							</div>

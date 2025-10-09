@@ -34,27 +34,10 @@ export default function CreateEventPage() {
 	}))
 
 	useEffect(() => {
-		// Reset error state when component mounts or navigate away
 		return () => {
 			resetState()
 		}
 	}, [resetState])
-
-	// No longer need local useEffect for success/error, as toast handles it globally
-	// useEffect(() => {
-	// 	if (success) {
-	// 		const timer = setTimeout(() => {
-	// 			resetState()
-	// 			navigate('/dashboard/admin') // Redirect on success
-	// 		}, 3000) // Reset after 3 seconds and redirect
-	// 		return () => clearTimeout(timer)
-	// 	} else if (error) {
-	// 		const timer = setTimeout(() => {
-	// 			resetState()
-	// 		}, 5000) // Reset after 5 seconds
-	// 		return () => clearTimeout(timer)
-	// 	}
-	// }, [success, error, resetState, navigate])
 
 	const handlePublishEvent = async () => {
 		const formattedStartDate = startDate ? startDate.toISOString() : ''
@@ -167,7 +150,6 @@ export default function CreateEventPage() {
 										customInput={<DateInputWithIcon />}
 										className="w-full pr-10 border border-gray-300 rounded-md py-2 pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-purple-500"
 									/>
-									{/* CalendarIcon is now part of DateInputWithIcon */}
 								</div>
 							</div>
 							<div>
@@ -186,7 +168,6 @@ export default function CreateEventPage() {
 										customInput={<DateInputWithIcon />}
 										className="w-full pr-10 border border-gray-300 rounded-md py-2 pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-purple-500"
 									/>
-									{/* CalendarIcon is now part of DateInputWithIcon */}
 								</div>
 							</div>
 						</div>
@@ -267,7 +248,6 @@ export default function CreateEventPage() {
 							<div className="flex items-center mb-4">
 								<span className="text-purple-700 mr-2">
 									<List className="h-6 w-6" />{' '}
-									{/* Using List icon as a placeholder for ticket icon */}
 								</span>
 								<h2 className="text-xl font-semibold text-gray-800">Informasi Tiket</h2>
 							</div>
