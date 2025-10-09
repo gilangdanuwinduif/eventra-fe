@@ -9,7 +9,7 @@ export default function UserProfileDropdown() {
 	// State untuk mengontrol status buka/tutup dropdown
 	const [isOpen, setIsOpen] = useState(false)
 	const dropdownRef = useRef<HTMLDivElement>(null) // Specify the type of the ref
-	const { user, userRole, logout } = useAuthStore()
+	const { user, logout } = useAuthStore()
 	const navigate = useNavigate()
 
 	// Fungsi untuk menutup dropdown saat klik di luar area
@@ -33,10 +33,9 @@ export default function UserProfileDropdown() {
 	}
 
 	if (!user) {
-		//(!user || !user.fullName) {
 		return null
 	}
-	const userName = user.fullName || user.sub || 'Pengguna'
+	const userName = user.email || 'Pengguna'
 	const initials = userName
 		.split(' ')
 		.map((n) => n[0])
@@ -44,9 +43,9 @@ export default function UserProfileDropdown() {
 		.toUpperCase()
 		.substring(0, 2)
 
-	const displayRole = userRole ? userRole.charAt(0).toUpperCase() + userRole.slice(1).toLowerCase() : 'User'
+	const displayRole = user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1).toLowerCase() : 'User'
 
-	const profileImageUrl = user.profilePicture || DEFAULT_PROFILE_URL
+	const profileImageUrl = DEFAULT_PROFILE_URL
 
 	return (
 		// Gunakan ref untuk mendeteksi klik di luar
@@ -61,7 +60,7 @@ export default function UserProfileDropdown() {
 				{/* Avatar/Foto Kustom (Tailwind Murni) */}
 				<div className="h-8 w-8 rounded-full overflow-hidden bg-gray-600 flex items-center justify-center flex-shrink-0">
 					{profileImageUrl !== DEFAULT_PROFILE_URL ? (
-						<img src={profileImageUrl} alt={user.fullName} className="h-full w-full object-cover" />
+						<img src={profileImageUrl} alt={user.email} className="h-full w-full object-cover" />
 					) : (
 						<span className="text-sm font-medium text-white">{initials}</span>
 					)}
@@ -69,7 +68,7 @@ export default function UserProfileDropdown() {
 
 				{/* Nama dan Status */}
 				<div className="flex flex-col items-start hidden sm:flex">
-					<span className="text-sm font-semibold text-white truncate max-w-[120px]">{user.fullName}</span>
+					<span className="text-sm font-semibold text-white truncate max-w-[120px]">{user.email}</span>
 					<span className="text-xs text-blue-200">{displayRole}</span>
 				</div>
 
@@ -92,14 +91,14 @@ export default function UserProfileDropdown() {
 				<div className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-xl border border-gray-200 z-30 transform origin-top-right animate-fade-in">
 					{/* Label Header */}
 					<div className="px-4 py-3 border-b">
-						<p className="font-bold text-gray-900">{user.fullName}</p>
+						<p className="font-bold text-gray-900">{user.email}</p>
 						<p className="text-xs font-normal text-gray-500">{displayRole}</p>
 					</div>
 
 					{/* Menu Items */}
 					<div className="py-1">
 						{/* Opsi Role-Based */}
-						{userRole === 'ADMIN' && (
+						{user.role === 'ADMIN' && (
 							<Link
 								to="/dashboard/admin"
 								className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

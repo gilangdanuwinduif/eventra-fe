@@ -9,7 +9,6 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { DateInputWithIcon } from '../components/form-elements/DateInputWithIcon'
 import { useNavigate, useParams } from 'react-router-dom'
-import api from '../lib/axios' // Import the configured axios instance
 
 interface Event {
 	id: string
@@ -33,7 +32,7 @@ export default function UpdateEventPage() {
 	const { id } = useParams<{ id: string }>()
 	const [eventName, setEventName] = useState('')
 	const [category, setCategory] = useState('')
-	const [capacity, setCapacity] = useState('')
+	const [capacity, setCapacity] = useState(0)
 	const [startDate, setStartDate] = useState<Date | null>(null)
 	const [endDate, setEndDate] = useState<Date | null>(null)
 	// startTime and endTime will be handled by DatePicker directly within startDate/endDate
@@ -44,7 +43,7 @@ export default function UpdateEventPage() {
 	const [description, setDescription] = useState('')
 	// Removed importantInfo and ticketTypes states as they are not part of the API payload
 
-	const { loading, error, success, message, createEvent, updateEvent, resetState } = useEventStore()
+	const { loading, error, success, message, updateEvent, resetState } = useEventStore()
 	const [isEditMode, setIsEditMode] = useState(false)
 
 	useEffect(() => {
@@ -57,7 +56,7 @@ export default function UpdateEventPage() {
 					if (event) {
 						setEventName(event.title)
 						setCategory(event.category)
-						setCapacity(event.capacity.toString())
+						setCapacity(event.capacity)
 						setStartDate(new Date(event.startDate))
 						setEndDate(new Date(event.endDate))
 						const locationParts = event.location.split(', ')
@@ -104,15 +103,13 @@ export default function UpdateEventPage() {
 			startDate: formattedStartDate,
 			endDate: formattedEndDate,
 			imageUrl: 'https://picsum.photos/seed/event1/800/600', // Placeholder
-			capacity: parseInt(capacity),
+			capacity: capacity,
 			category: category,
 			status: 'PLANNED' // Assuming status remains PLANNED for now
 		}
 
 		if (isEditMode && id) {
 			await updateEvent(id, eventPayload)
-		} else {
-			await createEvent(eventPayload)
 		}
 	}
 
@@ -163,9 +160,9 @@ export default function UpdateEventPage() {
 								type="number"
 								placeholder="123"
 								value={capacity}
-								onChange={(e) => setCapacity(e.target.value)}
+								onChange={(e) => setCapacity(Number(e.target.value))}
 								required
-								onClear={() => setCapacity('')}
+								onClear={() => setCapacity(0)}
 							/>
 						</div>
 						<div className="mt-6 p-4 border-2 border-dashed border-gray-300 rounded-lg text-center">

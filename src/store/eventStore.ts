@@ -49,7 +49,7 @@ export const useEventStore = create<EventState>((set) => ({
 	createEvent: async (eventData: CreateEventPayload) => {
 		set({ loading: true, error: null, success: false, message: null })
 		try {
-			const response = await axios.post('http://localhost:8080/api/events', eventData)
+			const response = await axios.post('/events', eventData)
 			if (response.data.success) {
 				set({ success: true, message: response.data.message, loading: false })
 			} else {
@@ -66,10 +66,9 @@ export const useEventStore = create<EventState>((set) => ({
 	fetchEventById: async (id: string): Promise<Event | null> => {
 		set({ loading: true, error: null, success: false, message: null }) // Reset success/message for fetch
 		try {
-			const response = await axios.get<Event>(`http://localhost:8080/api/events/${id}`)
-			console.log(response, '<=== ini apa?')
+			const response = await axios.get(`/events/${id}`)
 			set({ loading: false }) // Only set loading to false, do not set success/message
-			return response.data
+			return response.data.data
 		} catch (err: unknown) {
 			const message =
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -82,7 +81,10 @@ export const useEventStore = create<EventState>((set) => ({
 	updateEvent: async (id: string, eventData: CreateEventPayload) => {
 		set({ loading: true, error: null, success: false, message: null })
 		try {
-			const response = await axios.put(`http://localhost:8080/api/events/${id}`, eventData)
+			const response = await axios.put(`/events/${id}`, eventData)
+			console.log(response.data, '<=== ini apa isinya')
+			console.log(response.data.data, '<=== ini apa isinya2222222222')
+
 			if (response.data.success) {
 				set({ success: true, message: response.data.message, loading: false })
 			} else {

@@ -11,7 +11,7 @@ import UserProfileDropdown from '../custom-ui/UserProfileDropdown'
 export default function Navbar() {
 	const [scrollY, setScrollY] = useState(0)
 	const [isOpen, setIsOpen] = useState(false)
-	const { token, user, userRole } = useAuthStore() //edit : by Gilang ambil data token dan logout dari authStore
+	const { token, user } = useAuthStore() //edit : by Gilang ambil data token dan logout dari authStore
 
 	const toggleOpen = () => {
 		setIsOpen(!isOpen)
@@ -47,7 +47,7 @@ export default function Navbar() {
 
 	// Navigasi khusus
 	const roleNavLinks = []
-	if (userRole === 'ADMIN') {
+	if (user?.role === 'ADMIN') {
 		roleNavLinks.push(
 			{ to: '/dashboard/admin', label: 'Dashboard' },
 			{ to: '/event', label: 'Event' },
@@ -57,12 +57,12 @@ export default function Navbar() {
 			{ to: '/order', label: 'Order' }
 		)
 	}
-	// else if (userRole === 'USER') {
+	// else if (user?.role === 'USER') {
 	//     roleNavLinks.push({ to: '/my-tickets', label: 'Tiket Saya' })
 	// }
 
 	let finalNavLinks = commonNavLinks
-	if (userRole === 'ADMIN') {
+	if (user?.role === 'ADMIN') {
 		finalNavLinks = roleNavLinks
 	} else {
 		finalNavLinks = [...commonNavLinks]

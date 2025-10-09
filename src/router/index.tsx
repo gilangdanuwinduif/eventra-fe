@@ -2,7 +2,6 @@ import React, { Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { publicRoutes, privateRoutes } from './routes'
 import ProtectedRoute from './ProtectedRoute'
-import CreateEventPage from '../pages/CreateEventPage' // Import CreateEventPage
 import Navbar from '../components/landing/Navbar' // Import Navbar
 
 const AppRouter: React.FC = () => {

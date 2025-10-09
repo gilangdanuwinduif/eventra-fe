@@ -15,30 +15,38 @@ const LoginPage: React.FC = () => {
 		try {
 			const loginResponse = await axios.post('/auth/login', { email, password })
 			const token = loginResponse.data.data.token
-			useAuthStore.getState().setToken(token) // Use the store's setToken function
+			useAuthStore.getState().setToken(token)
 
-			const decodedToken: { sub: string; iat: number; exp: number } = jwtDecode(token)
-			const userId = decodedToken.sub // Assuming 'sub' contains the user ID or email
+			const decodedToken: DecodedToken = jwtDecode(token)
+			const userId = decodedToken.sub
 
 			const userResponse = await axios.get(`/users/${userId}`, {
 				headers: { Authorization: `Bearer ${token}` }
 			})
 
-			const userRole = userResponse.data.data.role // Assuming the user role is in response.data.data.role
-			const currentUser = useAuthStore.getState().user as DecodedToken // Cast to DecodedToken
+			const userDetails = userResponse.data.data
+
 			const fullUser: User = {
-				sub: currentUser.sub,
-				iat: currentUser.iat,
-				exp: currentUser.exp,
-				role: userRole,
-				fullName: currentUser.fullName, // edit : by Gilang Diisi dari API
-				profilePicture: currentUser.profilePicture // edit : by Gilang Diisi dari API
+				sub: decodedToken.sub,
+				iat: decodedToken.iat,
+				exp: decodedToken.exp,
+				role: userDetails.role,
+				fullName: userDetails.fullName,
+				profilePicture: userDetails.profilePicture || null,
+				id: userDetails.id,
+				email: userDetails.email,
+				phone: userDetails.phone,
+				createdAt: userDetails.createdAt,
+				gender: userDetails.gender,
+				nik: userDetails.nik,
+				isRegistered: userDetails.isRegistered
 			}
-			useAuthStore.getState().setUser(fullUser) // Update user role in store
-			if (userRole == 'ADMIN') {
+			useAuthStore.getState().setUser(fullUser)
+
+			if (userDetails.role === 'ADMIN') {
 				navigate('/dashboard/admin')
 			} else {
-				navigate('/') // Redirect to a default page for non-admin users
+				navigate('/')
 			}
 		} catch (error) {
 			console.error('Login failed:', error)

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Button } from '../components/ui/button'
 import api from '../lib/axios' // Import the configured axios instance
 import { useNavigate } from 'react-router-dom'
+import useAuthStore from '../store/authStore'
 
 interface Event {
 	id: string
@@ -31,12 +32,17 @@ interface ApiResponse {
 }
 
 const DashboardAdminPage: React.FC = () => {
+	const { user } = useAuthStore()
 	const navigate = useNavigate()
 	const [events, setEvents] = useState<Event[]>([])
 	const [currentPage, setCurrentPage] = useState<number>(1)
 	const [totalPages, setTotalPages] = useState<number>(1)
 	const [loading, setLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)
+
+	const handleDetailClick = (id: string) => {
+		navigate(`/update/event/${id}`)
+	}
 
 	useEffect(() => {
 		const fetchEvents = async () => {
@@ -54,8 +60,19 @@ const DashboardAdminPage: React.FC = () => {
 			}
 		}
 
-		fetchEvents()
-	}, [currentPage])
+		if (user?.role === 'ADMIN') {
+			fetchEvents()
+		}
+	}, [currentPage, user])
+
+	if (user?.role !== 'ADMIN') {
+		return (
+			<div className="flex justify-center items-center h-screen">
+				<h1 className="text-2xl font-bold text-red-500">You are not authorized to view this page.</h1>
+			</div>
+		)
+	}
+
 	return (
 		<div className="min-h-screen bg-gray-100">
 			{/* Main Content */}
@@ -183,7 +200,10 @@ const DashboardAdminPage: React.FC = () => {
 										<td className="px-6 py-4 whitespace-nowrap">N/A</td>{' '}
 										{/* Sisa Tiket - Not available in API */}
 										<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-											<Button className="bg-purple-600 text-white px-4 py-2 rounded-md">
+											<Button
+												onClick={() => handleDetailClick(event.id)}
+												className="bg-purple-600 text-white px-4 py-2 rounded-md"
+											>
 												Detail
 											</Button>
 										</td>
