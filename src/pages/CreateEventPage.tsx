@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '../components/ui/button'
 import { CalendarIcon, UploadCloud, AlertCircle, MapPin, List } from 'lucide-react'
-import { useEventStore } from '../store/eventStore'
+import useEventStore from '../store/eventStore'
 import { FormInput } from '../components/form-elements/FormInput'
 import { FormTextarea } from '../components/form-elements/FormTextarea'
 import { Label } from '../components/ui/label' // Re-import Label for date/time fields
@@ -23,7 +23,9 @@ export default function CreateEventPage() {
 	const [city, setCity] = useState('')
 	const [province, setProvince] = useState('')
 	const [description, setDescription] = useState('')
-	// Removed importantInfo and ticketTypes states as they are not part of the API payload
+	const [ticketTypes, setTicketTypes] = useState([
+		{ name: '', price: 0, quantity: 0, purchaseLimit: 0, importantInfo: '' }
+	]) // State for ticket types
 
 	const { loading, error, success, message, createEvent, resetState } = useEventStore()
 
@@ -55,9 +57,31 @@ export default function CreateEventPage() {
 			imageUrl: 'https://picsum.photos/seed/event1/800/600', // Placeholder
 			capacity: parseInt(capacity),
 			category: category,
-			status: 'PLANNED'
+			status: 'PLANNED',
+			importantInfo: null, // Add importantInfo as null or a default value if needed
+			ticketTypes: ticketTypes.map((ticket) => ({
+				name: ticket.name,
+				price: ticket.price,
+				quantity: ticket.quantity,
+				purchaseLimit: ticket.purchaseLimit,
+				importantInfo: ticket.importantInfo || null
+			}))
 		}
 		await createEvent(eventPayload)
+	}
+
+	const handleTicketTypeChange = (index: number, field: string, value: string | number) => {
+		const updatedTicketTypes = [...ticketTypes]
+		updatedTicketTypes[index] = { ...updatedTicketTypes[index], [field]: value }
+		setTicketTypes(updatedTicketTypes)
+	}
+
+	const addTicketType = () => {
+		setTicketTypes([...ticketTypes, { name: '', price: 0, quantity: 0, purchaseLimit: 0, importantInfo: '' }])
+	}
+
+	const removeTicketType = (indexToRemove: number) => {
+		setTicketTypes(ticketTypes.filter((_, index) => index !== indexToRemove))
 	}
 
 	return (
@@ -169,8 +193,8 @@ export default function CreateEventPage() {
 						</div>
 
 						{/* Lokasi */}
-						<div className="mb-8 bg-purple-50 rounded-lg shadow-md">
-							<div className="flex items-center mb-4">
+						<div>
+							<div className="flex items-center my-4">
 								<span className="text-purple-700 mr-2">
 									<MapPin className="h-6 w-6" />
 								</span>
@@ -217,8 +241,8 @@ export default function CreateEventPage() {
 						</div>
 
 						{/* Deskripsi / Highlight Acara & Informasi Penting */}
-						<div className="mb-8 bg-purple-50 rounded-lg shadow-md">
-							<div className="flex items-center mb-4">
+						<div>
+							<div className="flex items-center my-4">
 								<span className="text-purple-700 mr-2">
 									<List className="h-6 w-6" />
 								</span>
@@ -232,11 +256,92 @@ export default function CreateEventPage() {
 									label="Deskripsi / Highlight Acara"
 									placeholder="Jelaskan secara singkat dan Menarik"
 									value={description}
-									onChange={(e) => setDescription(e.target.value)}
+									onChange={setDescription}
 									required
 									onClear={() => setDescription('')}
 								/>
 							</div>
+						</div>
+
+						{/* Informasi Tiket */}
+						<div>
+							<div className="flex items-center mb-4">
+								<span className="text-purple-700 mr-2">
+									<List className="h-6 w-6" />{' '}
+									{/* Using List icon as a placeholder for ticket icon */}
+								</span>
+								<h2 className="text-xl font-semibold text-gray-800">Informasi Tiket</h2>
+							</div>
+							{ticketTypes.map((ticket, index) => (
+								<div key={index} className="mb-6 p-4 border border-gray-200 rounded-md">
+									<div className="flex justify-between items-center mb-4">
+										<h3 className="text-lg font-medium text-gray-700">Jenis Tiket #{index + 1}</h3>
+										{ticketTypes.length > 1 && (
+											<Button
+												type="button"
+												variant="destructive"
+												onClick={() => removeTicketType(index)}
+												className="bg-red-500 hover:bg-red-600 text-white"
+											>
+												Hapus
+											</Button>
+										)}
+									</div>
+									<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+										<FormInput
+											id={`ticketName-${index}`}
+											label="Nama Tiket"
+											placeholder="Contoh : Regular Tiket"
+											value={ticket.name}
+											onChange={(e) => handleTicketTypeChange(index, 'name', e.target.value)}
+											required
+											onClear={() => handleTicketTypeChange(index, 'name', '')}
+										/>
+										<FormInput
+											id={`ticketPrice-${index}`}
+											label="Harga"
+											type="number"
+											placeholder={'Rp. 0'}
+											value={ticket.price}
+											onChange={(e) =>
+												handleTicketTypeChange(index, 'price', Number(e.target.value))
+											}
+											required
+											onClear={() => handleTicketTypeChange(index, 'price', 0)}
+										/>
+										<FormInput
+											id={`ticketQuantity-${index}`}
+											label="Jumlah"
+											type="number"
+											placeholder={'0'}
+											value={ticket.quantity}
+											onChange={(e) =>
+												handleTicketTypeChange(index, 'quantity', Number(e.target.value))
+											}
+											required
+											onClear={() => handleTicketTypeChange(index, 'quantity', 0)}
+										/>
+										<FormInput
+											id={`purchaseLimit-${index}`}
+											label="Batas Pembelian"
+											type="number"
+											placeholder="Maksimal per Orang"
+											value={ticket.purchaseLimit}
+											onChange={(e) =>
+												handleTicketTypeChange(index, 'purchaseLimit', Number(e.target.value))
+											}
+											onClear={() => handleTicketTypeChange(index, 'purchaseLimit', 0)}
+										/>
+									</div>
+								</div>
+							))}
+							<Button
+								type="button"
+								onClick={addTicketType}
+								className="mt-4 bg-purple-600 hover:bg-purple-700 text-white"
+							>
+								+ Tambah Jenis Tiket
+							</Button>
 						</div>
 					</div>
 

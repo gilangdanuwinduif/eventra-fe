@@ -18,7 +18,7 @@ const AppRouter: React.FC = () => {
 						},
 						index: number
 					) => (
-						<Route key={index} path={route.path} element={React.createElement(route.element)} />
+						<Route key={index} path={route.path} element={<route.element />} />
 					)
 				)}
 				{/* Private routes will go here */}
@@ -26,7 +26,7 @@ const AppRouter: React.FC = () => {
 					<Route
 						key={index}
 						path={route.path}
-						element={<ProtectedRoute>{React.createElement(route.element)}</ProtectedRoute>}
+						element={<ProtectedRoute>{<route.element />}</ProtectedRoute>}
 					/>
 				))}
 			</Routes>

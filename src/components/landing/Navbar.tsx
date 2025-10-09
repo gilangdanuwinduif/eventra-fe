@@ -49,6 +49,7 @@ export default function Navbar() {
 	const roleNavLinks = []
 	if (user?.role === 'ADMIN') {
 		roleNavLinks.push(
+			{ to: '/', label: 'Dashboard User' },
 			{ to: '/dashboard/admin', label: 'Dashboard' },
 			{ to: '/event', label: 'Event' },
 			{ to: '/tiket', label: 'Tiket' },
@@ -69,8 +70,7 @@ export default function Navbar() {
 	}
 
 	return (
-		<>
-			<SideNav handleClose={toggleOpen} isOpen={isOpen} />
+		<div>
 			<motion.nav
 				initial={{ y: -100 }}
 				animate={{ y: 0 }}
@@ -139,6 +139,6 @@ export default function Navbar() {
 					</motion.div>
 				</div>
 			</motion.nav>
-		</>
+		</div>
 	)
 }

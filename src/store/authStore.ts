@@ -55,7 +55,7 @@ const useAuthStore = create<AuthState>()(
 					set({
 						token,
 						user: decodedToken,
-						userRole: decodedToken.role || null,
+						userRole: decodedToken.role || null
 					})
 				} else {
 					set({ token: null, user: null, userRole: null })
@@ -65,7 +65,7 @@ const useAuthStore = create<AuthState>()(
 			setUser: (user) => {
 				set({
 					user,
-					userRole: user?.role || null,
+					userRole: user?.role || null
 				})
 			},
 
@@ -80,18 +80,18 @@ const useAuthStore = create<AuthState>()(
 					const currentUser = state.user as User
 					const updatedUser: User = {
 						...currentUser,
-						...updatedFields,
+						...updatedFields
 					}
 					return { user: updatedUser }
-				}),
+				})
 		}),
 		{
 			name: 'auth-storage', // key di localStorage
 			partialize: (state) => ({
 				token: state.token,
 				user: state.user,
-				userRole: state.userRole,
-			}),
+				userRole: state.userRole
+			})
 		}
 	)
 )

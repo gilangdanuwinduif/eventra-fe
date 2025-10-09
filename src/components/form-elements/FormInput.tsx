@@ -7,7 +7,7 @@ interface FormInputProps {
 	id: string
 	label: string
 	placeholder: string
-	value: string | number
+	value: string | number | null
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 	type?: string
 	required?: boolean
@@ -37,8 +37,9 @@ export const FormInput: React.FC<FormInputProps> = ({
 					value={value}
 					onChange={onChange}
 					className="w-full pr-10"
+					min={type === 'number' ? 1 : undefined} // Enforce minimum value of 1 for number inputs
 				/>
-				{onClear && value && (
+				{onClear && value !== 0 && (
 					<X
 						className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 cursor-pointer"
 						onClick={onClear}

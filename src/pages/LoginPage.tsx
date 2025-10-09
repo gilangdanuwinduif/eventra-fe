@@ -22,7 +22,7 @@ const LoginPage: React.FC = () => {
 			const userId = decodedToken.sub
 
 			const userResponse = await axios.get(`/users/${userId}`, {
-				headers: { Authorization: `Bearer ${token}` },
+				headers: { Authorization: `Bearer ${token}` }
 			})
 
 			const userDetails = userResponse.data.data
@@ -40,7 +40,7 @@ const LoginPage: React.FC = () => {
 				createdAt: userDetails.createdAt,
 				gender: userDetails.gender,
 				nik: userDetails.nik,
-				isRegistered: userDetails.isRegistered,
+				isRegistered: userDetails.isRegistered
 			}
 			useAuthStore.getState().setUser(fullUser)
 
@@ -57,7 +57,7 @@ const LoginPage: React.FC = () => {
 
 	return (
 		<div>
-			<section className="bg-[#d1c4e9] py-[100px] px-[50px] text-center text-[#4a148c] min-h-[500px] flex flex-col justify-center items-center">
+			<section className="bg-[#d1c4e9] h-screen py-[100px] px-[50px] text-center text-[#4a148c] min-h-[500px] flex flex-col justify-center items-center">
 				<div className="flex max-w-screen-md bg-white rounded-[10px] shadow-[0_10px_30px_rgba(0,0,0,0.1)] overflow-hidden mx-auto">
 					<div className="flex flex-col md:flex-row p-[50px] gap-[30px]">
 						{/* Left Column */}
@@ -67,7 +67,8 @@ const LoginPage: React.FC = () => {
 								Kembali di EventraTech Eventra
 							</h2>
 							<p className="text-[#555]">
-								Masuk ke akun Anda untuk mengelola event, pembelian tiket, dan pengaturan personal lainnya.
+								Masuk ke akun Anda untuk mengelola event, pembelian tiket, dan pengaturan personal
+								lainnya.
 							</p>
 							<ul className="list-disc list-inside text-[#555] mt-[30px] text-left">
 								<li>Akses ke semua event eksklusif</li>
