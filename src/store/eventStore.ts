@@ -39,14 +39,10 @@ const useEventStore = create<EventState>((set, get) => ({
 
 	fetchEvents: async (page = get().currentPage, limit = get().limit) => {
 		set({ loading: true, error: null })
-		const token = useAuthStore.getState().token
 		try {
-			const response = await axios.get<EventResponse>(`/events?page=${page}&limit=${limit}`, {
-				headers: {
-					Authorization: `Bearer ${token}`
-				}
-			})
+			const response = await axios.get<EventResponse>(`/events?page=${page}&limit=${limit}`)
 			if (response.data.success) {
+				console.log(response.data.data, '<==== masuk fetch events')
 				set({
 					events: response.data.data.content,
 					currentPage: response.data.data.page,

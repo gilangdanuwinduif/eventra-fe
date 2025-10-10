@@ -4,7 +4,6 @@ import { CiMenuFries } from 'react-icons/ci'
 import useAuthStore from '../../store/authStore'
 import { Button } from '../ui/button'
 import Text from '../custom-ui/text'
-import SideNav from './side-nav'
 import { motion } from 'framer-motion'
 import UserProfileDropdown from '../custom-ui/UserProfileDropdown'
 

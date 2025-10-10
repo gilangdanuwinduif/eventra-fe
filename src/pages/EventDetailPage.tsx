@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import useEventDetailStore from '../store/eventDetailStore'
-import Navbar from '../components/landing/Navbar'
+import { useToast } from '../hooks/useToast'
 import { Button } from '../components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select'
 import DOMPurify from 'dompurify'
@@ -16,6 +16,9 @@ const EventDetailPage: React.FC = () => {
 	const [ticketQuantity, setTicketQuantity] = useState(1)
 	const [totalPrice, setTotalPrice] = useState(0)
 	const [userRole, setUserRole] = useState<string | null>(authStore.getState().userRole)
+	const navigate = useNavigate()
+	const { showToast } = useToast()
+	const token = authStore.getState().token
 
 	useEffect(() => {
 		if (id) {
@@ -38,14 +41,21 @@ const EventDetailPage: React.FC = () => {
 	}, [event, selectedTicketId, ticketQuantity])
 
 	const handleBuyTicket = () => {
+		if (!token) {
+			showToast('Anda harus melakukan login terlebih dahulu', 'error')
+			navigate('/login')
+			return
+		}
+
 		const selectedTicket = event?.tickets.find((ticket) => ticket.id === selectedTicketId)
 		if (selectedTicket) {
-			alert(
-				`Buying ${ticketQuantity} x ${selectedTicket.ticketCategory} tickets for ${event?.title}. Total: Rp ${totalPrice}`
-			)
+			// alert(
+			// 	`Buying ${ticketQuantity} x ${selectedTicket.ticketCategory} tickets for ${event?.title}. Total: Rp ${totalPrice}`
+			// )
 			// Implement actual ticket purchase logic here
+			navigate('/checkout')
 		} else {
-			alert('Please select a ticket category.')
+			showToast('Please select a ticket category.', 'error')
 		}
 	}
 
@@ -74,7 +84,6 @@ const EventDetailPage: React.FC = () => {
 
 	return (
 		<div className="min-h-screen bg-[#d1c4e9] py-[100px] text-[#4a148c] min-h-[500px] flex flex-col justify-center items-center w-full">
-			<Navbar />
 			<div className="container mx-auto p-4 pt-20">
 				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 					{/* Left Column: Event Poster and Details */}

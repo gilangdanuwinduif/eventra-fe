@@ -30,11 +30,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 	if (token && user && user.exp * 1000 >= Date.now()) {
 		return (
 			<>
-				<Navbar />
-				<main>
-					{/* jarak aman dari navbar */}
-					{children}
-				</main>
+				<main>{children}</main>
 			</>
 		)
 	}

@@ -11,6 +11,7 @@ const DashboardAdminPage = React.lazy(() => import('../pages/DashboardAdminPage'
 const CreateEventPage = React.lazy(() => import('../pages/CreateEventPage'))
 const UpdateEventPage = React.lazy(() => import('../pages/UpdateEventPage'))
 const EventDetailPage = React.lazy(() => import('../pages/EventDetailPage'))
+const CheckoutPage = React.lazy(() => import('../pages/CheckoutPage'))
 
 export const publicRoutes = [
 	{
@@ -54,6 +55,11 @@ export const privateRoutes = [
 	{
 		path: '/profile', //Edit : By Gilang, route untuk profile page
 		element: ProfilePage,
+		exact: true
+	},
+	{
+		path: '/checkout',
+		element: CheckoutPage,
 		exact: true
 	}
 ]
