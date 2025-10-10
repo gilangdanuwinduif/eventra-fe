@@ -6,14 +6,35 @@ import { Button } from '../ui/button'
 import Text from '../custom-ui/text'
 import { motion } from 'framer-motion'
 import UserProfileDropdown from '../custom-ui/UserProfileDropdown'
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger
+} from '../ui/dialog'
+import { Input } from '../ui/input'
+import { Label } from '../ui/label'
 
 export default function Navbar() {
 	const [scrollY, setScrollY] = useState(0)
 	const [isOpen, setIsOpen] = useState(false)
+	const [showTopupModal, setShowTopupModal] = useState(false)
+	const [walletBalance, setWalletBalance] = useState(150000) // Initial wallet balance
+	const [topupAmount, setTopupAmount] = useState(0)
 	const { token, user } = useAuthStore() //edit : by Gilang ambil data token dan logout dari authStore
 
 	const toggleOpen = () => {
 		setIsOpen(!isOpen)
+	}
+
+	const handleTopup = () => {
+		// Simulate API call for topup
+		setWalletBalance((prevBalance) => prevBalance + topupAmount)
+		setTopupAmount(0)
+		setShowTopupModal(false)
 	}
 
 	useEffect(() => {
@@ -110,7 +131,48 @@ export default function Navbar() {
 						{/* 👇 Pengkondisian untuk Profil/Auth */}
 						{token && user ? (
 							// Tampilkan komponen dropdown profil jika sudah login
-							<UserProfileDropdown />
+							<>
+								<Dialog open={showTopupModal} onOpenChange={setShowTopupModal}>
+									<DialogTrigger asChild>
+										<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+											<Button
+												variant="ghost"
+												className="text-sm font-medium text-white hover:text-even-tect-purple transition-colors"
+											>
+												Wallet: Rp{walletBalance.toLocaleString('id-ID')}
+											</Button>
+										</motion.div>
+									</DialogTrigger>
+									<DialogContent className="sm:max-w-[425px]">
+										<DialogHeader>
+											<DialogTitle>Top Up Wallet</DialogTitle>
+											<DialogDescription>
+												Current Balance: Rp{walletBalance.toLocaleString('id-ID')}
+											</DialogDescription>
+										</DialogHeader>
+										<div className="grid gap-4 py-4">
+											<div className="grid grid-cols-4 items-center gap-4">
+												<Label htmlFor="amount" className="text-right">
+													Amount
+												</Label>
+												<Input
+													id="amount"
+													type="number"
+													value={topupAmount}
+													onChange={(e) => setTopupAmount(Number(e.target.value))}
+													className="col-span-3"
+												/>
+											</div>
+										</div>
+										<DialogFooter>
+											<Button type="button" onClick={handleTopup}>
+												Top Up
+											</Button>
+										</DialogFooter>
+									</DialogContent>
+								</Dialog>
+								<UserProfileDropdown />
+							</>
 						) : (
 							// Tampilkan tombol Login/Signup jika belum login
 							<>
