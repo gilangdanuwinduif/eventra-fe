@@ -7,12 +7,17 @@ interface EventDetailState {
 	loading: boolean
 	error: string | null
 	fetchEventDetail: (id: string) => Promise<void>
+	ticketQuantity: number | 0
+	setTicketQuantity: (ticketQuantity: number) => void
+	ticketCategoryId: string | undefined
+	setTicketCategoryId: (ticketCategoryId: string | undefined) => void
 }
 
 const useEventDetailStore = create<EventDetailState>((set) => ({
 	event: null,
 	loading: false,
 	error: null,
+	ticketQuantity: 0,
 	fetchEventDetail: async (id: string) => {
 		set({ loading: true, error: null })
 		try {
@@ -29,6 +34,13 @@ const useEventDetailStore = create<EventDetailState>((set) => ({
 				set({ error: 'An unknown error occurred', loading: false })
 			}
 		}
+	},
+	setTicketQuantity: (ticketQuantity: number) => {
+		set({ ticketQuantity })
+	},
+	ticketCategoryId: undefined,
+	setTicketCategoryId: (ticketCategoryId: string | undefined) => {
+		set({ ticketCategoryId })
 	}
 }))
 

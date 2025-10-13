@@ -6,6 +6,7 @@ import { Button } from '../components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select'
 import DOMPurify from 'dompurify'
 import authStore from '../store/authStore'
+import { User } from '../store/authStore' // Import User type from authStore
 
 const EventDetailPage: React.FC = () => {
 	const { id } = useParams<{ id: string }>()
@@ -15,10 +16,18 @@ const EventDetailPage: React.FC = () => {
 	)
 	const [ticketQuantity, setTicketQuantity] = useState(1)
 	const [totalPrice, setTotalPrice] = useState(0)
-	const [userRole, setUserRole] = useState<string | null>(authStore.getState().userRole)
+	const [userRole] = useState<string | null>(authStore.getState().userRole) // Removed setUserRole
+	const [user, setUser] = useState<User | null>(authStore.getState().user) // Get user from authStore
 	const navigate = useNavigate()
 	const { showToast } = useToast()
 	const token = authStore.getState().token
+
+	useEffect(() => {
+		const unsubscribe = authStore.subscribe((state) => {
+			setUser(state.user)
+		})
+		return () => unsubscribe()
+	}, [])
 
 	useEffect(() => {
 		if (id) {
@@ -49,11 +58,8 @@ const EventDetailPage: React.FC = () => {
 
 		const selectedTicket = event?.tickets.find((ticket) => ticket.id === selectedTicketId)
 		if (selectedTicket) {
-			// alert(
-			// 	`Buying ${ticketQuantity} x ${selectedTicket.ticketCategory} tickets for ${event?.title}. Total: Rp ${totalPrice}`
-			// )
-			// Implement actual ticket purchase logic here
-			navigate('/checkout')
+			useEventDetailStore.setState({ ticketQuantity, ticketCategoryId: selectedTicket.id })
+			navigate(`/checkout/${id}`)
 		} else {
 			showToast('Please select a ticket category.', 'error')
 		}
@@ -244,10 +250,20 @@ const EventDetailPage: React.FC = () => {
 							<Button
 								className="w-full bg-purple-600 hover:bg-purple-700 text-white"
 								onClick={handleBuyTicket}
-								disabled={!selectedTicketId || ticketQuantity === 0 || userRole === 'ADMIN'}
+								disabled={
+									!selectedTicketId ||
+									ticketQuantity === 0 ||
+									userRole === 'ADMIN' ||
+									(user && user.wallet >= totalPrice ? false : true)
+								}
 							>
 								Beli Tiket Sekarang
 							</Button>
+							{user && user.wallet < totalPrice && (
+								<p className="text-red-500 text-sm text-center">
+									Saldo anda kurang. Silahkan Top Up Saldo
+								</p>
+							)}
 						</div>
 					</div>
 				</div>

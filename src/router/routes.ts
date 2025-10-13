@@ -58,7 +58,7 @@ export const privateRoutes = [
 		exact: true
 	},
 	{
-		path: '/checkout',
+		path: '/checkout/:id',
 		element: CheckoutPage,
 		exact: true
 	}
