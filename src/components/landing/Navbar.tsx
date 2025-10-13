@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { CiMenuFries } from 'react-icons/ci'
 import useAuthStore from '../../store/authStore'
+import { useToast } from '../../hooks/useToast' // Import useToast
 import { Button } from '../ui/button'
 import Text from '../custom-ui/text'
-import { motion } from 'framer-motion'
 import UserProfileDropdown from '../custom-ui/UserProfileDropdown'
 import {
 	Dialog,
@@ -22,19 +22,26 @@ export default function Navbar() {
 	const [scrollY, setScrollY] = useState(0)
 	const [isOpen, setIsOpen] = useState(false)
 	const [showTopupModal, setShowTopupModal] = useState(false)
-	const [walletBalance, setWalletBalance] = useState(150000) // Initial wallet balance
-	const [topupAmount, setTopupAmount] = useState(0)
-	const { token, user } = useAuthStore() //edit : by Gilang ambil data token dan logout dari authStore
+	const { token, user, topupAmount, setTopupAmount, topupWallet } = useAuthStore()
+	const { showToast } = useToast() // Initialize useToast
 
 	const toggleOpen = () => {
 		setIsOpen(!isOpen)
 	}
-
-	const handleTopup = () => {
-		// Simulate API call for topup
-		setWalletBalance((prevBalance) => prevBalance + topupAmount)
-		setTopupAmount(0)
-		setShowTopupModal(false)
+	const handleTopup = async () => {
+		console.log(user)
+		if (user && 'id' in user && token) {
+			// Check if 'id' property exists in user
+			const success = await topupWallet(user.id, topupAmount, token)
+			if (success) {
+				setShowTopupModal(false)
+				showToast('Successfully top up wallet!', 'success')
+			} else {
+				showToast('Unable to top up wallet. Please try again. Or contact admin', 'error')
+			}
+		} else {
+			showToast('User not logged in or token not available.', 'error')
+		}
 	}
 
 	useEffect(() => {
@@ -91,10 +98,7 @@ export default function Navbar() {
 
 	return (
 		<div>
-			<motion.nav
-				initial={{ y: -100 }}
-				animate={{ y: 0 }}
-				transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+			<nav
 				className={`flex items-center justify-between px-4 md:px-8 w-full h-[80px] top-0 bg-blue-500/80 md:border-none border-b z-20 fixed backdrop-blur-md ${
 					scrollY > 150 ? 'shadow-sm' : ''
 				}`}
@@ -103,9 +107,9 @@ export default function Navbar() {
 				{/* Logo */}
 				<div className="flex items-center gap-8">
 					<Link to="/">
-						<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+						<div>
 							<Text label="EventTech" className="text-xl font-bold text-white" />
-						</motion.div>
+						</div>
 					</Link>
 				</div>
 
@@ -113,7 +117,7 @@ export default function Navbar() {
 				<div className="hidden md:flex items-center gap-6 mx-auto">
 					{/* Tampilkan link yang sudah digabungkan dan difilter role */}
 					{finalNavLinks.map((link) => (
-						<motion.div key={link.to} whileHover={{ y: -2 }} whileTap={{ y: 0 }}>
+						<div key={link.to}>
 							<Link
 								to={link.to}
 								className="text-sm font-medium text-white hover:text-even-tect-purple transition-colors relative group"
@@ -121,7 +125,7 @@ export default function Navbar() {
 								{link.label}
 								<span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-even-tect-purple group-hover:w-full transition-all duration-300" />
 							</Link>
-						</motion.div>
+						</div>
 					))}
 				</div>
 
@@ -134,20 +138,18 @@ export default function Navbar() {
 							<>
 								<Dialog open={showTopupModal} onOpenChange={setShowTopupModal}>
 									<DialogTrigger asChild>
-										<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-											<Button
-												variant="ghost"
-												className="text-sm font-medium text-white hover:text-even-tect-purple transition-colors"
-											>
-												Wallet: Rp{walletBalance.toLocaleString('id-ID')}
-											</Button>
-										</motion.div>
+										<Button
+											variant="ghost"
+											className="text-sm font-medium text-white hover:text-even-tect-purple transition-colors"
+										>
+											Wallet: Rp{user?.wallet?.toLocaleString('id-ID') ?? 0}
+										</Button>
 									</DialogTrigger>
-									<DialogContent className="sm:max-w-[425px]">
+									<DialogContent className="bg-white sm:max-w-[425px]">
 										<DialogHeader>
 											<DialogTitle>Top Up Wallet</DialogTitle>
 											<DialogDescription>
-												Current Balance: Rp{walletBalance.toLocaleString('id-ID')}
+												Current Balance: Rp{user?.wallet?.toLocaleString('id-ID') ?? 0}
 											</DialogDescription>
 										</DialogHeader>
 										<div className="grid gap-4 py-4">
@@ -165,7 +167,11 @@ export default function Navbar() {
 											</div>
 										</div>
 										<DialogFooter>
-											<Button type="button" onClick={handleTopup}>
+											<Button
+												className="bg-[#d1c4e9] text-[#4a148c] "
+												type="button"
+												onClick={handleTopup}
+											>
 												Top Up
 											</Button>
 										</DialogFooter>
@@ -176,30 +182,24 @@ export default function Navbar() {
 						) : (
 							// Tampilkan tombol Login/Signup jika belum login
 							<>
-								<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-									<Link
-										to="/login"
-										className="text-sm font-medium text-white hover:text-even-tect-purple transition-colors"
-									>
-										Login
-									</Link>
-								</motion.div>
-								<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-									<Link to="/register">
-										<Button className="bg-even-tect-purple hover:bg-even-tect-purple/90 text-white shadow-lg hover:shadow-xl transition-all duration-300">
-											Sign Up
-										</Button>
-									</Link>
-								</motion.div>
+								<Link
+									to="/login"
+									className="text-sm font-medium text-white hover:text-even-tect-purple transition-colors"
+								>
+									Login
+								</Link>
+								<Link to="/register">
+									<Button className="bg-even-tect-purple hover:bg-even-tect-purple/90 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+										Sign Up
+									</Button>
+								</Link>
 							</>
 						)}
 					</div>
 					{/* Tombol Menu untuk Mobile */}
-					<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-						<CiMenuFries className="text-white text-2xl cursor-pointer md:hidden" onClick={toggleOpen} />
-					</motion.div>
+					<CiMenuFries className="text-white text-2xl cursor-pointer md:hidden" onClick={toggleOpen} />
 				</div>
-			</motion.nav>
+			</nav>
 		</div>
 	)
 }

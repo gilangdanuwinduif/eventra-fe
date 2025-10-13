@@ -34,13 +34,14 @@ const LoginPage: React.FC = () => {
 				role: userDetails.role,
 				fullName: userDetails.fullName,
 				profilePicture: userDetails.profilePicture || null,
-				id: userDetails.id,
+				id: decodedToken.sub,
 				email: userDetails.email,
 				phone: userDetails.phone,
 				createdAt: userDetails.createdAt,
 				gender: userDetails.gender,
 				nik: userDetails.nik,
-				isRegistered: userDetails.isRegistered
+				isRegistered: userDetails.isRegistered,
+				wallet: userDetails.wallet
 			}
 			useAuthStore.getState().setUser(fullUser)
 
