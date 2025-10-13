@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom' // Import useLocation
-import Navbar from '../components/landing/Navbar'
 import useAuthStore from '../store/authStore'
 
 interface ProtectedRouteProps {

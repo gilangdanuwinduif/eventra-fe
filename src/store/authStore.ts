@@ -146,7 +146,7 @@ const useAuthStore = create<AuthState>()(
 			}
 		}),
 		{
-			name: 'auth-storage', // key di localStorage
+			name: 'auth-storage',
 			partialize: (state) => ({
 				token: state.token,
 				user: state.user,

@@ -5,7 +5,7 @@ import useAuthStore from '../store/authStore' // pastikan path ini sesuai strukt
 const DEFAULT_AVATAR_URL = 'https://placehold.co/80x80/7b5bf3/ffffff?text=U'
 
 const ProfilePage: React.FC = () => {
-	const { user, userRole, updateProfileInStore } = useAuthStore()
+	const { user, updateProfileInStore } = useAuthStore()
 
 	// State form
 	const [fullName, setFullName] = useState('')
@@ -21,10 +21,10 @@ const ProfilePage: React.FC = () => {
 	useEffect(() => {
 		if (user) {
 			setFullName(user.fullName || '')
-			setNik((user as any).nik || '')
-			setEmail((user as any).email || '')
-			setPhone((user as any).phone || (user as any).phoneNumber || '')
-			setGender((user as any).gender || 'Laki - Laki')
+			setNik(user.nik || '')
+			setEmail(user.email || '')
+			setPhone(user.phone || '')
+			setGender(user.gender || 'Laki - Laki')
 		}
 	}, [user])
 
@@ -59,8 +59,7 @@ const ProfilePage: React.FC = () => {
 		}
 	}
 
-	const displayRole = userRole ? userRole.charAt(0).toUpperCase() + userRole.slice(1).toLowerCase() : 'User'
-	const userAvatar = (user as any)?.profilePicture || DEFAULT_AVATAR_URL
+	const userAvatar = user?.profilePicture || DEFAULT_AVATAR_URL
 
 	return (
 		<div className="min-h-screen bg-[#f3f3ff] font-sans">
@@ -85,9 +84,9 @@ const ProfilePage: React.FC = () => {
 							<Ticket className="w-5 h-5 text-[#7b5bf3]" />
 							<div>
 								<p className="text-[#7b5bf3] font-bold text-2xl leading-none">
-									{(user as any)?.tickets ?? 0}
+									{user?.wallet ?? 0} {/* Assuming 'tickets' was meant to be 'wallet' */}
 								</p>
-								<p className="text-gray-500 text-xs mt-1">Tiket Anda</p>
+								<p className="text-gray-500 text-xs mt-1">Wallet Anda</p>
 							</div>
 						</div>
 					</div>

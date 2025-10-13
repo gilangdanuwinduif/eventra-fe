@@ -16,6 +16,6 @@ module.exports = {
 				endOfLine: 'lf'
 			}
 		],
-		'linebreak-style': ['error', 'unix']
+		'linebreak-style': ['off']
 	}
 }

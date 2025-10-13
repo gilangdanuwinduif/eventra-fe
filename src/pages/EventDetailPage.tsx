@@ -42,10 +42,7 @@ const EventDetailPage: React.FC = () => {
 				setSelectedTicketId(event.tickets[0].id)
 			}
 			// Calculate total price
-			const selectedTicket = event.tickets.find((ticket) => ticket.id === selectedTicketId)
-			if (selectedTicket) {
-				setTotalPrice(selectedTicket.price * ticketQuantity)
-			}
+			setTotalPrice(calculateTotal())
 		}
 	}, [event, selectedTicketId, ticketQuantity])
 
@@ -63,6 +60,24 @@ const EventDetailPage: React.FC = () => {
 		} else {
 			showToast('Please select a ticket category.', 'error')
 		}
+	}
+
+	const calculateSubtotal = () => {
+		const selectedTicket = event?.tickets.find((ticket) => ticket.id === selectedTicketId)
+		return (selectedTicket?.price || 0) * ticketQuantity
+	}
+
+	const calculateServiceFee = () => {
+		return 10000
+	}
+
+	const calculatePPN = () => {
+		const totalPrice = calculateSubtotal() + calculateServiceFee()
+		return totalPrice * 0.11 // 11% PPN
+	}
+
+	const calculateTotal = () => {
+		return calculateSubtotal() + calculateServiceFee() + calculatePPN()
 	}
 
 	if (loading) {
@@ -223,26 +238,25 @@ const EventDetailPage: React.FC = () => {
 							</div>
 						)}
 
-						<div className="border-t border-gray-200 pt-4">
-							<div className="flex justify-between mb-2">
-								<span className="text-gray-700">
-									{event.tickets.find((ticket) => ticket.id === selectedTicketId)?.ticketCategory ||
-										'Pilih Tiket'}
-								</span>
-								<span className="font-semibold">
-									Rp{' '}
-									{(
-										event.tickets.find((ticket) => ticket.id === selectedTicketId)?.price || 0
-									).toLocaleString('id-ID')}
-								</span>
+						<div className="space-y-2 border-t border-gray-200 pt-4 mt-4">
+							<div className="flex justify-between">
+								<p className="text-gray-700">SubTotal</p>
+								<p className="font-medium">Rp {calculateSubtotal().toLocaleString('id-ID')}</p>
 							</div>
-							<div className="flex justify-between mb-2">
-								<span className="text-gray-700">Biaya Lain</span>
-								<span className="font-semibold">Rp 0</span> {/* Placeholder for other fees */}
+							<div className="flex justify-between">
+								<p className="text-gray-700">Biaya Layanan</p>
+								<p className="font-medium">Rp {calculateServiceFee().toLocaleString('id-ID')}</p>
 							</div>
-							<div className="flex justify-between font-bold text-lg mt-4">
+							<div className="flex justify-between">
+								<p className="text-gray-700">PPN (11%)</p>
+								<p className="font-medium">Rp {calculatePPN().toLocaleString('id-ID')}</p>
+							</div>
+						</div>
+
+						<div className="border-t border-gray-200 pt-4 mt-4">
+							<div className="flex justify-between font-bold text-lg">
 								<span>Total</span>
-								<span>Rp {totalPrice.toLocaleString('id-ID')}</span>
+								<span>Rp {calculateTotal().toLocaleString('id-ID')}</span>
 							</div>
 						</div>
 

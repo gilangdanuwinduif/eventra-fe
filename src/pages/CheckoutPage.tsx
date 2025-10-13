@@ -2,17 +2,24 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import useEventDetailStore from '../store/eventDetailStore'
 import axios from '../lib/axios' // Assuming axios is configured for API calls
+import ValidatedInput from '../components/form-elements/ValidatedInput'
+
+interface BuyerInfo {
+	nik: string
+	fullName: string
+	email: string
+	phoneNumber: string
+	nikValid: boolean
+	emailValid: boolean
+	phoneNumberValid: boolean
+	fullNameValid: boolean
+}
 
 const CheckoutPage: React.FC = () => {
 	// Extract event ID from URL
 	const { id } = useParams<{ id: string }>()
-	const { event, loading, error, fetchEventDetail, ticketQuantity } = useEventDetailStore()
-	const [buyerInfo, setBuyerInfo] = useState({
-		nik: '',
-		fullName: '',
-		email: '',
-		phoneNumber: ''
-	})
+	const { event, loading, error, fetchEventDetail, ticketQuantity, ticketCategoryId } = useEventDetailStore()
+	const [buyerInfo, setBuyerInfo] = useState<BuyerInfo[]>([])
 	const [agreeToTerms, setAgreeToTerms] = useState(false)
 
 	useEffect(() => {
@@ -21,9 +28,40 @@ const CheckoutPage: React.FC = () => {
 		}
 	}, [id, fetchEventDetail])
 
-	const handleBuyerInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	useEffect(() => {
+		// Initialize buyerInfo array based on ticketQuantity
+		setBuyerInfo(
+			Array.from({ length: ticketQuantity }, () => ({
+				nik: '',
+				fullName: '',
+				email: '',
+				phoneNumber: '',
+				nikValid: false,
+				emailValid: false,
+				phoneNumberValid: false,
+				fullNameValid: false
+			}))
+		)
+	}, [ticketQuantity])
+
+	const handleBuyerInfoChange = (
+		index: number,
+		e: React.ChangeEvent<HTMLInputElement>,
+		isValid: boolean,
+		validationType: 'nik' | 'email' | 'phoneNumber' | 'text'
+	) => {
 		const { name, value } = e.target
-		setBuyerInfo((prev) => ({ ...prev, [name]: value }))
+		setBuyerInfo((prev) =>
+			prev.map((info, i) =>
+				i === index
+					? {
+							...info,
+							[name]: value,
+							[`${validationType}Valid`]: isValid
+						}
+					: info
+			)
+		)
 	}
 
 	const handleCheckout = async () => {
@@ -36,10 +74,19 @@ const CheckoutPage: React.FC = () => {
 			return
 		}
 
+		const allBuyerInfoValid = buyerInfo.every(
+			(info) => info.nikValid && info.emailValid && info.phoneNumberValid && info.fullNameValid
+		)
+
+		if (!allBuyerInfoValid) {
+			alert('Please ensure all buyer information is valid.')
+			return
+		}
+
 		// Placeholder for actual checkout logic
 		console.log('Initiating checkout with:', {
 			eventId: event.id,
-			buyerInfo,
+			buyerInfo: buyerInfo, // Now an array of buyer info
 			totalAmount: calculateTotal(),
 			paymentMethod: 'Bank BCA' // Hardcoded for now
 		})
@@ -48,7 +95,10 @@ const CheckoutPage: React.FC = () => {
 			// Example API call for checkout
 			const response = await axios.post('/checkout', {
 				eventId: event.id,
-				buyerInfo,
+				buyerInfo: buyerInfo.map(({ nikValid, emailValid, phoneNumberValid, fullNameValid, ...rest }) => ({
+					...rest,
+					phoneNumber: `+62${rest.phoneNumber}` // Add +62 prefix for submission
+				})), // Send only relevant data
 				totalAmount: calculateTotal(),
 				paymentMethod: 'Bank BCA'
 			})
@@ -69,11 +119,12 @@ const CheckoutPage: React.FC = () => {
 
 	const calculateSubtotal = () => {
 		// Assuming one ticket type for simplicity, or the first ticket in the array
-		return event && event.tickets.length > 0 ? event.tickets[0].price : 0
+		return event && event.tickets.length > 0 && ticketCategoryId
+			? (event.tickets.find((ticket) => ticket.id === ticketCategoryId)?.price || 0) * ticketQuantity || 0
+			: 0
 	}
 
 	const calculateServiceFee = () => {
-		// Placeholder for service fee
 		return 10000 // Example fee
 	}
 
@@ -84,7 +135,7 @@ const CheckoutPage: React.FC = () => {
 	}
 
 	const calculateTotal = () => {
-		return calculateSubtotal() * ticketQuantity + calculateServiceFee() + calculatePPN()
+		return calculateSubtotal() + calculateServiceFee() + calculatePPN()
 	}
 
 	if (loading) {
@@ -134,70 +185,72 @@ const CheckoutPage: React.FC = () => {
 					{/* Left Section: Buyer Info & Payment Method */}
 					<div className="lg:w-2/3 space-y-8">
 						{/* Informasi Pembeli */}
-						<div className="bg-white p-6 rounded-lg shadow-md">
-							<h2 className="text-2xl font-bold mb-6 text-[#4a148c]">Informasi Pembeli</h2>
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-								<div>
-									<label htmlFor="nik" className="block text-sm font-medium text-gray-700 mb-1">
-										NIK
-									</label>
-									<input
-										type="text"
-										id="nik"
-										name="nik"
-										value={buyerInfo.nik}
-										onChange={handleBuyerInfoChange}
-										className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#673ab7]"
-										placeholder="XXXXXXXXXXXXXXXX"
-									/>
-								</div>
-								<div>
-									<label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
-										Nama Lengkap
-									</label>
-									<input
-										type="text"
-										id="fullName"
-										name="fullName"
-										value={buyerInfo.fullName}
-										onChange={handleBuyerInfoChange}
-										className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#673ab7]"
-										placeholder="XXXXXXXXXXXXXXXX"
-									/>
-								</div>
-								<div>
-									<label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-										Email
-									</label>
-									<input
-										type="email"
-										id="email"
-										name="email"
-										value={buyerInfo.email}
-										onChange={handleBuyerInfoChange}
-										className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#673ab7]"
-										placeholder="XXXXXXXXXXXXXXXX"
-									/>
-								</div>
-								<div>
-									<label
-										htmlFor="phoneNumber"
-										className="block text-sm font-medium text-gray-700 mb-1"
-									>
-										Nomor Telepon
-									</label>
-									<input
-										type="tel"
-										id="phoneNumber"
-										name="phoneNumber"
-										value={buyerInfo.phoneNumber}
-										onChange={handleBuyerInfoChange}
-										className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#673ab7]"
-										placeholder="XXXXXXXXXXXXXXXX"
-									/>
+						{Array.from({ length: ticketQuantity }).map((_, index) => (
+							<div key={index} className="bg-white p-6 rounded-lg shadow-md mb-4">
+								<h2 className="text-2xl font-bold mb-6 text-[#4a148c]">
+									Informasi Pembeli Tiket {index + 1}
+								</h2>
+								<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+									<div>
+										<ValidatedInput
+											validationType="nik"
+											label="NIK"
+											id={`nik-${index}`}
+											name="nik"
+											value={buyerInfo[index]?.nik || ''}
+											onValueChange={(e, isValid) =>
+												handleBuyerInfoChange(index, e, isValid, 'nik')
+											}
+											placeholder="XXXXXXXXXXXXXXXX"
+											required
+										/>
+									</div>
+									<div>
+										<ValidatedInput
+											validationType="text"
+											label="Nama Lengkap"
+											id={`fullName-${index}`}
+											name="fullName"
+											value={buyerInfo[index]?.fullName || ''}
+											onValueChange={(e, isValid) =>
+												handleBuyerInfoChange(index, e, isValid, 'text')
+											}
+											placeholder="XXXXXXXXXXXXXXXX"
+											required
+										/>
+									</div>
+									<div>
+										<ValidatedInput
+											validationType="email"
+											label="Email"
+											id={`email-${index}`}
+											name="email"
+											value={buyerInfo[index]?.email || ''}
+											onValueChange={(e, isValid) =>
+												handleBuyerInfoChange(index, e, isValid, 'email')
+											}
+											placeholder="XXXXXXXXXXXXXXXX"
+											required
+										/>
+									</div>
+									<div>
+										<ValidatedInput
+											validationType="phoneNumber"
+											label="Nomor Telepon"
+											id={`phoneNumber-${index}`}
+											name="phoneNumber"
+											value={buyerInfo[index]?.phoneNumber || ''}
+											onValueChange={(e, isValid) =>
+												handleBuyerInfoChange(index, e, isValid, 'phoneNumber')
+											}
+											placeholder="81234567890"
+											prefix="+62"
+											required
+										/>
+									</div>
 								</div>
 							</div>
-						</div>
+						))}
 
 						{/* Metode Pembayaran */}
 						<div className="bg-white p-6 rounded-lg shadow-md">
@@ -219,7 +272,9 @@ const CheckoutPage: React.FC = () => {
 										<p className="text-gray-800">Bank BCA</p>
 										<p className="text-gray-600">VA_XXXXXXXXXXXX</p>
 									</div>
-									<p className="text-[#673ab7] font-bold text-xl">Rp XXXXXXXX</p>
+									<p className="text-[#673ab7] font-bold text-xl">
+										Rp {calculateTotal().toLocaleString('id-ID')}
+									</p>
 								</div>
 							</div>
 						</div>
@@ -263,7 +318,9 @@ const CheckoutPage: React.FC = () => {
 								</p>
 								<p className="text-sm text-gray-600">
 									Qty: {ticketQuantity}, Jenis Tiket:{' '}
-									{event.tickets.length > 0 ? event.tickets[0].ticketCategory : 'N/A'}
+									{event.tickets.length > 0 && event.tickets[0]
+										? event.tickets[0].ticketCategory
+										: 'N/A'}
 								</p>
 							</div>
 						</div>
