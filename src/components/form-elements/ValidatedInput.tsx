@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 interface ValidatedInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-	validationType: 'nik' | 'email' | 'phoneNumber' | 'text'
+	validationType: 'nik' | 'email' | 'phoneNumber' | 'text' | 'fullName'
 	label: string
 	value: string
 	onValueChange: (e: React.ChangeEvent<HTMLInputElement>, isValid: boolean) => void
@@ -42,6 +42,13 @@ const ValidatedInput: React.FC<ValidatedInputProps> = ({
 				if (!/^8\d{9,12}$/.test(inputValue)) {
 					isValid = false
 					errorMessage = 'Nomor telepon tidak valid (contoh: 081234567890).'
+				}
+				break
+			case 'fullName':
+				// Full name should only contain alphabets and spaces
+				if (!/^[a-zA-Z\s]*$/.test(inputValue)) {
+					isValid = false
+					errorMessage = 'Nama lengkap hanya boleh berisi huruf.'
 				}
 				break
 			case 'text':

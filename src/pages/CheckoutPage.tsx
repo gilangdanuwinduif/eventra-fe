@@ -119,6 +119,8 @@ const CheckoutPage: React.FC = () => {
 					await refetchUser(user.id, token)
 				}
 				// Redirect to a success page or update UI
+				localStorage.removeItem('event-detail-storage')
+
 				navigate(`/`)
 			} else {
 				showToast(`Checkout failed: ${response.data.message}`, 'error')
@@ -181,20 +183,6 @@ const CheckoutPage: React.FC = () => {
 		<div className="min-h-screen bg-[#d1c4e9] py-[100px] text-[#4a148c]">
 			<div className="container mx-auto px-4">
 				{/* Progress Bar */}
-				<div className="flex justify-between items-center mb-8 max-w-3xl mx-auto">
-					<div className="text-center">
-						<p className="font-bold text-lg text-[#673ab7]">Detail</p>
-						<div className="h-1 w-full bg-[#8bc34a] mt-2"></div>
-					</div>
-					<div className="text-center">
-						<p className="text-lg text-[#673ab7]">Pembayaran</p>
-						<div className="h-1 w-full bg-gray-300 mt-2"></div>
-					</div>
-					<div className="text-center">
-						<p className="text-lg text-[#673ab7]">Selesai</p>
-						<div className="h-1 w-full bg-gray-300 mt-2"></div>
-					</div>
-				</div>
 
 				<div className="flex flex-col lg:flex-row gap-8">
 					{/* Left Section: Buyer Info & Payment Method */}
@@ -222,7 +210,7 @@ const CheckoutPage: React.FC = () => {
 									</div>
 									<div>
 										<ValidatedInput
-											validationType="text"
+											validationType="fullName"
 											label="Nama Lengkap Sesuai KTP"
 											id={`fullName-${index}`}
 											name="fullName"

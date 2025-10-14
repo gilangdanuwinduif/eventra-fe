@@ -91,6 +91,7 @@ const useAuthStore = create<AuthState>()(
 
 			logout: () => {
 				set({ token: null, user: null, userRole: null })
+				localStorage.clear()
 			},
 
 			updateProfileInStore: (updatedFields) =>

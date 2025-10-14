@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { CiMenuFries } from 'react-icons/ci'
 import useAuthStore from '../../store/authStore'
 import { useToast } from '../../hooks/useToast' // Import useToast
@@ -19,17 +19,18 @@ import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 
 export default function Navbar() {
+	const navigate = useNavigate()
 	const [scrollY, setScrollY] = useState(0)
 	const [isOpen, setIsOpen] = useState(false)
 	const [showTopupModal, setShowTopupModal] = useState(false)
-	const { token, user, topupAmount, setTopupAmount, topupWallet } = useAuthStore()
+	const { token, user, topupAmount, setTopupAmount, topupWallet, logout } = useAuthStore()
 	const { showToast } = useToast() // Initialize useToast
 
 	const toggleOpen = () => {
 		setIsOpen(!isOpen)
 	}
 	const handleTopup = async () => {
-		if (user && 'id' in user && token) {
+		if (user && token) {
 			// Check if 'id' property exists in user
 			const success = await topupWallet(user.id, topupAmount, token)
 			if (success) {
@@ -39,7 +40,8 @@ export default function Navbar() {
 				showToast('Unable to top up wallet. Please try again. Or contact admin', 'error')
 			}
 		} else {
-			showToast('User not logged in or token not available.', 'error')
+			showToast('Please Relogin.', 'error')
+			logout()
 		}
 	}
 
@@ -84,13 +86,15 @@ export default function Navbar() {
 			{ to: '/order', label: 'Order' }
 		)
 	}
-	// else if (user?.role === 'USER') {
-	//     roleNavLinks.push({ to: '/my-tickets', label: 'Tiket Saya' })
-	// }
+	if (user?.role === 'USER') {
+		roleNavLinks.push({ to: '/user/order', label: 'Tiket Saya' })
+	}
 
 	let finalNavLinks = commonNavLinks
 	if (user?.role === 'ADMIN') {
 		finalNavLinks = roleNavLinks
+	} else if (user?.role === 'USER') {
+		finalNavLinks = [...commonNavLinks, ...roleNavLinks]
 	} else {
 		finalNavLinks = [...commonNavLinks]
 	}

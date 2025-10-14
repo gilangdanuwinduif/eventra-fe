@@ -42,7 +42,6 @@ const useEventStore = create<EventState>((set, get) => ({
 		try {
 			const response = await axios.get<EventResponse>(`/events?page=${page}&limit=${limit}`)
 			if (response.data.success) {
-				console.log(response.data.data, '<==== masuk fetch events')
 				set({
 					events: response.data.data.content,
 					currentPage: response.data.data.page,

@@ -17,11 +17,8 @@ instance.interceptors.response.use(
 	},
 	(error) => {
 		// Example: Handle global errors, e.g., redirect to login on 401
-		if (error.response && error.response.status === 401) {
-			console.log('Unauthorized, logging out...')
-			useAuthStore.getState().logout() // Logout user automatically
-			// Optionally redirect to login page
-			// window.location.href = '/login';
+		if ((error.response && error.response.status === 401) || error.response.status === 403) {
+			useAuthStore.getState().logout()
 		}
 		return Promise.reject(error)
 	}

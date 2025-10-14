@@ -176,7 +176,7 @@ const RegisterPage: React.FC = () => {
 
 							<div className="mb-[10px]">
 								<ValidatedInput
-									validationType="text"
+									validationType="fullName"
 									label="Nama Sesuai NIK"
 									id="nama"
 									name="nama"
