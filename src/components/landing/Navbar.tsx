@@ -29,7 +29,6 @@ export default function Navbar() {
 		setIsOpen(!isOpen)
 	}
 	const handleTopup = async () => {
-		console.log(user)
 		if (user && 'id' in user && token) {
 			// Check if 'id' property exists in user
 			const success = await topupWallet(user.id, topupAmount, token)

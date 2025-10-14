@@ -4,8 +4,10 @@ import { Button } from '../components/ui/button'
 import axios from '../lib/axios'
 import { jwtDecode } from 'jwt-decode'
 import useAuthStore, { DecodedToken, User } from '../store/authStore'
+import { useToast } from '../hooks/useToast'
 
 const LoginPage: React.FC = () => {
+	const { showToast } = useToast()
 	const [email, setEmail] = useState<string>('')
 	const [password, setPassword] = useState<string>('')
 	const [showPassword, setShowPassword] = useState<boolean>(false)
@@ -52,7 +54,7 @@ const LoginPage: React.FC = () => {
 			}
 		} catch (error) {
 			console.error('Login failed:', error)
-			alert('Login failed. Please check your credentials.')
+			showToast('Login failed. Please check your credentials.', 'error')
 		}
 	}
 

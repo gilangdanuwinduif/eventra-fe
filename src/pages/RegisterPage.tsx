@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '../components/ui/button'
 import ValidatedInput from '../components/form-elements/ValidatedInput'
+import { useToast } from '../hooks/useToast'
 
 interface RegisterFormData {
 	nik: string
@@ -21,6 +22,7 @@ interface RegisterFormData {
 }
 
 const RegisterPage: React.FC = () => {
+	const { showToast } = useToast()
 	const navigate = useNavigate()
 	const [formData, setFormData] = useState<RegisterFormData>({
 		nik: '',
@@ -133,7 +135,7 @@ const RegisterPage: React.FC = () => {
 			const data = await response.json()
 
 			if (response.ok) {
-				alert('Registrasi berhasil! Silakan masuk.')
+				showToast('Registrasi berhasil! Silakan masuk.', 'success')
 				navigate('/login')
 			} else {
 				setError(data.message || 'Registrasi gagal. Silakan coba lagi.')

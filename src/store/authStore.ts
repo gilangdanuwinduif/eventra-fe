@@ -40,6 +40,7 @@ interface AuthState {
 	logout: () => void
 	updateProfileInStore: (updatedFields: Partial<User>) => void
 	updateWalletBalance: (newBalance: number) => void
+	refetchUser: (userId: string, token: string) => Promise<void>
 	topupAmount: number
 	setTopupAmount: (amount: number) => void
 	topupWallet: (userId: string, amount: number, token: string) => Promise<boolean>
@@ -115,6 +116,21 @@ const useAuthStore = create<AuthState>()(
 					}
 					return { user: updatedUser }
 				}),
+
+			refetchUser: async (userId, token) => {
+				try {
+					const response = await axios.get(`/api/users/${userId}`, {
+						headers: {
+							Authorization: `Bearer ${token}`
+						}
+					})
+					if (response.data.data) {
+						set({ user: response.data.data })
+					}
+				} catch (error) {
+					console.error('Failed to refetch user:', error)
+				}
+			},
 
 			setTopupAmount: (amount) => set({ topupAmount: amount }),
 

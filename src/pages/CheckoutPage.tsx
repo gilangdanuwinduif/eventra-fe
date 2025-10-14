@@ -1,24 +1,27 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import useEventDetailStore from '../store/eventDetailStore'
+import useAuthStore from '../store/authStore' // Import auth store
 import axios from '../lib/axios' // Assuming axios is configured for API calls
 import ValidatedInput from '../components/form-elements/ValidatedInput'
+import { useToast } from '../hooks/useToast'
 
 interface BuyerInfo {
 	nik: string
 	fullName: string
 	email: string
-	phoneNumber: string
 	nikValid: boolean
 	emailValid: boolean
-	phoneNumberValid: boolean
 	fullNameValid: boolean
 }
 
 const CheckoutPage: React.FC = () => {
 	// Extract event ID from URL
+	const navigate = useNavigate()
 	const { id } = useParams<{ id: string }>()
 	const { event, loading, error, fetchEventDetail, ticketQuantity, ticketCategoryId } = useEventDetailStore()
+	const { showToast } = useToast()
+	const { user, token, refetchUser } = useAuthStore() // Get user from auth store
 	const [buyerInfo, setBuyerInfo] = useState<BuyerInfo[]>([])
 	const [agreeToTerms, setAgreeToTerms] = useState(false)
 
@@ -35,10 +38,8 @@ const CheckoutPage: React.FC = () => {
 				nik: '',
 				fullName: '',
 				email: '',
-				phoneNumber: '',
 				nikValid: false,
 				emailValid: false,
-				phoneNumberValid: false,
 				fullNameValid: false
 			}))
 		)
@@ -48,7 +49,7 @@ const CheckoutPage: React.FC = () => {
 		index: number,
 		e: React.ChangeEvent<HTMLInputElement>,
 		isValid: boolean,
-		validationType: 'nik' | 'email' | 'phoneNumber' | 'text'
+		validationType: 'nik' | 'email' | 'text'
 	) => {
 		const { name, value } = e.target
 		setBuyerInfo((prev) =>
@@ -66,53 +67,67 @@ const CheckoutPage: React.FC = () => {
 
 	const handleCheckout = async () => {
 		if (!agreeToTerms) {
-			alert('You must agree to the Terms & Conditions and Privacy Policy.')
+			showToast('You must agree to the Terms & Conditions and Privacy Policy.', 'error')
 			return
 		}
 		if (!event) {
-			alert('Event data not loaded.')
+			showToast('Event data not loaded.', 'error')
 			return
 		}
 
-		const allBuyerInfoValid = buyerInfo.every(
-			(info) => info.nikValid && info.emailValid && info.phoneNumberValid && info.fullNameValid
-		)
+		// Validate unique NIK and Email
+		const nicks = buyerInfo.map((info) => info.nik)
+		const emails = buyerInfo.map((info) => info.email)
 
-		if (!allBuyerInfoValid) {
-			alert('Please ensure all buyer information is valid.')
+		const hasDuplicateNik = new Set(nicks).size !== nicks.length
+		const hasDuplicateEmail = new Set(emails).size !== emails.length
+
+		if (hasDuplicateNik) {
+			showToast('NIK tidak boleh sama. Setiap NIK harus unik untuk setiap pembeli.', 'error')
 			return
 		}
 
-		// Placeholder for actual checkout logic
-		console.log('Initiating checkout with:', {
-			eventId: event.id,
-			buyerInfo: buyerInfo, // Now an array of buyer info
-			totalAmount: calculateTotal(),
-			paymentMethod: 'Bank BCA' // Hardcoded for now
-		})
+		if (hasDuplicateEmail) {
+			showToast('Emails tidak boleh sama. Setiap email harus unik untuk setiap pembeli.', 'error')
+			return
+		}
+
+		if (!user || !user.id) {
+			showToast('Anda harus login untuk melakukan checkout.', 'error')
+			return
+		}
 
 		try {
-			// Example API call for checkout
-			const response = await axios.post('/checkout', {
+			const payload = {
+				userId: user.id,
 				eventId: event.id,
-				buyerInfo: buyerInfo.map(({ nikValid, emailValid, phoneNumberValid, fullNameValid, ...rest }) => ({
-					...rest,
-					phoneNumber: `+62${rest.phoneNumber}` // Add +62 prefix for submission
-				})), // Send only relevant data
-				totalAmount: calculateTotal(),
-				paymentMethod: 'Bank BCA'
+				totalPrice: calculateTotal(),
+				ticketId: ticketCategoryId,
+				orderDetails: buyerInfo.map((info) => ({
+					nik: info.nik,
+					fullName: info.fullName,
+					email: info.email
+				}))
+			}
+
+			const response = await axios.post('/orders', payload, {
+				headers: { Authorization: `Bearer ${token}` }
 			})
 			if (response.data.success) {
-				alert('Checkout successful!')
+				showToast('Checkout successful!', 'success')
+				if (user && token) {
+					await refetchUser(user.id, token)
+				}
 				// Redirect to a success page or update UI
+				navigate(`/`)
 			} else {
-				alert(`Checkout failed: ${response.data.message}`)
+				showToast(`Checkout failed: ${response.data.message}`, 'error')
 			}
 		} catch (err) {
 			if (err instanceof Error) {
-				alert(`Checkout error: ${err.message}`)
+				showToast(`Checkout error: ${err.message}`, 'error')
 			} else {
-				alert('An unknown error occurred during checkout.')
+				showToast('An unknown error occurred during checkout.', 'error')
 			}
 		}
 	}
@@ -201,21 +216,21 @@ const CheckoutPage: React.FC = () => {
 											onValueChange={(e, isValid) =>
 												handleBuyerInfoChange(index, e, isValid, 'nik')
 											}
-											placeholder="XXXXXXXXXXXXXXXX"
+											placeholder="317500505XXXXXX"
 											required
 										/>
 									</div>
 									<div>
 										<ValidatedInput
 											validationType="text"
-											label="Nama Lengkap"
+											label="Nama Lengkap Sesuai KTP"
 											id={`fullName-${index}`}
 											name="fullName"
 											value={buyerInfo[index]?.fullName || ''}
 											onValueChange={(e, isValid) =>
 												handleBuyerInfoChange(index, e, isValid, 'text')
 											}
-											placeholder="XXXXXXXXXXXXXXXX"
+											placeholder="John Doe"
 											required
 										/>
 									</div>
@@ -229,55 +244,13 @@ const CheckoutPage: React.FC = () => {
 											onValueChange={(e, isValid) =>
 												handleBuyerInfoChange(index, e, isValid, 'email')
 											}
-											placeholder="XXXXXXXXXXXXXXXX"
-											required
-										/>
-									</div>
-									<div>
-										<ValidatedInput
-											validationType="phoneNumber"
-											label="Nomor Telepon"
-											id={`phoneNumber-${index}`}
-											name="phoneNumber"
-											value={buyerInfo[index]?.phoneNumber || ''}
-											onValueChange={(e, isValid) =>
-												handleBuyerInfoChange(index, e, isValid, 'phoneNumber')
-											}
-											placeholder="81234567890"
-											prefix="+62"
+											placeholder="johndoe@example.com"
 											required
 										/>
 									</div>
 								</div>
 							</div>
 						))}
-
-						{/* Metode Pembayaran */}
-						<div className="bg-white p-6 rounded-lg shadow-md">
-							<h2 className="text-2xl font-bold mb-6 text-[#4a148c] flex items-center">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									className="h-7 w-7 mr-3 text-[#673ab7]"
-									viewBox="0 0 24 24"
-									fill="currentColor"
-								>
-									<path d="M21 18H2V6h19V4H2v2h19v12zm0 2H2v-2h19v2zM2 10h19v2H2v-2zm0 4h19v2H2v-2z" />
-								</svg>
-								Metode Pembayaran
-							</h2>
-							<div className="border border-gray-200 rounded-md p-4 bg-gray-50">
-								<p className="font-semibold text-lg mb-2">Transfer ke Rekening Berikut</p>
-								<div className="flex justify-between items-center">
-									<div>
-										<p className="text-gray-800">Bank BCA</p>
-										<p className="text-gray-600">VA_XXXXXXXXXXXX</p>
-									</div>
-									<p className="text-[#673ab7] font-bold text-xl">
-										Rp {calculateTotal().toLocaleString('id-ID')}
-									</p>
-								</div>
-							</div>
-						</div>
 					</div>
 
 					{/* Right Section: Ringkasan Pesanan */}

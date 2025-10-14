@@ -34,11 +34,11 @@ export const ToastNotification: React.FC<ToastNotificationProps> = ({ message, t
 		<AnimatePresence>
 			{isVisible && (
 				<motion.div
-					initial={{ opacity: 0, x: 100 }}
-					animate={{ opacity: 1, x: 0 }}
-					exit={{ opacity: 0, x: 100 }}
+					initial={{ opacity: 0, y: -100 }}
+					animate={{ opacity: 1, y: 0 }}
+					exit={{ opacity: 0, y: -100 }}
 					transition={{ duration: 0.3 }}
-					className={`fixed bottom-4 right-4 z-50 flex items-center p-4 rounded-lg shadow-lg border ${bgColor} ${borderColor}`}
+					className={`fixed top-4 left-1/2 -translate-x-1/2 transform z-50 flex items-center p-4 rounded-lg shadow-lg border ${bgColor} ${borderColor}`}
 					role="alert"
 				>
 					<div className="flex-shrink-0">{icon}</div>

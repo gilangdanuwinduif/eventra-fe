@@ -3,10 +3,11 @@ import { Routes, Route } from 'react-router-dom'
 import { publicRoutes, privateRoutes } from './routes'
 import ProtectedRoute from './ProtectedRoute'
 import Navbar from '../components/landing/Navbar' // Import Navbar
+import LoadingSpinner from '../components/custom-ui/LoadingSpinner' // Import LoadingSpinner
 
 const AppRouter: React.FC = () => {
 	return (
-		<Suspense fallback={<div>Loading...</div>}>
+		<Suspense fallback={<LoadingSpinner />}>
 			<Navbar /> {/* Render Navbar globally */}
 			<Routes>
 				{publicRoutes.map(

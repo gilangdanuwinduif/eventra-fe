@@ -153,7 +153,7 @@ const EventDetailPage: React.FC = () => {
 									event.tickets.find((ticket) => ticket.id === selectedTicketId)?.price || 0
 								).toLocaleString('id-ID')}
 							</h2>
-							<Button variant="outline" size="icon" onClick={() => alert('Share event!')}>
+							<Button variant="outline" size="icon" onClick={() => showToast('Share event!', 'success')}>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									className="h-5 w-5"
