@@ -107,24 +107,22 @@ const RegisterPage: React.FC = () => {
 			formData.nikValid &&
 			formData.namaValid &&
 			formData.emailValid &&
-			formData.teleponValid &&
 			formData.passwordValid &&
 			formData.konfirmasi_passwordValid
-
 		if (!allFieldsValid) {
 			setError('Harap lengkapi semua bidang dengan benar.')
 			return
 		}
 
 		try {
-			const response = await fetch('http://localhost:8080/api/auth/register', {
+			const response = await fetch('http://localhost:8081/api/auth/register', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
 					nik: formData.nik,
-					nama: formData.nama,
+					fullName: formData.nama,
 					email: formData.email,
 					telepon: `+62${formData.telepon}`, // Add +62 prefix for submission
 					password: formData.password,

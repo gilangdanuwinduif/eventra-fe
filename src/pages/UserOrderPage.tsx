@@ -1,18 +1,41 @@
 import React, { useEffect, useState } from 'react'
-import { useUserOrderStore } from '../store/userOrderStore'
 import useAuthStore from '../store/authStore'
 import { UserEvent } from '../types/order'
+import axiosInstance from '../lib/axios'
 
 const UserOrderPage: React.FC = () => {
-	const { events, isLoading, error, fetchUserEvents } = useUserOrderStore()
-	const { user } = useAuthStore()
-	const [filter, setFilter] = useState('Semua')
+	const [events, setEvents] = useState<UserEvent[]>([])
+	const [isLoading, setIsLoading] = useState(false)
+	const [error, setError] = useState<string | null>(null)
+	const { user, token } = useAuthStore()
+	const [filter, setFilter] = useState('')
 
 	useEffect(() => {
-		if (user?.id) {
-			fetchUserEvents(user.id)
+		const fetchUserEvents = async () => {
+			if (!user?.id) return
+
+			setIsLoading(true)
+			setError(null)
+			try {
+				const response = await axiosInstance.get(`/users/${user.id}/events`, {
+					headers: {
+						Authorization: `Bearer ${token}`
+					},
+					params: {
+						status: filter
+					}
+				})
+				setEvents(response.data.data.content)
+				console.log(response.data.data.content, '<=== ini isinya apa?')
+			} catch (err) {
+				setError('Failed to fetch events')
+			} finally {
+				setIsLoading(false)
+			}
 		}
-	}, [user, fetchUserEvents])
+
+		fetchUserEvents()
+	}, [user])
 
 	const filteredEvents = events.filter((event) => {
 		if (filter === 'Semua') return true
