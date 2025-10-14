@@ -1,32 +1,8 @@
 import { create } from 'zustand'
 import axios from '../lib/axios'
-import { Event, EventResponse } from '../types/event'
 import useAuthStore from './authStore'
-
-interface EventState {
-	events: Event[]
-	loading: boolean
-	error: string | null
-	currentPage: number
-	totalPages: number
-	totalElements: number
-	limit: number
-	fetchEvents: (page?: number, limit?: number) => Promise<void>
-	createEvent: (
-		event: Omit<Event, 'id' | 'createdAt' | 'createdBy' | 'updatedAt' | 'updatedBy'>,
-		showToast: (message: string, type: 'success' | 'error') => void
-	) => Promise<void>
-	fetchEventById: (
-		id: string,
-		showToast?: (message: string, type: 'success' | 'error') => void
-	) => Promise<Event | null>
-	updateEvent: (
-		id: string,
-		event: Omit<Event, 'id' | 'createdAt' | 'createdBy' | 'updatedAt' | 'updatedBy'>,
-		showToast: (message: string, type: 'success' | 'error') => void
-	) => Promise<void>
-	resetState: () => void
-}
+import { EventState } from '../interfaces/EventState'
+import { ApiResponse } from '../interfaces/ApiResponse'
 
 const useEventStore = create<EventState>((set, get) => ({
 	events: [],
@@ -40,7 +16,7 @@ const useEventStore = create<EventState>((set, get) => ({
 	fetchEvents: async (page = get().currentPage, limit = get().limit) => {
 		set({ loading: true, error: null })
 		try {
-			const response = await axios.get<EventResponse>(`/events?page=${page}&limit=${limit}`)
+			const response = await axios.get<ApiResponse>(`/events?page=${page}&limit=${limit}`)
 			if (response.data.success) {
 				set({
 					events: response.data.data.content,

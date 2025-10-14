@@ -10,7 +10,8 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { DateInputWithIcon } from '../components/form-elements/DateInputWithIcon'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '../hooks/useToast'
-import { EventStatus } from '~/types/event'
+import { EventStatus } from '../enums/EventStatus'
+import { Event } from '../interfaces/Event'
 
 export default function CreateEventPage() {
 	const navigate = useNavigate()
@@ -44,7 +45,7 @@ export default function CreateEventPage() {
 		const formattedStartDate = startDate ? startDate.toISOString() : ''
 		const formattedEndDate = endDate ? endDate.toISOString() : ''
 
-		const eventPayload = {
+		const eventPayload: Omit<Event, 'id' | 'createdAt' | 'createdBy' | 'updatedAt' | 'updatedBy'> = {
 			title: eventName,
 			description: description,
 			location: `${venueName}, ${address}, ${city}, ${province}`,

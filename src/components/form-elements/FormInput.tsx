@@ -3,16 +3,7 @@ import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { X } from 'lucide-react'
 
-interface FormInputProps {
-	id: string
-	label: string
-	placeholder: string
-	value: string | number
-	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-	type?: string
-	required?: boolean
-	onClear?: () => void
-}
+import { FormInputProps } from '../../interfaces/FormInputProps'
 
 export const FormInput: React.FC<FormInputProps> = ({
 	id,

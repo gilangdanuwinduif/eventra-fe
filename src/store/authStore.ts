@@ -6,26 +6,8 @@ import axios from 'axios' // Assuming axios is already configured or will be con
 // ==============================
 // 🧩 Tipe Data
 // ==============================
-export interface DecodedToken {
-	sub: string
-	iat: number
-	exp: number
-	role?: string | null
-	fullName?: string | null
-	profilePicture?: string | null
-}
-
-export interface User extends DecodedToken {
-	id: string
-	fullName: string | null
-	email: string
-	phone: string
-	createdAt: string
-	gender: string
-	nik: string
-	isRegistered: boolean
-	wallet: number
-}
+import { DecodedToken } from '../interfaces/DecodedToken'
+import { User } from '../interfaces/User'
 
 // ==============================
 // 🧠 State & Store

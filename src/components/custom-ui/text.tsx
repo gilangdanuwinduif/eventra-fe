@@ -1,9 +1,6 @@
 import React from 'react'
 
-interface TextProps {
-	label: string
-	className?: string
-}
+import { TextProps } from '../../interfaces/TextProps'
 
 const Text: React.FC<TextProps> = ({ label, className }) => {
 	return <span className={className}>{label}</span>

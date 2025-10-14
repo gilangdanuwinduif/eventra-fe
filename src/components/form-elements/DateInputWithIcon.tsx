@@ -2,12 +2,7 @@ import React, { forwardRef } from 'react'
 import { Input } from '../ui/input'
 import { CalendarIcon } from 'lucide-react'
 
-interface DateInputWithIconProps {
-	value?: string
-	onClick?: () => void
-	placeholder?: string
-	className?: string
-}
+import { DateInputWithIconProps } from '../../interfaces/DateInputWithIconProps'
 
 export const DateInputWithIcon = forwardRef<HTMLInputElement, DateInputWithIconProps>(
 	({ value, onClick, placeholder, className }, ref) => (

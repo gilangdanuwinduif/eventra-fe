@@ -2,11 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { AlertCircle, CheckCircle2 } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 
-interface ToastNotificationProps {
-	message: string
-	type: 'success' | 'error'
-	onClose: () => void
-}
+import { ToastNotificationProps } from '../../interfaces/ToastNotificationProps'
 
 export const ToastNotification: React.FC<ToastNotificationProps> = ({ message, type, onClose }) => {
 	const [isVisible, setIsVisible] = useState(true)

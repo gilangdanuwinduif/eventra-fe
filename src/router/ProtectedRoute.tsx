@@ -2,9 +2,7 @@ import React, { useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom' // Import useLocation
 import useAuthStore from '../store/authStore'
 
-interface ProtectedRouteProps {
-	children: React.ReactNode
-}
+import { ProtectedRouteProps } from '../interfaces/ProtectedRouteProps'
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 	const { token, user, userRole, logout } = useAuthStore()

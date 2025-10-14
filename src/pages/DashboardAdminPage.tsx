@@ -4,37 +4,15 @@ import api from '../lib/axios' // Import the configured axios instance
 import { useNavigate } from 'react-router-dom'
 import useAuthStore from '../store/authStore'
 
-interface Event {
-	id: string
-	title: string
-	description: string
-	location: string
-	startDate: string
-	endDate: string
-	createdAt: string
-	createdBy: string
-	updatedAt: string
-	updatedBy: string
-	imageUrl: string
-}
-
-interface ApiResponse {
-	success: boolean
-	message: string
-	data: {
-		content: Event[]
-		page: number
-		limit: number
-		totalElements: number
-		totalPages: number
-		last: boolean
-	}
-}
+import { SummaryData } from '../interfaces/SummaryData'
+import { Event } from '../interfaces/Event'
+import { ApiResponse } from '../interfaces/ApiResponse'
 
 const DashboardAdminPage: React.FC = () => {
 	const { user } = useAuthStore()
 	const navigate = useNavigate()
 	const [events, setEvents] = useState<Event[]>([])
+	const [summary, setSummary] = useState<SummaryData | null>(null)
 	const [currentPage, setCurrentPage] = useState<number>(1)
 	const [totalPages, setTotalPages] = useState<number>(1)
 	const [loading, setLoading] = useState<boolean>(true)
@@ -45,6 +23,15 @@ const DashboardAdminPage: React.FC = () => {
 	}
 
 	useEffect(() => {
+		const fetchSummary = async () => {
+			try {
+				const response = await api.get<{ data: SummaryData }>('/events/summary')
+				setSummary(response.data.data)
+			} catch (err) {
+				console.error('Failed to fetch summary data:', err)
+			}
+		}
+
 		const fetchEvents = async () => {
 			setLoading(true)
 			setError(null)
@@ -61,6 +48,7 @@ const DashboardAdminPage: React.FC = () => {
 		}
 
 		if (user?.role === 'ADMIN') {
+			fetchSummary()
 			fetchEvents()
 		}
 	}, [currentPage, user])
@@ -84,50 +72,48 @@ const DashboardAdminPage: React.FC = () => {
 
 				{/* Stats Cards */}
 				<div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-					{/* Card 1 */}
+					{/* Card 1: Tiket Terjual */}
 					<div className="bg-white rounded-lg shadow-md p-6 flex items-center">
 						<div className="mr-4">
-							<img src="https://via.placeholder.com/48" alt="Icon" className="h-12 w-12" />{' '}
-							{/* Placeholder for icon */}
+							<img src="https://via.placeholder.com/48" alt="Icon" className="h-12 w-12" />
 						</div>
 						<div>
-							<p className="text-3xl font-bold">1.0000</p>
+							<p className="text-3xl font-bold">{summary?.totalOrderDetails ?? 0}</p>
 							<p className="text-gray-600">Tiket Terjual</p>
 						</div>
 					</div>
 
-					{/* Card 2 */}
+					{/* Card 2: Total Pendapatan */}
 					<div className="bg-white rounded-lg shadow-md p-6 flex items-center">
 						<div className="mr-4">
-							<img src="https://via.placeholder.com/48" alt="Icon" className="h-12 w-12" />{' '}
-							{/* Placeholder for icon */}
+							<img src="https://via.placeholder.com/48" alt="Icon" className="h-12 w-12" />
 						</div>
 						<div>
-							<p className="text-3xl font-bold">Rp 1000</p>
+							<p className="text-3xl font-bold">
+								Rp{summary?.totalRevenue?.toLocaleString('id-ID') ?? 0}
+							</p>
 							<p className="text-gray-600">Total Pendapatan</p>
 						</div>
 					</div>
 
-					{/* Card 3 */}
+					{/* Card 3: Pengguna Terdaftar */}
 					<div className="bg-white rounded-lg shadow-md p-6 flex items-center">
 						<div className="mr-4">
-							<img src="https://via.placeholder.com/48" alt="Icon" className="h-12 w-12" />{' '}
-							{/* Placeholder for icon */}
+							<img src="https://via.placeholder.com/48" alt="Icon" className="h-12 w-12" />
 						</div>
 						<div>
-							<p className="text-3xl font-bold">10000</p>
+							<p className="text-3xl font-bold">{summary?.totalUsers ?? 0}</p>
 							<p className="text-gray-600">Pengguna Terdaftar</p>
 						</div>
 					</div>
 
-					{/* Card 4 */}
+					{/* Card 4: Event Aktif */}
 					<div className="bg-white rounded-lg shadow-md p-6 flex items-center">
 						<div className="mr-4">
-							<img src="https://via.placeholder.com/48" alt="Icon" className="h-12 w-12" />{' '}
-							{/* Placeholder for icon */}
+							<img src="https://via.placeholder.com/48" alt="Icon" className="h-12 w-12" />
 						</div>
 						<div>
-							<p className="text-3xl font-bold">10000</p>
+							<p className="text-3xl font-bold">{summary?.totalUpcomingEvents ?? 0}</p>
 							<p className="text-gray-600">Event Aktif</p>
 						</div>
 					</div>

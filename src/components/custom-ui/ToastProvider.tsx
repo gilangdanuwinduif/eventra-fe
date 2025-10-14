@@ -2,17 +2,10 @@ import React, { createContext, useContext, useState, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { ToastNotification } from './ToastNotification'
 
-export interface ToastContextType {
-	showToast: (message: string, type: 'success' | 'error') => void
-}
+import { ToastContextType } from '../../interfaces/ToastContextType'
+import { Toast } from '../../interfaces/Toast'
 
 export const ToastContext = createContext<ToastContextType | undefined>(undefined)
-
-interface Toast {
-	id: string
-	message: string
-	type: 'success' | 'error'
-}
 
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const [toasts, setToasts] = useState<Toast[]>([])

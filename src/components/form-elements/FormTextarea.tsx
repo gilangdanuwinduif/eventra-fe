@@ -4,15 +4,7 @@ import ReactQuill from 'react-quill'
 import { Label } from '../ui/label'
 import { X } from 'lucide-react'
 
-interface FormTextareaProps {
-	id: string
-	label: string
-	placeholder: string
-	value: string
-	onChange: (content: string) => void // onChange now takes a string
-	required?: boolean
-	onClear?: () => void
-}
+import { FormTextareaProps } from '../../interfaces/FormTextareaProps'
 
 export const FormTextarea: React.FC<FormTextareaProps> = ({
 	id,

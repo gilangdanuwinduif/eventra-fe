@@ -5,16 +5,9 @@ import useAuthStore from '../store/authStore' // Import auth store
 import axios from '../lib/axios' // Assuming axios is configured for API calls
 import ValidatedInput from '../components/form-elements/ValidatedInput'
 import { useToast } from '../hooks/useToast'
-import { EventStatus } from '../types/event'
+import { EventStatus } from '../enums/EventStatus'
 
-interface BuyerInfo {
-	nik: string
-	fullName: string
-	email: string
-	nikValid: boolean
-	emailValid: boolean
-	fullNameValid: boolean
-}
+import { BuyerInfo } from '../interfaces/BuyerInfo'
 
 const CheckoutPage: React.FC = () => {
 	// Extract event ID from URL

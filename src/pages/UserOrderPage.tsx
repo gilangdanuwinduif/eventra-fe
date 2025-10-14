@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useAuthStore from '../store/authStore'
-import { UserOrderItem } from '../types/order'
+import { UserOrderItem } from '../interfaces/UserOrderItem'
 import axiosInstance from '../lib/axios'
 
 const UserOrderPage: React.FC = () => {

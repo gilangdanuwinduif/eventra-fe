@@ -3,39 +3,12 @@ import { useParams } from 'react-router-dom'
 import ValidatedInput from '../components/form-elements/ValidatedInput'
 import axios from '../lib/axios'
 import useAuthStore from '../store/authStore'
-import { Event } from '../types/event'
 import LoadingSpinner from '../components/custom-ui/LoadingSpinner'
 
-interface BuyerInfo {
-	nik: string
-	fullName: string
-	email: string
-}
-
-interface OrderDetail {
-	id: string
-	orderId: string
-	nik: string
-	fullName: string
-	email: string
-}
-
-interface Order {
-	id: string
-	orderNumber: string
-	totalPrice: number
-	status: string
-	userId: string
-	eventId: string
-	event: Event
-	orderDetails: OrderDetail[]
-}
-
-interface UserEventOrderItem {
-	event: Event
-	order: Omit<Order, 'event' | 'orderDetails'>
-	orderDetails: OrderDetail[]
-}
+import { BuyerInfo } from '../interfaces/BuyerInfo'
+import { OrderDetail } from '../interfaces/OrderDetail'
+import { Order } from '../interfaces/Order'
+import { UserEventOrderItem } from '../interfaces/UserEventOrderItem'
 
 const UserDetailTicketPage: React.FC = () => {
 	const { id } = useParams<{ id: string }>()

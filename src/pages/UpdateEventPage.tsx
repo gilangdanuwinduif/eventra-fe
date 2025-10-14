@@ -10,6 +10,9 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { DateInputWithIcon } from '../components/form-elements/DateInputWithIcon'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useToast } from '../hooks/useToast'
+import { Event } from '../interfaces/Event'
+import { EventStatus } from '../enums/EventStatus'
+import { Ticket } from '../interfaces/Ticket'
 
 export default function UpdateEventPage() {
 	const navigate = useNavigate()
@@ -57,9 +60,9 @@ export default function UpdateEventPage() {
 						setTickets(
 							event.tickets && event.tickets.length > 0
 								? event.tickets.map((ticket) => ({
-										ticketCategory: ticket.ticketCategory,
-										price: ticket.price,
-										quota: ticket.quota
+										ticketCategory: ticket.ticketCategory || '',
+										price: ticket.price || 0,
+										quota: ticket.quota || 0
 									}))
 								: [{ ticketCategory: '', price: 0, quota: 0 }]
 						)
@@ -101,8 +104,8 @@ export default function UpdateEventPage() {
 			endDate: formattedEndDate,
 			imageUrl: 'https://picsum.photos/seed/event1/800/600', // Placeholder
 			category: category,
-			status: 'PLANNED', // Assuming status remains PLANNED for now
-			tickets: tickets.map((ticket) => ({
+			status: EventStatus.UPCOMING, // Assuming status remains UPCOMING for now
+			tickets: tickets.map((ticket: Partial<Ticket>) => ({
 				ticketCategory: ticket.ticketCategory,
 				price: ticket.price,
 				quota: ticket.quota
@@ -110,7 +113,11 @@ export default function UpdateEventPage() {
 		}
 
 		if (isEditMode && id) {
-			await updateEvent(id, eventPayload, showToast)
+			await updateEvent(
+				id,
+				eventPayload as Omit<Event, 'id' | 'createdAt' | 'createdBy' | 'updatedAt' | 'updatedBy'>,
+				showToast
+			)
 			if (!loading && !error) {
 				navigate('/dashboard/admin')
 			}
