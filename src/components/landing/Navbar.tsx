@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { CiMenuFries } from 'react-icons/ci'
 import useAuthStore from '../../store/authStore'
 import { useToast } from '../../hooks/useToast' // Import useToast
@@ -19,7 +19,6 @@ import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 
 export default function Navbar() {
-	const navigate = useNavigate()
 	const [scrollY, setScrollY] = useState(0)
 	const [isOpen, setIsOpen] = useState(false)
 	const [showTopupModal, setShowTopupModal] = useState(false)

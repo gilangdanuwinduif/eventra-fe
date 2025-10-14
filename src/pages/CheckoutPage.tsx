@@ -5,6 +5,7 @@ import useAuthStore from '../store/authStore' // Import auth store
 import axios from '../lib/axios' // Assuming axios is configured for API calls
 import ValidatedInput from '../components/form-elements/ValidatedInput'
 import { useToast } from '../hooks/useToast'
+import { EventStatus } from '../types/event'
 
 interface BuyerInfo {
 	nik: string
@@ -331,6 +332,7 @@ const CheckoutPage: React.FC = () => {
 						<button
 							onClick={handleCheckout}
 							className="w-full bg-[#673ab7] text-white py-3 rounded-md mt-6 hover:bg-[#5e35b1] transition-colors duration-200 font-semibold text-lg"
+							disabled={!agreeToTerms || event.status !== EventStatus.UPCOMING}
 						>
 							Bayar Sekarang
 						</button>

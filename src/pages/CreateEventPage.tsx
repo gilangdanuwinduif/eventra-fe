@@ -10,6 +10,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { DateInputWithIcon } from '../components/form-elements/DateInputWithIcon'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '../hooks/useToast'
+import { EventStatus } from '~/types/event'
 
 export default function CreateEventPage() {
 	const navigate = useNavigate()
@@ -51,7 +52,7 @@ export default function CreateEventPage() {
 			endDate: formattedEndDate,
 			imageUrl: 'https://picsum.photos/seed/event1/800/600', // Placeholder
 			category: category,
-			status: 'PLANNED',
+			status: EventStatus.UPCOMING,
 			tickets: tickets.map((ticket) => ({
 				ticketCategory: ticket.ticketCategory,
 				price: ticket.price,

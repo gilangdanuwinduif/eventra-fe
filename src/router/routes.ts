@@ -13,6 +13,7 @@ const UpdateEventPage = React.lazy(() => import('../pages/UpdateEventPage'))
 const EventDetailPage = React.lazy(() => import('../pages/EventDetailPage'))
 const CheckoutPage = React.lazy(() => import('../pages/CheckoutPage'))
 const UserOrderPage = React.lazy(() => import('../pages/UserOrderPage'))
+const UserDetailTicketPage = React.lazy(() => import('../pages/UserDetailTicketPage'))
 
 export const publicRoutes = [
 	{
@@ -66,6 +67,11 @@ export const privateRoutes = [
 	{
 		path: '/user/order',
 		element: UserOrderPage,
+		exact: true
+	},
+	{
+		path: '/user/order/detail/:id',
+		element: UserDetailTicketPage,
 		exact: true
 	}
 ]

@@ -15,8 +15,26 @@ export interface UserEvent {
 	tickets: null | unknown[] // Replace 'any' with a specific ticket type if available
 }
 
+export interface Order {
+	id: string
+	orderNumber: string
+	userId: string
+	eventId: string
+	status: string
+	totalPrice: number
+	createdAt: string
+	createdBy: string
+	updatedAt: string | null
+	updatedBy: string | null
+}
+
+export interface UserOrderItem {
+	event: UserEvent
+	order: Order
+}
+
 export interface UserEventResponse {
-	content: UserEvent[]
+	content: UserOrderItem[]
 	page: number
 	limit: number
 	totalElements: number

@@ -11,7 +11,7 @@ export interface Event {
 	updatedBy: string | null
 	imageUrl: string
 	category: string
-	status: string
+	status: EventStatus
 	tickets: Ticket[]
 }
 
@@ -38,4 +38,10 @@ export interface EventResponse {
 		totalPages: number
 		last: boolean
 	}
+}
+
+export enum EventStatus {
+	UPCOMING,
+	FINISHED,
+	CANCELED
 }

@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import useAuthStore from '../store/authStore'
-import { UserEvent } from '../types/order'
+import { UserOrderItem } from '../types/order'
 import axiosInstance from '../lib/axios'
 
 const UserOrderPage: React.FC = () => {
-	const [events, setEvents] = useState<UserEvent[]>([])
+	const [events, setEvents] = useState<UserOrderItem[]>([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
 	const { user, token } = useAuthStore()
 	const [filter, setFilter] = useState('')
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		const fetchUserEvents = async () => {
@@ -37,16 +39,18 @@ const UserOrderPage: React.FC = () => {
 		fetchUserEvents()
 	}, [user])
 
-	const filteredEvents = events.filter((event) => {
+	const filteredEvents = events.filter((item) => {
 		if (filter === 'Semua') return true
-		if (filter === 'Mendatang') return event.status === 'UPCOMING'
-		if (filter === 'Selesai') return event.status === 'COMPLETED'
-		if (filter === 'Dibatalkan') return event.status === 'CANCELLED'
+		if (filter === 'Mendatang') return item.event.status === 'UPCOMING'
+		if (filter === 'Selesai') return item.event.status === 'COMPLETED'
+		if (filter === 'Dibatalkan') return item.event.status === 'CANCELLED'
 		return true
 	})
 
-	const upcomingEvents = filteredEvents.filter((event) => event.status === 'UPCOMING')
-	const pastEvents = filteredEvents.filter((event) => event.status === 'COMPLETED' || event.status === 'CANCELLED')
+	const upcomingEvents = filteredEvents.filter((item) => item.event.status === 'UPCOMING')
+	const pastEvents = filteredEvents.filter(
+		(item) => item.event.status === 'COMPLETED' || item.event.status === 'CANCELLED'
+	)
 
 	if (isLoading) {
 		return <div>Loading...</div>
@@ -56,7 +60,8 @@ const UserOrderPage: React.FC = () => {
 		return <div>Error: {error}</div>
 	}
 
-	const renderEventCard = (event: UserEvent) => {
+	const renderEventCard = (item: UserOrderItem) => {
+		const { event, order } = item
 		const eventDate = new Date(event.startDate).toLocaleDateString('id-ID', {
 			weekday: 'long',
 			year: 'numeric',
@@ -97,7 +102,7 @@ const UserOrderPage: React.FC = () => {
 				<div className="p-4">
 					<div className="flex justify-between mb-2">
 						<span className="text-gray-600">No. Tiket</span>
-						<span className="font-semibold">#VSP-20231105-7892</span>
+						<span className="font-semibold">{order.orderNumber}</span>
 					</div>
 					<div className="flex justify-between mb-2">
 						<span className="text-gray-600">Jenis Tiket</span>
@@ -105,14 +110,23 @@ const UserOrderPage: React.FC = () => {
 					</div>
 					<div className="flex justify-between mb-4">
 						<span className="text-gray-600">Harga</span>
-						<span className="font-semibold">Rp XXXXXX</span>
+						<span className="font-semibold">
+							{new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(
+								order.totalPrice
+							)}
+						</span>
 					</div>
 					{event.status === 'UPCOMING' && (
 						<>
 							<div className="bg-gray-200 h-40 flex items-center justify-center rounded-md mb-4">
 								<p className="text-gray-500">Scan QR code saat masuk event</p>
 							</div>
-							<button className="w-full bg-purple-600 text-white py-2 rounded-md">Unduh E-Tiket</button>
+							<button
+								onClick={() => navigate(`/user/order/detail/${order.id}`)}
+								className="w-full bg-purple-600 text-white py-2 rounded-md"
+							>
+								Detail
+							</button>
 						</>
 					)}
 					{event.status === 'COMPLETED' && (
