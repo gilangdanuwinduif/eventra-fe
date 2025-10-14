@@ -124,9 +124,9 @@ const RegisterPage: React.FC = () => {
 					nik: formData.nik,
 					fullName: formData.nama,
 					email: formData.email,
-					telepon: `+62${formData.telepon}`, // Add +62 prefix for submission
+					phone: `+62${formData.telepon}`, // Add +62 prefix for submission
 					password: formData.password,
-					jenis_kelamin: formData.jenis_kelamin
+					gender: formData.jenis_kelamin
 				})
 			})
 
