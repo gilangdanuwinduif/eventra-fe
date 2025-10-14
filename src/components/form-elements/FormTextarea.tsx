@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css' // Import Quill's CSS
+// import 'react-quill/dist/quill.snow.css' // Import Quill's CSS
 import { Label } from '../ui/label'
 import { X } from 'lucide-react'
 
