@@ -3,8 +3,10 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '../components/ui/button'
 import axios from '../lib/axios'
 import { jwtDecode } from 'jwt-decode'
-import useAuthStore, { DecodedToken, User } from '../store/authStore'
+import useAuthStore from '../store/authStore'
 import { useToast } from '../hooks/useToast'
+import { DecodedToken } from '../interfaces/DecodedToken'
+import { User } from '../interfaces/User'
 
 const LoginPage: React.FC = () => {
 	const { showToast } = useToast()

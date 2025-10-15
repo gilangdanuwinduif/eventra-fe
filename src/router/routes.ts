@@ -76,7 +76,7 @@ export const privateRoutes = [
 		exact: true
 	},
 	{
-		path: '/pengguna',
+		path: '/dashboard/admin/users',
 		element: AdminViewUserPage,
 		exact: true
 	}

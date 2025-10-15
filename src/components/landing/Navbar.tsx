@@ -78,9 +78,7 @@ export default function Navbar() {
 		roleNavLinks.push(
 			{ to: '/', label: 'Dashboard User' },
 			{ to: '/dashboard/admin', label: 'Dashboard' },
-			{ to: '/event', label: 'Event' },
-			{ to: '/tiket', label: 'Tiket' },
-			{ to: '/pengguna', label: 'Pengguna' },
+			{ to: '/dashboard/admin/users', label: 'User List' },
 			{ to: '/laporan', label: 'Laporan' },
 			{ to: '/order', label: 'Order' }
 		)
@@ -99,7 +97,7 @@ export default function Navbar() {
 	}
 
 	return (
-		<div>
+		<div className="my-20">
 			<nav
 				className={`flex items-center justify-between px-4 md:px-8 w-full h-[80px] top-0 bg-blue-500/80 md:border-none border-b z-20 fixed backdrop-blur-md ${
 					scrollY > 150 ? 'shadow-sm' : ''
