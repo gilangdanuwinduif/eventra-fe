@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useEventStore from '../store/eventStore'
 import { Event } from '../types/event'
@@ -6,9 +6,10 @@ import { Event } from '../types/event'
 const LandingPage: React.FC = () => {
 	const navigate = useNavigate()
 	const { events, loading, error, currentPage, totalPages, fetchEvents } = useEventStore()
+	const [searchTerm, setSearchTerm] = useState('')
 
 	useEffect(() => {
-		fetchEvents(1, 20) // Fetch initial 20 events on page 1
+		fetchEvents(1, 20, searchTerm) // Fetch initial 20 events on page 1
 	}, [fetchEvents])
 
 	const handleCardClick = (id: string) => {
@@ -16,7 +17,18 @@ const LandingPage: React.FC = () => {
 	}
 
 	const handlePageChange = (page: number) => {
-		fetchEvents(page, 20)
+		fetchEvents(page, 20, searchTerm)
+	}
+
+	const handleSearchSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
+		if (event.key === 'Enter') {
+			fetchEvents(1, 20, searchTerm)
+		}
+	}
+
+	const handleClearSearch = () => {
+		setSearchTerm('')
+		fetchEvents(1, 20, '') // Fetch events with default settings (no search term)
 	}
 
 	const formatDateTime = (dateString: string) => {
@@ -62,7 +74,18 @@ const LandingPage: React.FC = () => {
 						type="text"
 						className="w-full py-[15px] pr-[25px] pl-[50px] border-none rounded-[30px] text-[16px] shadow-[0_4px_15px_rgba(0,0,0,0.1)] outline-none"
 						placeholder="Search"
+						value={searchTerm}
+						onChange={(e) => setSearchTerm(e.target.value)}
+						onKeyDown={handleSearchSubmit}
 					/>
+					{searchTerm && (
+						<button
+							className="absolute right-[20px] top-1/2 -translate-y-1/2 text-[#999] text-[18px] cursor-pointer"
+							onClick={handleClearSearch}
+						>
+							✕
+						</button>
+					)}
 				</div>
 			</section>
 

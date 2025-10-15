@@ -9,7 +9,7 @@ export interface EventState {
 	totalPages: number
 	totalElements: number
 	limit: number
-	fetchEvents: (page?: number, limit?: number) => Promise<void>
+	fetchEvents: (page?: number, limit?: number, title?: string) => Promise<void>
 	createEvent: (
 		event: Omit<Event, 'id' | 'createdAt' | 'createdBy' | 'updatedAt' | 'updatedBy'>,
 		showToast: (message: string, type: 'success' | 'error') => void

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import ReactQuill from 'react-quill'
-// import 'react-quill/dist/quill.snow.css' // Import Quill's CSS
+import 'react-quill/dist/quill.snow.css' // Import Quill's CSS
 import { Label } from '../ui/label'
 import { X } from 'lucide-react'
 
@@ -15,6 +15,8 @@ export const FormTextarea: React.FC<FormTextareaProps> = ({
 	required = false,
 	onClear
 }) => {
+	const quillRef = useRef(null) // Initialize ref once
+
 	const modules = {
 		toolbar: [
 			[{ header: '1' }, { header: '2' }, { font: [] }],
@@ -50,7 +52,7 @@ export const FormTextarea: React.FC<FormTextareaProps> = ({
 			</Label>
 			<div className="relative">
 				<ReactQuill
-					ref={useRef(null)}
+					ref={quillRef}
 					theme="snow"
 					value={value}
 					onChange={onChange}

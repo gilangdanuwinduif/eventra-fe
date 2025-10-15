@@ -67,9 +67,10 @@ export default function Navbar() {
 	// Navigasi yang tampil di tengah Navbar
 	const commonNavLinks = [
 		{ to: '/', label: 'Home' },
-		{ to: '/events', label: 'Events' },
+		{ to: '/categories', label: 'Categories' },
 		{ to: '/about', label: 'About Us' },
-		{ to: '/contact', label: 'Contact' }
+		{ to: '/contact', label: 'Contact' },
+		{ to: '/faq', label: 'FAQ' }
 	]
 
 	// Navigasi khusus

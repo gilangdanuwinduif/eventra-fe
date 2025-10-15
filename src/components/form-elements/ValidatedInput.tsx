@@ -7,7 +7,7 @@ const ValidatedInput: React.FC<ValidatedInputProps> = ({
 	label,
 	value,
 	onValueChange,
-	suffix,
+	prefix,
 	...props
 }) => {
 	const [error, setError] = useState<string | null>(null)
@@ -74,9 +74,9 @@ const ValidatedInput: React.FC<ValidatedInputProps> = ({
 
 			{/* Input Group */}
 			<div className="flex items-center rounded-md overflow-hidden border focus-within:ring-2 focus-within:ring-[#673ab7] transition">
-				{suffix && (
+				{prefix && (
 					<span className="px-3 py-2 bg-gray-50 text-gray-700 border-r text-sm font-medium select-none">
-						{suffix}
+						{prefix}
 					</span>
 				)}
 				<input

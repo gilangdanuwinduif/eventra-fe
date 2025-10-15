@@ -13,10 +13,14 @@ const useEventStore = create<EventState>((set, get) => ({
 	totalElements: 0,
 	limit: 20, // Default limit as per requirement
 
-	fetchEvents: async (page = get().currentPage, limit = get().limit) => {
+	fetchEvents: async (page = get().currentPage, limit = get().limit, title?: string) => {
 		set({ loading: true, error: null })
 		try {
-			const response = await axios.get<ApiResponse>(`/events?page=${page}&limit=${limit}`)
+			let url = `/events?page=${page}&limit=${limit}`
+			if (title) {
+				url += `&title=${title}`
+			}
+			const response = await axios.get<ApiResponse>(url)
 			if (response.data.success) {
 				set({
 					events: response.data.data.content,
